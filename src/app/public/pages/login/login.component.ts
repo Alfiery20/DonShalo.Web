@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { IniciarSesionRequest } from '../../../core/models/iniciarSesion/iniciarSesionRequest';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
+import { AutenticacionService } from '../../../core/services/autenticacion.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +19,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private localService: LocalStorageService
+    private localService: LocalStorageService,
+    private autentitacionService: AutenticacionService
   ) {
     this.formulario = this.fb.group({
       correo: ['', [Validators.required, Validators.email]],
@@ -42,13 +45,33 @@ export class LoginComponent {
     return formularioValidado;
   }
 
-  IniciarSesion(){
+  IniciarSesion() {
     var userLogin: IniciarSesionRequest = {
       correo: this.formulario.value.correo,
       clave: this.formulario.value.clave,
     };
-    console.log(userLogin);
-    
+    this.autentitacionService.IniciarSesion(userLogin).subscribe(
+      (response) => {
+        if (response != null && response.token != null) {
+          this.localService.setItem('token', response.token);
+          this.localService.setItem('usuario', JSON.stringify(response));
+          Swal.fire({
+            title: "Bienvenido!",
+            icon: "success"
+          });
+          // this.router.navigate(['/home']);
+        } else {
+          Swal.fire({
+            title: "Datos incorrectos",
+            icon: "error",
+          });
+        }
+      },
+      (error) => {
+        alert('Usuario o clave incorrectos');
+      }
+    );
+
   }
 
 }
