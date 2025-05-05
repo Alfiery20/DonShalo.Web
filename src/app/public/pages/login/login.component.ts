@@ -6,6 +6,7 @@ import { IniciarSesionRequest } from '../../../core/models/iniciarSesion/iniciar
 import { LocalStorageService } from '../../../core/services/local-storage.service';
 import { AutenticacionService } from '../../../core/services/autenticacion.service';
 import Swal from 'sweetalert2';
+import { LoaderService } from '../../../core/services/loader.service';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,8 @@ export class LoginComponent {
     private fb: FormBuilder,
     private router: Router,
     private localService: LocalStorageService,
-    private autentitacionService: AutenticacionService
+    private autentitacionService: AutenticacionService,
+    private loaderServi: LoaderService
   ) {
     this.formulario = this.fb.group({
       correo: ['', [Validators.required, Validators.email]],
@@ -50,17 +52,20 @@ export class LoginComponent {
       correo: this.formulario.value.correo,
       clave: this.formulario.value.clave,
     };
+    this.loaderServi.MostrarLoader();
     this.autentitacionService.IniciarSesion(userLogin).subscribe(
       (response) => {
         if (response != null && response.token != null) {
           this.localService.setItem('token', response.token);
           this.localService.setItem('usuario', JSON.stringify(response));
+          this.loaderServi.OcultarLoader();
           Swal.fire({
             title: "Bienvenido!",
             icon: "success"
           });
-          // this.router.navigate(['/home']);
+          this.router.navigate(['/intranet']);
         } else {
+          this.loaderServi.OcultarLoader();
           Swal.fire({
             title: "Datos incorrectos",
             icon: "error",
@@ -68,7 +73,11 @@ export class LoginComponent {
         }
       },
       (error) => {
-        alert('Usuario o clave incorrectos');
+        this.loaderServi.OcultarLoader();
+        Swal.fire({
+          title: "Datos incorrectos",
+          icon: "error",
+        });
       }
     );
 
