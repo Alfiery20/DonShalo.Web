@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-sucursal',
@@ -6,6 +6,10 @@ import { Component } from '@angular/core';
   templateUrl: './sucursal.component.html',
   styleUrl: './sucursal.component.scss'
 })
-export class SucursalComponent {
+export class SucursalComponent implements OnInit {
+  constructor() {}
 
+  ngOnInit(): void {
+    console.log('SucursalComponent initialized');
+  }
 }
