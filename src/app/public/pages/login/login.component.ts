@@ -61,7 +61,8 @@ export class LoginComponent {
           this.loaderServi.OcultarLoader();
           Swal.fire({
             title: "Bienvenido!",
-            icon: "success"
+            icon: "success",
+            confirmButtonColor: "var(--color-principal)",
           });
           this.router.navigate(['/intranet']);
         } else {

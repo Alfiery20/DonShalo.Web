@@ -1,15 +1,142 @@
-import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { SucursalService } from '../../../core/services/sucursal.service';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { ObtenerSucursalRequest } from '../../../core/models/obtenerSucursal/ObtenerSucursalResponse';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+import { AgregarEditarSucursalComponent } from './agregar-editar-sucursal/agregar-editar-sucursal.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-sucursal',
-  imports: [],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule
+  ],
   templateUrl: './sucursal.component.html',
   styleUrl: './sucursal.component.scss'
 })
-export class SucursalComponent implements OnInit {
-  constructor() {}
+export class SucursalComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatPaginator) paginator: MatPaginator = {} as MatPaginator;
+
+  formulario: FormGroup;
+
+  displayedColumns: string[] =
+    [
+      'Nro',
+      'Id',
+      'CodSuc',
+      'Nombre',
+      'Direcc',
+      'Telef',
+      'HoraEntr',
+      'HoraSal',
+      'Estado',
+      'Respo',
+      'Accion'
+    ];
+  Sucursales: ObtenerSucursalRequest[] = []
+  dataSource = new MatTableDataSource<ObtenerSucursalRequest>(this.Sucursales);
+
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private dialog: MatDialog,
+    private sucursaService: SucursalService,
+  ) {
+    this.formulario = this.fb.group({
+      sucursal: ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {
-    console.log('SucursalComponent initialized');
+    this.buscarSucursal('');
   }
+
+  buscarSucursalPorNombre() {
+    const nombre = this.formulario.get('sucursal')?.value ?? '';
+    this.buscarSucursal(nombre);
+  }
+
+  buscarSucursal(termino: string) {
+    this.sucursaService.ObtenerSucursal(termino).subscribe((sucursales) => {
+      this.Sucursales = sucursales;
+      this.dataSource.data = this.Sucursales;
+    });
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  AgregarSucursal() {
+    var modalAbierto = this.dialog.open(AgregarEditarSucursalComponent, {
+      width: '400px',
+    });
+    modalAbierto.componentInstance.onClose.subscribe(() => {
+      this.formulario.reset();
+      this.buscarSucursal('');
+    });
+  }
+
+  EditarSucursal(idCategoria: number) {
+    var modalAbierto = this.dialog.open(AgregarEditarSucursalComponent, {
+      width: '400px',
+      data: { id: idCategoria },
+    });
+    modalAbierto.componentInstance.onClose.subscribe(() => {
+      this.formulario.reset();
+      this.buscarSucursal('');
+    });
+  }
+
+  EliminarSucursal(idCategoria: number) {
+    Swal.fire({
+      title: "¡Atención!",
+      text: "¿Esta seguro de de eliminar la sucursal?",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonColor: "var(--color-principal)",
+      confirmButtonText: "Si",
+      cancelButtonText: "No",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.sucursaService.EliminarSucursal(idCategoria).subscribe(
+          (response) => {
+            if (response != null && response.codigo == 'OK') {
+              this.buscarSucursal('');
+              Swal.fire({
+                title: response.mensaje,
+                icon: "success",
+                confirmButtonColor: "var(--color-principal)",
+              });
+            } else {
+              Swal.fire({
+                title: response.mensaje,
+                icon: "error",
+                confirmButtonColor: "var(--color-principal)",
+              });
+            }
+          },
+          (error) => {
+            Swal.fire({
+              title: "Ocurrio un error, comunicarse con servicio tecnico",
+              icon: "error",
+              confirmButtonColor: "var(--color-principal)",
+            });
+          }
+        )
+      }
+    });
+  }
+
+  convertToDate(timeString: string): Date {
+    return new Date(`1970-01-01T${timeString}`);
+  }
+
 }
