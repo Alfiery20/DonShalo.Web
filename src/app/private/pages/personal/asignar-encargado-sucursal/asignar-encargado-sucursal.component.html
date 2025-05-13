@@ -1,0 +1,35 @@
+<div class="modal fade show" id="exampleModalLive" tabindex="-1" style="display: block;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Asignar encargado</h2>
+                <button type="button" class="btn-close" (click)="CerrarModal()"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formulario">
+                    <div class="mb-3 row">
+                        <label for="menuRol" class="col-sm-3 col-form-label">Sucursal: </label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="menuRol" formControlName="sucursal"
+                                (keyup)="ObtenerSucursal()">
+                            <ul class="list-group col-sm-8" style="z-index: 999; position: absolute;"
+                                *ngIf="sucursal.length > 0 && formulario.get('sucursal')?.value.length > 0 && this.sucursalSeleccionado.id == null">
+                                <li class="list-group-item" *ngFor="let item of sucursal"
+                                    (click)="setearSucursalSeleccionado(item)">
+                                    {{item.nombre}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" style="background-color: var(--color-principal); color: white;"
+                    (click)="CerrarModal()">Cancelar</button>
+                <button type="button" class="btn" [ngClass]="{'disabled': null}"
+                    style="background-color: var(--color-terciario); color: var(--color-principal);"
+                    (click)="guardarEncargado()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

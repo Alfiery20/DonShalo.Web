@@ -77,9 +77,9 @@ export class SucursalComponent implements OnInit, AfterViewInit {
   AgregarSucursal() {
     var modalAbierto = this.dialog.open(AgregarEditarSucursalComponent, {
       width: '400px',
+      data: { id: 0 },
     });
     modalAbierto.componentInstance.onClose.subscribe(() => {
-      this.formulario.reset();
       this.buscarSucursal('');
     });
   }
@@ -90,12 +90,11 @@ export class SucursalComponent implements OnInit, AfterViewInit {
       data: { id: idCategoria },
     });
     modalAbierto.componentInstance.onClose.subscribe(() => {
-      this.formulario.reset();
       this.buscarSucursal('');
     });
   }
 
-  EliminarSucursal(idCategoria: number) {
+  EliminarSucursal(idSucursal: number) {
     Swal.fire({
       title: "¡Atención!",
       text: "¿Esta seguro de de eliminar la sucursal?",
@@ -106,7 +105,7 @@ export class SucursalComponent implements OnInit, AfterViewInit {
       cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
-        this.sucursaService.EliminarSucursal(idCategoria).subscribe(
+        this.sucursaService.EliminarSucursal(idSucursal).subscribe(
           (response) => {
             if (response != null && response.codigo == 'OK') {
               this.buscarSucursal('');

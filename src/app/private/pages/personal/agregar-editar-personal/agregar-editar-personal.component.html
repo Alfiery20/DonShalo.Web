@@ -1,0 +1,103 @@
+<div class="modal fade show" id="exampleModalLive" tabindex="-1" style="display: block;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">{{this.titulo}} Sucursal</h2>
+                <button type="button" class="btn-close" (click)="CerrarModal()"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formulario">
+                    <div class="mb-3 row">
+                        <label for="tipDoc" class="col-sm-3 col-form-label">Tipo Documento: </label>
+                        <div class="col-sm-9">
+                            <select class="form-select" formControlName="tipDoc" id="tipDoc"
+                                aria-label="Default select example">
+                                <option value="0" disabled selected>Seleccione</option>
+                                <option value="01">DNI</option>
+                                <option value="02">Carnet de Extranjeria</option>
+                                <option value="03">Pasaporte</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="nroDoc" class="col-sm-3 col-form-label">Numero Documento: </label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="nroDoc" formControlName="nroDoc" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="nombre" class="col-sm-3 col-form-label">Nombre: </label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="nombre" formControlName="nombre" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="apePat" class="col-sm-3 col-form-label">Apellido Paterno: </label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="apePat" formControlName="apePat" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="apeMat" class="col-sm-3 col-form-label">Apellido Materno: </label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="apeMat" formControlName="apeMat" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="telef" class="col-sm-3 col-form-label">Telefono: </label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="telef" formControlName="telef" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="emeal" class="col-sm-3 col-form-label">Correo Electronico: </label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="emeal" formControlName="emeal" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row" *ngIf="!this.esEditar">
+                        <label for="clave" class="col-sm-3 col-form-label">Clave: </label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="clave" formControlName="clave" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="rol" class="col-sm-3 col-form-label">Rol: </label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="rol" formControlName="rol"
+                                (keyup)="ObtenerRoles()">
+                            <ul class="list-group" style="z-index: 999; position: absolute;"
+                                *ngIf="this.Roles.length > 0 && this.formulario.get('rol')?.value.length > 0 && this.rolSeleccionado.id == null">
+                                <li class="list-group-item" *ngFor="let item of this.Roles"
+                                    (click)="this.setearRolSeleccionado(item)">
+                                    {{item.nombre}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="rol" class="col-sm-3 col-form-label">Sucursal: </label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="menuRol" formControlName="sucursal"
+                                (keyup)="ObtenerSucursal()">
+                            <ul class="list-group col-sm-8" style="z-index: 999; position: absolute;"
+                                *ngIf="sucursal.length > 0 && formulario.get('sucursal')?.value.length > 0 && this.sucursalSeleccionado.id == null">
+                                <li class="list-group-item" *ngFor="let item of sucursal"
+                                    (click)="setearSucursalSeleccionado(item)">
+                                    {{item.nombre}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" style="background-color: var(--color-principal); color: white;"
+                    (click)="CerrarModal()">Cancelar</button>
+                <button type="button" class="btn" [ngClass]="{'disabled': null}"
+                    style="background-color: var(--color-terciario); color: var(--color-principal);"
+                    (click)="AccionGuardar()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -10,6 +10,7 @@ import { VerSucursalResponse } from '../models/verSucursal/verSucursalResponse';
 import { EditarSucursalRequest } from '../models/editarSucural/editarSucuralRequest';
 import { EditarSucursalResponse } from '../models/editarSucural/editarSucuralResponse';
 import { EliminarSucursalResponse } from '../models/eliminarSucursal/eliminarSucursalResponse';
+import { ObtenerMenuSucursalResponse } from '../models/obtenerMenuSucursal/obtenerMenuSucursalResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -59,7 +60,7 @@ export class SucursalService {
     };
     return this.http.put<EditarSucursalResponse>(uri, sucursal, { headers: headers });
   }
-  
+
   EliminarSucursal(id: number): Observable<EliminarSucursalResponse> {
     var token = this.localService.getItem('token');
     const uri = `${constants.apiUrl}/Sucursal/eliminarSucursal/${id}`;
@@ -69,4 +70,13 @@ export class SucursalService {
     return this.http.delete<EliminarSucursalResponse>(uri, { headers: headers });
   }
 
+  ObtenerMenuSucursal(termino: string): Observable<Array<ObtenerMenuSucursalResponse>> {
+    var token = this.localService.getItem('token');
+    const uri = `${constants.apiUrl}/Sucursal/obtenerMenuSucursal/${termino}`;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+    return this.http.get<Array<ObtenerMenuSucursalResponse>>(uri, { headers: headers });
+  }
 }

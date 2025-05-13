@@ -1,5 +1,4 @@
-export interface VerPersonalResponse {
-    id: number,
+export interface AgregarPersonalRequest {
     tipoDocumento: string,
     numeroDocumento: string,
     nombre: string,
@@ -7,7 +6,7 @@ export interface VerPersonalResponse {
     apellidoMaterno: string,
     telefono: string,
     correo: string,
-    estado: string,
-    rol: number,
-    sucursal: number
+    clave: string,
+    idRol: number,
+    idSucursal: number,
 }
