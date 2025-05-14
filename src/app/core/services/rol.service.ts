@@ -5,6 +5,12 @@ import { Observable } from 'rxjs';
 import { ObtenerPersonalResponse } from '../models/obtenerPersonal/obtenerPersonalResponse';
 import { constants } from '../models/utils/contants';
 import { LocalStorageService } from './local-storage.service';
+import { AgregarRolRequest } from '../models/agregarRol/agregarRolRequest';
+import { AgregarRolResponse } from '../models/agregarRol/agregarRolResponse';
+import { EditarRolRequest } from '../models/editarRol/editarRolRequest';
+import { EditarRolResponse } from '../models/editarRol/editarRolResponse';
+import { EliminarRolResponse } from '../models/eliminarRol/eliminarRolResponse';
+import { VerRolResponse } from '../models/verRol/verRolResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +30,44 @@ export class RolService {
       'Content-Type': 'application/json'
     };
     return this.http.get<Array<ObtenerRolResponse>>(uri, { headers: headers });
+  }
+
+  AgregarRol(Rol: AgregarRolRequest): Observable<AgregarRolResponse> {
+    var token = this.localService.getItem('token');
+    const uri = `${constants.apiUrl}/Rol/registrarRol`;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+    return this.http.post<AgregarRolResponse>(uri, Rol, { headers: headers });
+  }
+
+  VerRol(id: number): Observable<VerRolResponse> {
+    var token = this.localService.getItem('token');
+    const uri = `${constants.apiUrl}/Rol/verRol/${id}`;
+    const headers = {
+      Authorization: `Bearer ${token}`
+    };
+    return this.http.get<VerRolResponse>(uri, { headers: headers });
+  }
+
+  EditarRol(Rol: EditarRolRequest): Observable<EditarRolResponse> {
+    var token = this.localService.getItem('token');
+    const uri = `${constants.apiUrl}/Rol/editarRol`;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+    return this.http.put<EditarRolResponse>(uri, Rol, { headers: headers });
+  }
+
+  EliminarRol(id: number): Observable<EliminarRolResponse> {
+    var token = this.localService.getItem('token');
+    const uri = `${constants.apiUrl}/Rol/eliminarRol/${id}`;
+    const headers = {
+      Authorization: `Bearer ${token}`
+    };
+    return this.http.delete<EliminarRolResponse>(uri, { headers: headers });
   }
 
 }

@@ -5,6 +5,7 @@ import { PisoComponent } from "./pages/piso/piso.component";
 import { MesaComponent } from "./pages/mesa/mesa.component";
 import { SucursalComponent } from "./pages/sucursal/sucursal.component";
 import { PersonalComponent } from "./pages/personal/personal.component";
+import { RolComponent } from "./pages/rol/rol.component";
 
 const routes: Routes = [
     {
@@ -26,6 +27,10 @@ const routes: Routes = [
             {
                 path: "mesa",
                 component: MesaComponent
+            },
+            {
+                path: "rol",
+                component: RolComponent
             }
         ]
     }
