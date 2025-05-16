@@ -1,0 +1,28 @@
+<div class="modal fade show" id="exampleModalLive" tabindex="-1" style="display: block;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">{{this.titulo}} Menu para el Rol</h2>
+                <button type="button" class="btn-close" (click)="CerrarModal()"></button>
+            </div>
+            <div class="modal-body">
+                <section style="overflow-y: auto;" class="px-1">
+                    <div class="form-check form-switch" *ngFor="let item of menusConPermiso">
+                        <input class="form-check-input switch-rol" type="checkbox" role="switch" id="switchCheckDefault"
+                            [checked]="item.permiso" (change)="ActualizarPermiso(item.id, item.permiso)">
+                        <label class="form-check-label" for="switchCheckDefault">{{item.nombre}}</label>
+                        <div *ngFor="let hijo of item.hijos" class="px-4">
+                            <input class="form-check-input switch-rol" type="checkbox" role="switch"
+                                id="switchCheckDefault" [checked]="hijo.permiso" (change)="ActualizarPermiso(hijo.id, hijo.permiso)">
+                            <label class="form-check-label" for="switchCheckDefault">{{hijo.nombre}}</label>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" style="background-color: var(--color-principal); color: white;"
+                    (click)="CerrarModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

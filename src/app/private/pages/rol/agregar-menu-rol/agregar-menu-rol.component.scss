@@ -1,0 +1,8 @@
+.switch-rol:checked {
+    background-color: var(--color-principal) !important;
+    border-color: var(--color-principal) !important;
+}
+
+.switch-rol:focus {
+    box-shadow: 0 0 0 0.02rem var(--color-principal);
+}

@@ -29,8 +29,8 @@ export class AgregarEditarPersonalComponent implements OnInit {
   esEditar: boolean = false;
   titulo = 'Agregar';
 
-  rolSeleccionado: ObtenerRolResponse = {} as ObtenerRolResponse;
-  Roles: ObtenerRolResponse[] = []
+  rolSeleccionado: ObtenerMenuSucursalResponse = {} as ObtenerMenuSucursalResponse;
+  Roles: ObtenerMenuSucursalResponse[] = []
   sucursal: ObtenerMenuSucursalResponse[] = []
 
   sucursalSeleccionado: ObtenerMenuSucursalResponse = {} as ObtenerMenuSucursalResponse;
@@ -157,7 +157,7 @@ export class AgregarEditarPersonalComponent implements OnInit {
   ObtenerRoles() {
     this.rolSeleccionado = {} as ObtenerRolResponse;
     var terminoRol = this.formulario.get('rol')?.value ?? '';
-    this.rolServi.ObtenerRol(terminoRol).subscribe((roles) => {
+    this.rolServi.ObtenerMenuRol(terminoRol).subscribe((roles) => {
       this.Roles = roles;
     });
   }
@@ -199,7 +199,7 @@ export class AgregarEditarPersonalComponent implements OnInit {
     })
   }
 
-  setearRolSeleccionado(rol: ObtenerRolResponse) {
+  setearRolSeleccionado(rol: ObtenerMenuSucursalResponse) {
     this.rolSeleccionado = rol;
     this.formulario.get('rol')?.setValue(rol.nombre);
   }

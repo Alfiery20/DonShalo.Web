@@ -14,6 +14,7 @@ import { ObtenerRolResponse } from '../../../core/models/ObtenerRol/ObtenerRolRe
 import { AgregarEditarPersonalComponent } from './agregar-editar-personal/agregar-editar-personal.component';
 import Swal from 'sweetalert2';
 import { AsignarEncargadoSucursalComponent } from './asignar-encargado-sucursal/asignar-encargado-sucursal.component';
+import { ObtenerMenuRolResponse } from '../../../core/models/obtenerMenuRol/obtenerMenuRolResponse';
 
 @Component({
   selector: 'app-personal',
@@ -48,8 +49,8 @@ export class PersonalComponent implements OnInit, AfterViewInit {
   Personales: ObtenerPersonalResponse[] = []
   dataSource = new MatTableDataSource<ObtenerPersonalResponse>(this.Personales);
 
-  rolSeleccionado: ObtenerRolResponse = {} as ObtenerRolResponse;
-  Roles: ObtenerRolResponse[] = []
+  rolSeleccionado: ObtenerMenuRolResponse = {} as ObtenerMenuRolResponse;
+  Roles: ObtenerMenuRolResponse[] = []
 
   constructor(
     private fb: FormBuilder,
@@ -78,7 +79,7 @@ export class PersonalComponent implements OnInit, AfterViewInit {
   ObtenerRoles() {
     this.rolSeleccionado = {} as ObtenerRolResponse;
     var terminoRol = this.formulario.get('rol')?.value ?? '';
-    this.rolServi.ObtenerRol(terminoRol).subscribe((roles) => {
+    this.rolServi.ObtenerMenuRol(terminoRol).subscribe((roles) => {
       this.Roles = roles;
     });
   }
@@ -96,7 +97,7 @@ export class PersonalComponent implements OnInit, AfterViewInit {
     });
   }
 
-  setearRolSeleccionado(rol: ObtenerRolResponse) {
+  setearRolSeleccionado(rol: ObtenerMenuRolResponse) {
     this.rolSeleccionado = rol;
     this.formulario.get('rol')?.setValue(rol.nombre);
   }
@@ -122,16 +123,6 @@ export class PersonalComponent implements OnInit, AfterViewInit {
       // this.formulario.reset();
       this.ObtenerRoles();
       this.obtenerPersonal();
-    });
-  }
-
-  AsignarEncargado(idPersonal: number) {
-    var modalAbierto = this.dialog.open(AsignarEncargadoSucursalComponent, {
-      maxWidth: '750px',
-      data: { id: idPersonal },
-    });
-    modalAbierto.componentInstance.onClose.subscribe(() => {
-      // this.formulario.reset();
     });
   }
 

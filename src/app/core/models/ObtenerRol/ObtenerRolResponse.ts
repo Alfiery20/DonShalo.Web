@@ -1,4 +1,5 @@
 export interface ObtenerRolResponse {
     id: number,
-    nombre: string
+    nombre: string,
+    estado: string
 }

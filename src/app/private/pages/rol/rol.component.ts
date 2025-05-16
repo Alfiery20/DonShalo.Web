@@ -8,6 +8,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { PersonalService } from '../../../core/services/personal.service';
 import { RolService } from '../../../core/services/rol.service';
+import { AgregarEditarRolComponent } from './agregar-editar-rol/agregar-editar-rol.component';
+import Swal from 'sweetalert2';
+import { AgregarMenuRolComponent } from './agregar-menu-rol/agregar-menu-rol.component';
+import { ActualizarPermisoRequest } from '../../../core/models/actualizarPermiso/actualizarPermisoRequest';
 
 @Component({
   selector: 'app-rol',
@@ -30,18 +34,12 @@ export class RolComponent {
     [
       'Nro',
       'Id',
-      'TipoDoc',
-      'NumDoc',
       'Nombre',
-      'Telef',
-      'Correo',
       'Estado',
-      'Rol',
-      'Sucursal',
-      'Accion',
+      'Accion'
     ];
-  Personales: ObtenerRolResponse[] = []
-  dataSource = new MatTableDataSource<ObtenerRolResponse>(this.Personales);
+  roles: ObtenerRolResponse[] = []
+  dataSource = new MatTableDataSource<ObtenerRolResponse>(this.roles);
 
   rolSeleccionado: ObtenerRolResponse = {} as ObtenerRolResponse;
   Roles: ObtenerRolResponse[] = []
@@ -50,15 +48,99 @@ export class RolComponent {
     private fb: FormBuilder,
     private router: Router,
     private dialog: MatDialog,
-    private persServi: PersonalService,
     private rolServi: RolService,
   ) {
     this.formulario = this.fb.group({
-      codPersonal: ['', Validators.required],
-      nroDoru: ['', Validators.required],
       nombre: ['', Validators.required],
-      rol: ['', Validators.required],
     });
   }
 
+  ngOnInit(): void {
+    this.obtenerRoles();
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  obtenerRoles() {
+    var termino = this.formulario.get('nombre')?.value
+    this.rolServi.ObtenerRol(termino).subscribe((rol) => {
+      this.roles = rol;
+      this.dataSource.data = this.roles;
+    });
+  }
+
+  AgregarRol() {
+    var modalAbierto = this.dialog.open(AgregarEditarRolComponent, {
+      maxWidth: '750px',
+      data: { id: 0 },
+    });
+    modalAbierto.componentInstance.onClose.subscribe(() => {
+      // this.formulario.reset();
+      this.obtenerRoles();
+    });
+  }
+
+  EditarRol(idPersonal: number) {
+    var modalAbierto = this.dialog.open(AgregarEditarRolComponent, {
+      maxWidth: '750px',
+      data: { id: idPersonal },
+    });
+    modalAbierto.componentInstance.onClose.subscribe(() => {
+      // this.formulario.reset();
+      this.obtenerRoles();
+    });
+  }
+
+  EliminarRol(idPersonal: number) {
+    Swal.fire({
+      title: "¡Atención!",
+      text: "¿Esta seguro de de eliminar el rol?",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonColor: "var(--color-principal)",
+      confirmButtonText: "Si",
+      cancelButtonText: "No",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.rolServi.EliminarRol(idPersonal).subscribe(
+          (response) => {
+            if (response != null && response.codigo == 'OK') {
+              this.obtenerRoles();
+              Swal.fire({
+                title: response.mensaje,
+                icon: "success",
+                confirmButtonColor: "var(--color-principal)",
+              });
+            } else {
+              Swal.fire({
+                title: response.mensaje,
+                icon: "error",
+                confirmButtonColor: "var(--color-principal)",
+              });
+            }
+          },
+          (error) => {
+            Swal.fire({
+              title: "Ocurrio un error, comunicarse con servicio tecnico",
+              icon: "error",
+              confirmButtonColor: "var(--color-principal)",
+            });
+          }
+        )
+      }
+    });
+  }
+
+  AgregarPermisoRol(idPersonal: number) {
+    var modalAbierto = this.dialog.open(AgregarMenuRolComponent, {
+      maxWidth: '750px',
+      data: { id: idPersonal },
+    });
+    modalAbierto.componentInstance.onClose.subscribe(() => {
+      // this.formulario.reset();
+      this.obtenerRoles();
+    });
+  }
 }

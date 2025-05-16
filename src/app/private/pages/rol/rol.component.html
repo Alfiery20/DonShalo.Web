@@ -8,12 +8,12 @@
             <div class="col-xs-4 col-sm-6 col-md-6 col-xl-6">
                 <div class="form-floating">
                     <input type="text" class="form-control" id="codigo" placeholder="Codigo de personal..."
-                        formControlName="codPersonal">
+                        formControlName="nombre">
                     <label for="codigo">Nombre...</label>
                 </div>
             </div>
             <div class="col-xs-4 col-sm-1 col-md-1 col-xl-1 d-flex justify-content-end">
-                <button (click)="null" class="btn btn-buscar">
+                <button (click)="obtenerRoles()" class="btn btn-buscar">
                     <i class="bi bi-search" style="color: var(--color-terciario); font-size: 20px;"></i>
                 </button>
             </div>
@@ -21,7 +21,7 @@
     </form>
     <section class="row g-2 mt-3">
         <div class="d-flex justify-content-end">
-            <button class="btn" (click)="null"
+            <button class="btn" (click)="AgregarRol()"
                 style="background-color: var(--color-principal); color: var(--color-terciario);">
                 <i class="bi bi-plus"></i>
                 Agregar
@@ -33,7 +33,7 @@
             <table mat-table [dataSource]="dataSource">
                 <ng-container matColumnDef="Nro">
                     <th mat-header-cell *matHeaderCellDef> No. </th>
-                    <td mat-cell *matCellDef="let element"> {{Personales.indexOf(element) + 1}} </td>
+                    <td mat-cell *matCellDef="let element"> {{roles.indexOf(element) + 1}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="Id">
@@ -41,29 +41,9 @@
                     <td mat-cell *matCellDef="let element"> {{element.id}} </td>
                 </ng-container>
 
-                <ng-container matColumnDef="TipoDoc">
-                    <th mat-header-cell *matHeaderCellDef> Tipo Documento </th>
-                    <td mat-cell *matCellDef="let element"> {{element.tipoDocumento}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="NumDoc">
-                    <th mat-header-cell *matHeaderCellDef> Numero Documento </th>
-                    <td mat-cell *matCellDef="let element"> {{element.numeroDocumento}} </td>
-                </ng-container>
-
                 <ng-container matColumnDef="Nombre">
                     <th mat-header-cell *matHeaderCellDef> Nombre </th>
                     <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="Telef">
-                    <th mat-header-cell *matHeaderCellDef> Telefono </th>
-                    <td mat-cell *matCellDef="let element"> {{element.telefono}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="Correo">
-                    <th mat-header-cell *matHeaderCellDef> Correo </th>
-                    <td mat-cell *matCellDef="let element"> {{element.correo}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="Estado">
@@ -71,28 +51,18 @@
                     <td mat-cell *matCellDef="let element"> {{element.estado}} </td>
                 </ng-container>
 
-                <ng-container matColumnDef="Rol">
-                    <th mat-header-cell *matHeaderCellDef> Rol </th>
-                    <td mat-cell *matCellDef="let element"> {{element.rol}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="Sucursal">
-                    <th mat-header-cell *matHeaderCellDef> Sucursal </th>
-                    <td mat-cell *matCellDef="let element"> {{element.sucursal}} </td>
-                </ng-container>
-
                 <ng-container matColumnDef="Accion">
                     <th mat-header-cell *matHeaderCellDef> Acciones </th>
                     <td mat-cell *matCellDef="let element">
-                        <button class="btn" (click)="(element.id)" title="Asignar Responsable"
+                        <button class="btn" (click)="AgregarPermisoRol(element.id)" title="Asignar menu"
                             style="background-color: var(--color-principal); color: var(--color-terciario);">
-                            <i class="bi bi-file-person-fill"></i>
+                            <i class="bi bi-menu-button"></i>
                         </button>
-                        <button class="btn m-1" (click)="(element.id)" title="Editar"
+                        <button class="btn m-1" (click)="EditarRol(element.id)" title="Editar"
                             style="background-color: var(--color-principal); color: var(--color-terciario);">
                             <i class="bi bi-pencil-square"></i>
                         </button>
-                        <button class="btn" (click)="(element.id)" title="Eliminar"
+                        <button class="btn" (click)="EliminarRol(element.id)" title="Eliminar"
                             style="background-color: var(--color-principal); color: var(--color-terciario);">
                             <i class="bi bi-trash"></i>
                         </button>

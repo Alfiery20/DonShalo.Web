@@ -11,6 +11,10 @@ import { EditarRolRequest } from '../models/editarRol/editarRolRequest';
 import { EditarRolResponse } from '../models/editarRol/editarRolResponse';
 import { EliminarRolResponse } from '../models/eliminarRol/eliminarRolResponse';
 import { VerRolResponse } from '../models/verRol/verRolResponse';
+import { ObtenerMenuRolResponse } from '../models/obtenerMenuRol/obtenerMenuRolResponse';
+import { ObtenerMenuXRolResponse } from '../models/obtenerMenuXRol/obtenerMenuXRolResponse';
+import { ActualizarPermisoRequest } from '../models/actualizarPermiso/actualizarPermisoRequest';
+import { ActualizarPermisoResponse } from '../models/actualizarPermiso/actualizarPermisoResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -70,4 +74,33 @@ export class RolService {
     return this.http.delete<EliminarRolResponse>(uri, { headers: headers });
   }
 
+  ObtenerMenuRol(termino: string): Observable<Array<ObtenerMenuRolResponse>> {
+    var token = this.localService.getItem('token');
+    const uri = `${constants.apiUrl}/Rol/obtenerMenuRoles/${termino}`;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+    return this.http.get<Array<ObtenerRolResponse>>(uri, { headers: headers });
+  }
+
+  ObtenerMenuXRol(id: number): Observable<Array<ObtenerMenuXRolResponse>> {
+    var token = this.localService.getItem('token');
+    const uri = `${constants.apiUrl}/Rol/obtenerMenuPorRoles/${id}`;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+    return this.http.get<Array<ObtenerMenuXRolResponse>>(uri, { headers: headers });
+  }
+
+  ActualizarPermiso(request: ActualizarPermisoRequest): Observable<ActualizarPermisoResponse> {
+    var token = this.localService.getItem('token');
+    const uri = `${constants.apiUrl}/Rol/actualizarPermiso`;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+    return this.http.post<ActualizarPermisoResponse>(uri, request, { headers: headers });
+  }
 }
