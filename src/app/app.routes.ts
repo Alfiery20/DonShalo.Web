@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authorizeGuard } from './core/guards/authorize.guard';
 
 export const routes: Routes = [
     {

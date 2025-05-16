@@ -6,6 +6,7 @@ import { MesaComponent } from "./pages/mesa/mesa.component";
 import { SucursalComponent } from "./pages/sucursal/sucursal.component";
 import { PersonalComponent } from "./pages/personal/personal.component";
 import { RolComponent } from "./pages/rol/rol.component";
+import { authorizeGuard } from "../core/guards/authorize.guard";
 
 const routes: Routes = [
     {
@@ -14,23 +15,28 @@ const routes: Routes = [
         children: [
             {
                 path: "personal",
-                component: PersonalComponent
+                component: PersonalComponent,
+                canActivate: [authorizeGuard]
             },
             {
                 path: "sucursal",
-                component: SucursalComponent
+                component: SucursalComponent,
+                canActivate: [authorizeGuard]
             },
             {
                 path: "piso",
-                component: PisoComponent
+                component: PisoComponent,
+                canActivate: [authorizeGuard]
             },
             {
                 path: "mesa",
-                component: MesaComponent
+                component: MesaComponent,
+                canActivate: [authorizeGuard]
             },
             {
                 path: "rol",
-                component: RolComponent
+                component: RolComponent,
+                canActivate: [authorizeGuard]
             }
         ]
     }
