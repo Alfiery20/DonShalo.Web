@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LocalStorageService } from './local-storage.service';
 import { constants } from '../models/utils/contants';
-import { ObtenerMenuRequest } from '../models/obtenerMenu/ObtenerMenuRequest';
+import { ObtenerMenuRequest } from '../models/Autorizacion/obtenerMenu/ObtenerMenuRequest';
 
 @Injectable({
   providedIn: 'root'

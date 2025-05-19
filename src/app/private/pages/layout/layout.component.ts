@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AutorizacionService } from '../../../core/services/autorizacion.service';
-import { ObtenerMenuRequest } from '../../../core/models/obtenerMenu/ObtenerMenuRequest';
+import { ObtenerMenuRequest } from '../../../core/models/Autorizacion/obtenerMenu/ObtenerMenuRequest';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
-import { ObtenerInformacionUsuario } from '../../../core/models/obtenerInformacionUsuario/ObtenerInformacionLocal';
+import { ObtenerInformacionUsuario } from '../../../core/models/Autorizacion/obtenerInformacionUsuario/ObtenerInformacionLocal';
 
 @Component({
   selector: 'app-layout',

@@ -2,19 +2,18 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { ObtenerSucursalRequest } from '../../../core/models/obtenerSucursal/ObtenerSucursalResponse';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ObtenerPersonalResponse } from '../../../core/models/obtenerPersonal/obtenerPersonalResponse';
-import { ObtenerPersonalRequest } from '../../../core/models/obtenerPersonal/obtenerPersonalRequest';
+import { ObtenerPersonalResponse } from '../../../core/models/Personal/obtenerPersonal/obtenerPersonalResponse';
+import { ObtenerPersonalRequest } from '../../../core/models/Personal/obtenerPersonal/obtenerPersonalRequest';
 import { PersonalService } from '../../../core/services/personal.service';
 import { RolService } from '../../../core/services/rol.service';
-import { ObtenerRolResponse } from '../../../core/models/ObtenerRol/ObtenerRolResponse';
+import { ObtenerRolResponse } from '../../../core/models/Rol/ObtenerRol/ObtenerRolResponse';
 import { AgregarEditarPersonalComponent } from './agregar-editar-personal/agregar-editar-personal.component';
 import Swal from 'sweetalert2';
 import { AsignarEncargadoSucursalComponent } from './asignar-encargado-sucursal/asignar-encargado-sucursal.component';
-import { ObtenerMenuRolResponse } from '../../../core/models/obtenerMenuRol/obtenerMenuRolResponse';
+import { ObtenerMenuRolResponse } from '../../../core/models/Rol/obtenerMenuRol/obtenerMenuRolResponse';
 
 @Component({
   selector: 'app-personal',
@@ -49,7 +48,6 @@ export class PersonalComponent implements OnInit, AfterViewInit {
   Personales: ObtenerPersonalResponse[] = []
   dataSource = new MatTableDataSource<ObtenerPersonalResponse>(this.Personales);
 
-  rolSeleccionado: ObtenerMenuRolResponse = {} as ObtenerMenuRolResponse;
   Roles: ObtenerMenuRolResponse[] = []
 
   constructor(
@@ -63,7 +61,7 @@ export class PersonalComponent implements OnInit, AfterViewInit {
       codPersonal: ['', Validators.required],
       nroDoru: ['', Validators.required],
       nombre: ['', Validators.required],
-      rol: ['', Validators.required],
+      rol: [0, Validators.required],
     });
   }
 
@@ -77,9 +75,7 @@ export class PersonalComponent implements OnInit, AfterViewInit {
   }
 
   ObtenerRoles() {
-    this.rolSeleccionado = {} as ObtenerRolResponse;
-    var terminoRol = this.formulario.get('rol')?.value ?? '';
-    this.rolServi.ObtenerMenuRol(terminoRol).subscribe((roles) => {
+    this.rolServi.ObtenerMenuRol('').subscribe((roles) => {
       this.Roles = roles;
     });
   }
@@ -89,17 +85,12 @@ export class PersonalComponent implements OnInit, AfterViewInit {
       codigoPersonal: this.formulario.get('codPersonal')?.value,
       numeroDocumento: this.formulario.get('nroDoru')?.value,
       nombre: this.formulario.get('nombre')?.value,
-      idRol: this.rolSeleccionado.id ?? 0,
+      idRol: this.formulario.get('rol')?.value,
     }
     this.persServi.ObtenerPersonal(obtenerPersonal).subscribe((personal) => {
       this.Personales = personal;
       this.dataSource.data = this.Personales;
     });
-  }
-
-  setearRolSeleccionado(rol: ObtenerMenuRolResponse) {
-    this.rolSeleccionado = rol;
-    this.formulario.get('rol')?.setValue(rol.nombre);
   }
 
   AgregarPersonal() {

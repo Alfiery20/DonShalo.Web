@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IniciarSesionRequest } from '../models/iniciarSesion/iniciarSesionRequest';
-import { IniciarSesionResponse } from '../models/iniciarSesion/IniciarSesionResponse';
+import { IniciarSesionRequest } from '../models/Autenticacion/iniciarSesion/iniciarSesionRequest';
+import { IniciarSesionResponse } from '../models/Autenticacion/iniciarSesion/IniciarSesionResponse';
 import { Observable } from 'rxjs';
 import { constants } from '../models/utils/contants';
 

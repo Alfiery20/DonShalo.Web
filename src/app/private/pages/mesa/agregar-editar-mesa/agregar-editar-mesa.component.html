@@ -1,0 +1,57 @@
+<div class="modal fade show" id="exampleModalLive" tabindex="-1" style="display: block;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">{{this.titulo}} Mesa</h2>
+                <button type="button" class="btn-close" (click)="CerrarModal()"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formulario">
+                    <div class="mb-3 row">
+                        <label for="desc" class="col-sm-3 col-form-label">Numero: </label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="desc" formControlName="numero" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="desc" class="col-sm-3 col-form-label">Capacidad: </label>
+                        <div class="col-sm-9">
+                            <input type="number" class="form-control" id="desc" formControlName="capacidad" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="rol" class="col-sm-3 col-form-label">Sucursal: </label>
+                        <div class="col-sm-9">
+                            <select class="form-select" formControlName="sucursal" id="rol" id="floatingSelect"
+                                aria-label="Floating label select example" (change)="ObtenerPiso()">
+                                <option value="0" disabled selected>Seleccione</option>
+                                <option *ngFor="let sucursal of sucurales" value="{{sucursal.id}}">
+                                    {{sucursal.nombre}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="rol" class="col-sm-3 col-form-label">Piso: </label>
+                        <div class="col-sm-9">
+                            <select class="form-select" formControlName="piso" id="rol" id="floatingSelect"
+                                aria-label="Floating label select example">
+                                <option value="0" disabled selected>Seleccione</option>
+                                <option *ngFor="let sucursal of pisos" value="{{sucursal.id}}">
+                                    {{sucursal.nombre}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" style="background-color: var(--color-principal); color: white;"
+                    (click)="CerrarModal()">Cancelar</button>
+                <button type="button" class="btn" [ngClass]="{'disabled': null}"
+                    style="background-color: var(--color-terciario); color: var(--color-principal);"
+                    (click)="AccionGuardar()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

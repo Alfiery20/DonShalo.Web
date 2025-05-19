@@ -2,18 +2,18 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LocalStorageService } from './local-storage.service';
 import { Observable } from 'rxjs';
-import { ObtenerPersonalRequest } from '../models/obtenerPersonal/obtenerPersonalRequest';
+import { ObtenerPersonalRequest } from '../models/Personal/obtenerPersonal/obtenerPersonalRequest';
 import { constants } from '../models/utils/contants';
-import { VerPersonalResponse } from '../models/verPersonal/verPersonalResponse';
-import { AgregarPersonalRequest } from '../models/agregarPersonal/agregarPersonalRequest';
-import { AgregarPersonalResponse } from '../models/agregarPersonal/agregarPersonalResponse';
-import { EditarPersonalRequest } from '../models/editarPersonal/editarPersonalRequest';
-import { EditarPersonalResponse } from '../models/editarPersonal/editarPersonalResponse';
-import { EliminarPersonalResponse } from '../models/eliminarPersonal/eliminarPersonalResponse';
-import { ObtenerPersonalResponse } from '../models/obtenerPersonal/obtenerPersonalResponse';
-import { ObtenerMenuPersonalResponse } from '../models/obtenerMenuPersonal/obtenerMenuPersonalResponse';
-import { AsignarResponsableResponse } from '../models/asignarResponsable/asignarResponsableResponse';
-import { AsignarResponsableRequest } from '../models/asignarResponsable/asignarResponsableRequest';
+import { VerPersonalResponse } from '../models/Personal/verPersonal/verPersonalResponse';
+import { AgregarPersonalRequest } from '../models/Personal/agregarPersonal/agregarPersonalRequest';
+import { AgregarPersonalResponse } from '../models/Personal/agregarPersonal/agregarPersonalResponse';
+import { EditarPersonalRequest } from '../models/Personal/editarPersonal/editarPersonalRequest';
+import { EditarPersonalResponse } from '../models/Personal/editarPersonal/editarPersonalResponse';
+import { EliminarPersonalResponse } from '../models/Personal/eliminarPersonal/eliminarPersonalResponse';
+import { ObtenerPersonalResponse } from '../models/Personal/obtenerPersonal/obtenerPersonalResponse';
+import { ObtenerMenuPersonalResponse } from '../models/Personal/obtenerMenuPersonal/obtenerMenuPersonalResponse';
+import { AsignarResponsableResponse } from '../models/Personal/asignarResponsable/asignarResponsableResponse';
+import { AsignarResponsableRequest } from '../models/Personal/asignarResponsable/asignarResponsableRequest';
 
 @Injectable({
   providedIn: 'root'

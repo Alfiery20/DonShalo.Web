@@ -1,16 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { constants } from '../models/utils/contants';
-import { ObtenerSucursalRequest } from '../models/obtenerSucursal/ObtenerSucursalResponse';
 import { Observable } from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
-import { AgregarSucursalRequest } from '../models/agregarSucursal/agregarSucursalRequest';
-import { AgregarSucursalResponse } from '../models/agregarSucursal/agregarSucursalResponse';
-import { VerSucursalResponse } from '../models/verSucursal/verSucursalResponse';
-import { EditarSucursalRequest } from '../models/editarSucural/editarSucuralRequest';
-import { EditarSucursalResponse } from '../models/editarSucural/editarSucuralResponse';
-import { EliminarSucursalResponse } from '../models/eliminarSucursal/eliminarSucursalResponse';
-import { ObtenerMenuSucursalResponse } from '../models/obtenerMenuSucursal/obtenerMenuSucursalResponse';
+import { AgregarSucursalRequest } from '../models/Sucursal/agregarSucursal/agregarSucursalRequest';
+import { AgregarSucursalResponse } from '../models/Sucursal/agregarSucursal/agregarSucursalResponse';
+import { VerSucursalResponse } from '../models/Sucursal/verSucursal/verSucursalResponse';
+import { EditarSucursalRequest } from '../models/Sucursal/editarSucural/editarSucuralRequest';
+import { EditarSucursalResponse } from '../models/Sucursal/editarSucural/editarSucuralResponse';
+import { EliminarSucursalResponse } from '../models/Sucursal/eliminarSucursal/eliminarSucursalResponse';
+import { ObtenerMenuSucursalResponse } from '../models/Sucursal/obtenerMenuSucursal/obtenerMenuSucursalResponse';
+import { ObtenerSucursalResponse } from '../models/Sucursal/obtenerSucursal/ObtenerSucursalResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -22,14 +22,14 @@ export class SucursalService {
     private localService: LocalStorageService
   ) { }
 
-  ObtenerSucursal(termino: string): Observable<Array<ObtenerSucursalRequest>> {
+  ObtenerSucursal(termino: string): Observable<Array<ObtenerSucursalResponse>> {
     var token = this.localService.getItem('token');
     const uri = `${constants.apiUrl}/Sucursal/obtenerSucursal/${termino}`;
     const headers = {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json'
     };
-    return this.http.get<Array<ObtenerSucursalRequest>>(uri, { headers: headers });
+    return this.http.get<Array<ObtenerSucursalResponse>>(uri, { headers: headers });
   }
 
   AgregarSucursal(sucursal: AgregarSucursalRequest): Observable<AgregarSucursalResponse> {

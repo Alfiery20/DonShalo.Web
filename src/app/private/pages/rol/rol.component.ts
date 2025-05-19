@@ -3,7 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { ObtenerRolResponse } from '../../../core/models/ObtenerRol/ObtenerRolResponse';
+import { ObtenerRolResponse } from '../../../core/models/Rol/ObtenerRol/ObtenerRolResponse';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { PersonalService } from '../../../core/services/personal.service';
@@ -11,7 +11,7 @@ import { RolService } from '../../../core/services/rol.service';
 import { AgregarEditarRolComponent } from './agregar-editar-rol/agregar-editar-rol.component';
 import Swal from 'sweetalert2';
 import { AgregarMenuRolComponent } from './agregar-menu-rol/agregar-menu-rol.component';
-import { ActualizarPermisoRequest } from '../../../core/models/actualizarPermiso/actualizarPermisoRequest';
+import { ActualizarPermisoRequest } from '../../../core/models/Rol/actualizarPermiso/actualizarPermisoRequest';
 
 @Component({
   selector: 'app-rol',

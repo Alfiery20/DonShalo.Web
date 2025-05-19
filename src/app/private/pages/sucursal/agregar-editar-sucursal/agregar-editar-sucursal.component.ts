@@ -3,10 +3,10 @@ import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SucursalService } from '../../../../core/services/sucursal.service';
-import { AgregarSucursalRequest } from '../../../../core/models/agregarSucursal/agregarSucursalRequest';
+import { AgregarSucursalRequest } from '../../../../core/models/Sucursal/agregarSucursal/agregarSucursalRequest';
 import Swal from 'sweetalert2';
-import { VerSucursalResponse } from '../../../../core/models/verSucursal/verSucursalResponse';
-import { EditarSucursalRequest } from '../../../../core/models/editarSucural/editarSucuralRequest';
+import { VerSucursalResponse } from '../../../../core/models/Sucursal/verSucursal/verSucursalResponse';
+import { EditarSucursalRequest } from '../../../../core/models/Sucursal/editarSucural/editarSucuralRequest';
 
 @Component({
   selector: 'app-agregar-editar-sucursal',

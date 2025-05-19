@@ -1,17 +1,17 @@
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
-import { VerPersonalResponse } from '../../../../core/models/verPersonal/verPersonalResponse';
+import { VerPersonalResponse } from '../../../../core/models/Personal/verPersonal/verPersonalResponse';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SucursalService } from '../../../../core/services/sucursal.service';
 import { AgregarEditarSucursalComponent } from '../../sucursal/agregar-editar-sucursal/agregar-editar-sucursal.component';
 import { PersonalService } from '../../../../core/services/personal.service';
 import { CommonModule } from '@angular/common';
-import { ObtenerRolResponse } from '../../../../core/models/ObtenerRol/ObtenerRolResponse';
+import { ObtenerRolResponse } from '../../../../core/models/Rol/ObtenerRol/ObtenerRolResponse';
 import { RolService } from '../../../../core/services/rol.service';
-import { ObtenerMenuSucursalResponse } from '../../../../core/models/obtenerMenuSucursal/obtenerMenuSucursalResponse';
-import { AgregarPersonalRequest } from '../../../../core/models/agregarPersonal/agregarPersonalRequest';
+import { ObtenerMenuSucursalResponse } from '../../../../core/models/Sucursal/obtenerMenuSucursal/obtenerMenuSucursalResponse';
+import { AgregarPersonalRequest } from '../../../../core/models/Personal/agregarPersonal/agregarPersonalRequest';
 import Swal from 'sweetalert2';
-import { EditarPersonalRequest } from '../../../../core/models/editarPersonal/editarPersonalRequest';
+import { EditarPersonalRequest } from '../../../../core/models/Personal/editarPersonal/editarPersonalRequest';
 
 @Component({
   selector: 'app-agregar-editar-personal',
@@ -29,11 +29,8 @@ export class AgregarEditarPersonalComponent implements OnInit {
   esEditar: boolean = false;
   titulo = 'Agregar';
 
-  rolSeleccionado: ObtenerMenuSucursalResponse = {} as ObtenerMenuSucursalResponse;
   Roles: ObtenerMenuSucursalResponse[] = []
-  sucursal: ObtenerMenuSucursalResponse[] = []
-
-  sucursalSeleccionado: ObtenerMenuSucursalResponse = {} as ObtenerMenuSucursalResponse;
+  Sucursales: ObtenerMenuSucursalResponse[] = []
 
   constructor(
     private fb: FormBuilder,
@@ -52,8 +49,8 @@ export class AgregarEditarPersonalComponent implements OnInit {
       telef: ['', Validators.required],
       emeal: ['', Validators.required],
       clave: ['', Validators.required],
-      rol: ['', Validators.required],
-      sucursal: ['', Validators.required]
+      rol: [0, Validators.required],
+      sucursal: [0, Validators.required]
     });
   }
 
@@ -86,8 +83,8 @@ export class AgregarEditarPersonalComponent implements OnInit {
       telefono: this.formulario.value.telef,
       correo: this.formulario.value.emeal,
       clave: this.formulario.value.clave,
-      idRol: this.rolSeleccionado.id,
-      idSucursal: this.sucursalSeleccionado.id
+      idRol: this.formulario.value.rol,
+      idSucursal: this.formulario.value.sucursal
     }
     this.persoService.AgregarPersonal(agregarPersonal).subscribe(
       (response) => {
@@ -124,8 +121,8 @@ export class AgregarEditarPersonalComponent implements OnInit {
       apellidoMaterno: this.formulario.value.apeMat,
       telefono: this.formulario.value.telef,
       correo: this.formulario.value.emeal,
-      idRol: this.rolSeleccionado.id,
-      idSucursal: this.sucursalSeleccionado.id
+      idRol: this.formulario.value.rol,
+      idSucursal: this.formulario.value.sucursal
     }
     this.persoService.EditarPersonal(editarPersonal).subscribe(
       (response) => {
@@ -155,9 +152,7 @@ export class AgregarEditarPersonalComponent implements OnInit {
   }
 
   ObtenerRoles() {
-    this.rolSeleccionado = {} as ObtenerRolResponse;
-    var terminoRol = this.formulario.get('rol')?.value ?? '';
-    this.rolServi.ObtenerMenuRol(terminoRol).subscribe((roles) => {
+    this.rolServi.ObtenerMenuRol('').subscribe((roles) => {
       this.Roles = roles;
     });
   }
@@ -174,39 +169,17 @@ export class AgregarEditarPersonalComponent implements OnInit {
         telef: this.personal.telefono,
         emeal: this.personal.correo,
         clave: '',
-        rol: '',
-        sucursal: ''
+        rol: this.personal.rol,
+        sucursal: this.personal.sucursal
       });
-      this.Roles.forEach((rol) => {
-        if (rol.id == this.personal.rol) {
-          this.rolSeleccionado = rol;
-          this.formulario.get('rol')?.setValue(rol.nombre);
-        }
-      })
-      this.sucursal.forEach((sucursal) => {
-        if (sucursal.id == this.personal.sucursal) {
-          this.sucursalSeleccionado = sucursal;
-          this.formulario.get('sucursal')?.setValue(sucursal.nombre);
-        }
-      })
     });
   }
 
   ObtenerSucursal() {
     var terminoSucursal = this.formulario.get('sucursal')?.value ?? '';
     this.sucServi.ObtenerMenuSucursal(terminoSucursal).subscribe((response) => {
-      this.sucursal = response
+      this.Sucursales = response
     })
-  }
-
-  setearRolSeleccionado(rol: ObtenerMenuSucursalResponse) {
-    this.rolSeleccionado = rol;
-    this.formulario.get('rol')?.setValue(rol.nombre);
-  }
-
-  setearSucursalSeleccionado(rol: ObtenerMenuSucursalResponse) {
-    this.sucursalSeleccionado = rol;
-    this.formulario.get('sucursal')?.setValue(rol.nombre);
   }
 
   CerrarModal() {

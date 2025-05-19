@@ -1,1 +1,103 @@
-<p>piso works!</p>
+<div class="container-fluid">
+    <section>
+        <h1>Piso</h1>
+        <hr>
+    </section>
+    <form [formGroup]="formulario">
+        <div class="row g-2 d-flex justify-content-between">
+            <div class="col-xs-4 col-sm-8 col-md-4 col-xl-4">
+                <div class="form-floating">
+                    <input type="email" class="form-control" id="sucursal" placeholder="Nombre..."
+                        formControlName="nombre">
+                    <label for="sucursal">Nombre...</label>
+                </div>
+            </div>
+            <div class="form-floating col-xs-4 col-sm-6 col-md-4 col-xl-4">
+                <select class="form-select" formControlName="sucursal" id="rol" id="floatingSelect"
+                    aria-label="Floating label select example">
+                    <option value="0" selected>Seleccione</option>
+                    <option *ngFor="let rol of this.Sucursales" value="{{rol.id}}">
+                        {{rol.nombre}}
+                    </option>
+                </select>
+                <label for="floatingSelect">Sucursal...</label>
+            </div>
+            <div class="col-xs-4 col-sm-2 col-md-4 col-xl-4 d-flex justify-content-end">
+                <button (click)="ObtenerPiso()" class="btn"
+                    style="height: 58px; width:  58px; background-color: var(--color-principal);">
+                    <i class="bi bi-search" style="color: var(--color-terciario); font-size: 20px;"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+    <section class="row g-2 mt-3">
+        <div class="d-flex justify-content-end">
+            <button class="btn" (click)="AgregarPiso()"
+                style="background-color: var(--color-principal); color: var(--color-terciario);">
+                <i class="bi bi-plus"></i>
+                Agregar
+            </button>
+        </div>
+    </section>
+    <section>
+        <div class="mat-elevation-z8" style="overflow-x: auto;">
+            <table mat-table [dataSource]="dataSource">
+                <ng-container matColumnDef="Nro">
+                    <th mat-header-cell *matHeaderCellDef> No. </th>
+                    <td mat-cell *matCellDef="let element"> {{pisos.indexOf(element) + 1}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Id">
+                    <th mat-header-cell *matHeaderCellDef> Id </th>
+                    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Nombre">
+                    <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                    <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="CapaciCliente">
+                    <th mat-header-cell *matHeaderCellDef> Capacidad Cliente </th>
+                    <td mat-cell *matCellDef="let element"> {{element.capacidadCliente}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="CapaciPerson">
+                    <th mat-header-cell *matHeaderCellDef> Capacidad Personal </th>
+                    <td mat-cell *matCellDef="let element"> {{element.capacidadPersonal}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Sucursal">
+                    <th mat-header-cell *matHeaderCellDef> Sucursal </th>
+                    <td mat-cell *matCellDef="let element"> {{element.sucursal}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Estado">
+                    <th mat-header-cell *matHeaderCellDef> Estado </th>
+                    <td mat-cell *matCellDef="let element"> {{element.estado}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Accion">
+                    <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button class="btn m-1" (click)="EditarPiso(element.id)" title="Editar"
+                            style="background-color: var(--color-principal); color: var(--color-terciario);">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                        <button class="btn" (click)="EliminarPiso(element.id)" title="Eliminar"
+                            style="background-color: var(--color-principal); color: var(--color-terciario);">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                aria-label="Select page of periodic elements">
+            </mat-paginator>
+        </div>
+    </section>
+</div>

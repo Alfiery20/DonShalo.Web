@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
-import { ObtenerRolResponse } from '../models/ObtenerRol/ObtenerRolResponse';
+import { ObtenerRolResponse } from '../models/Rol/ObtenerRol/ObtenerRolResponse';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ObtenerPersonalResponse } from '../models/obtenerPersonal/obtenerPersonalResponse';
+import { ObtenerPersonalResponse } from '../models/Personal/obtenerPersonal/obtenerPersonalResponse';
 import { constants } from '../models/utils/contants';
 import { LocalStorageService } from './local-storage.service';
-import { AgregarRolRequest } from '../models/agregarRol/agregarRolRequest';
-import { AgregarRolResponse } from '../models/agregarRol/agregarRolResponse';
-import { EditarRolRequest } from '../models/editarRol/editarRolRequest';
-import { EditarRolResponse } from '../models/editarRol/editarRolResponse';
-import { EliminarRolResponse } from '../models/eliminarRol/eliminarRolResponse';
-import { VerRolResponse } from '../models/verRol/verRolResponse';
-import { ObtenerMenuRolResponse } from '../models/obtenerMenuRol/obtenerMenuRolResponse';
-import { ObtenerMenuXRolResponse } from '../models/obtenerMenuXRol/obtenerMenuXRolResponse';
-import { ActualizarPermisoRequest } from '../models/actualizarPermiso/actualizarPermisoRequest';
-import { ActualizarPermisoResponse } from '../models/actualizarPermiso/actualizarPermisoResponse';
+import { AgregarRolRequest } from '../models/Rol/agregarRol/agregarRolRequest';
+import { AgregarRolResponse } from '../models/Rol/agregarRol/agregarRolResponse';
+import { EditarRolRequest } from '../models/Rol/editarRol/editarRolRequest';
+import { EditarRolResponse } from '../models/Rol/editarRol/editarRolResponse';
+import { EliminarRolResponse } from '../models/Rol/eliminarRol/eliminarRolResponse';
+import { VerRolResponse } from '../models/Rol/verRol/verRolResponse';
+import { ObtenerMenuRolResponse } from '../models/Rol/obtenerMenuRol/obtenerMenuRolResponse';
+import { ObtenerMenuXRolResponse } from '../models/Rol/obtenerMenuXRol/obtenerMenuXRolResponse';
+import { ActualizarPermisoRequest } from '../models/Rol/actualizarPermiso/actualizarPermisoRequest';
+import { ActualizarPermisoResponse } from '../models/Rol/actualizarPermiso/actualizarPermisoResponse';
 
 @Injectable({
   providedIn: 'root'

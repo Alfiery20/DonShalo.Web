@@ -4,11 +4,11 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { SucursalService } from '../../../core/services/sucursal.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { ObtenerSucursalRequest } from '../../../core/models/obtenerSucursal/ObtenerSucursalResponse';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { AgregarEditarSucursalComponent } from './agregar-editar-sucursal/agregar-editar-sucursal.component';
 import Swal from 'sweetalert2';
+import { ObtenerSucursalResponse } from '../../../core/models/Sucursal/obtenerSucursal/ObtenerSucursalResponse';
 
 @Component({
   selector: 'app-sucursal',
@@ -40,8 +40,8 @@ export class SucursalComponent implements OnInit, AfterViewInit {
       'Respo',
       'Accion'
     ];
-  Sucursales: ObtenerSucursalRequest[] = []
-  dataSource = new MatTableDataSource<ObtenerSucursalRequest>(this.Sucursales);
+  Sucursales: ObtenerSucursalResponse[] = []
+  dataSource = new MatTableDataSource<ObtenerSucursalResponse>(this.Sucursales);
 
   constructor(
     private fb: FormBuilder,

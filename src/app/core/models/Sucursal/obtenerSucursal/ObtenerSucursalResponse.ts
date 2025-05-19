@@ -1,4 +1,4 @@
-export interface ObtenerSucursalRequest {
+export interface ObtenerSucursalResponse {
     id: number,
     codigoSucursal: string,
     nombre: string,

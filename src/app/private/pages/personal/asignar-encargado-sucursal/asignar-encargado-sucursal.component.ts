@@ -6,8 +6,8 @@ import { PersonalService } from '../../../../core/services/personal.service';
 import { RolService } from '../../../../core/services/rol.service';
 import { AgregarEditarSucursalComponent } from '../../sucursal/agregar-editar-sucursal/agregar-editar-sucursal.component';
 import { SucursalService } from '../../../../core/services/sucursal.service';
-import { ObtenerMenuPersonalResponse } from '../../../../core/models/obtenerMenuPersonal/obtenerMenuPersonalResponse';
-import { ObtenerMenuSucursalResponse } from '../../../../core/models/obtenerMenuSucursal/obtenerMenuSucursalResponse';
+import { ObtenerMenuPersonalResponse } from '../../../../core/models/Personal/obtenerMenuPersonal/obtenerMenuPersonalResponse';
+import { ObtenerMenuSucursalResponse } from '../../../../core/models/Sucursal/obtenerMenuSucursal/obtenerMenuSucursalResponse';
 
 @Component({
   selector: 'app-asignar-encargado-sucursal',

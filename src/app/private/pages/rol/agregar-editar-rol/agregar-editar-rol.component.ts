@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
-import { VerRolResponse } from '../../../../core/models/verRol/verRolResponse';
+import { VerRolResponse } from '../../../../core/models/Rol/verRol/verRolResponse';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PersonalService } from '../../../../core/services/personal.service';
@@ -7,9 +7,9 @@ import { RolService } from '../../../../core/services/rol.service';
 import { SucursalService } from '../../../../core/services/sucursal.service';
 import { AgregarEditarSucursalComponent } from '../../sucursal/agregar-editar-sucursal/agregar-editar-sucursal.component';
 import { CommonModule } from '@angular/common';
-import { EditarRolRequest } from '../../../../core/models/editarRol/editarRolRequest';
+import { EditarRolRequest } from '../../../../core/models/Rol/editarRol/editarRolRequest';
 import Swal from 'sweetalert2';
-import { AgregarRolRequest } from '../../../../core/models/agregarRol/agregarRolRequest';
+import { AgregarRolRequest } from '../../../../core/models/Rol/agregarRol/agregarRolRequest';
 
 @Component({
   selector: 'app-agregar-editar-rol',

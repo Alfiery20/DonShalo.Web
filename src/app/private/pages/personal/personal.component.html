@@ -26,20 +26,18 @@
                     <label for="nroDocu">Nombre...</label>
                 </div>
             </div>
-            <div class="col-xs-4 col-sm-6 col-md-5 col-xl-3">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="rol" placeholder="Rol..." formControlName="rol"
-                        (keyup)="ObtenerRoles()">
-                    <label for="rol">Rol...</label>
-                </div>
-                <ul class="list-group" style="z-index: 999;"
-                    *ngIf="this.Roles.length > 0 && this.formulario.get('rol')?.value.length > 0 && this.rolSeleccionado.id == null">
-                    <li class="list-group-item" *ngFor="let item of this.Roles"
-                        (click)="this.setearRolSeleccionado(item)">
-                        {{item.nombre}}
-                    </li>
-                </ul>
+
+            <div class="form-floating col-xs-4 col-sm-6 col-md-5 col-xl-3">
+                <select class="form-select" formControlName="rol" id="rol" id="floatingSelect"
+                    aria-label="Floating label select example">
+                    <option value="0" selected>Seleccione</option>
+                    <option *ngFor="let rol of this.Roles" value="{{rol.id}}">
+                        {{rol.nombre}}
+                    </option>
+                </select>
+                <label for="floatingSelect">Rol...</label>
             </div>
+
             <div class="col-xs-4 col-sm-12 col-md-1 col-xl-1 d-flex justify-content-end">
                 <button (click)="obtenerPersonal()" class="btn btn-buscar">
                     <i class="bi bi-search" style="color: var(--color-terciario); font-size: 20px;"></i>

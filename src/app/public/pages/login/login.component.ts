@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IniciarSesionRequest } from '../../../core/models/iniciarSesion/iniciarSesionRequest';
+import { IniciarSesionRequest } from '../../../core/models/Autenticacion/iniciarSesion/iniciarSesionRequest';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
 import { AutenticacionService } from '../../../core/services/autenticacion.service';
 import Swal from 'sweetalert2';
