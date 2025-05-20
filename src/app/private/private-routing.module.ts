@@ -7,6 +7,7 @@ import { SucursalComponent } from "./pages/sucursal/sucursal.component";
 import { PersonalComponent } from "./pages/personal/personal.component";
 import { RolComponent } from "./pages/rol/rol.component";
 import { authorizeGuard } from "../core/guards/authorize.guard";
+import { MediopagoComponent } from "./pages/mediopago/mediopago.component";
 
 const routes: Routes = [
     {
@@ -36,6 +37,11 @@ const routes: Routes = [
             {
                 path: "rol",
                 component: RolComponent,
+                canActivate: [authorizeGuard]
+            },
+            {
+                path: "medioPago",
+                component: MediopagoComponent,
                 canActivate: [authorizeGuard]
             }
         ]
