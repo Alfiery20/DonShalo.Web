@@ -95,9 +95,13 @@ export class SucursalComponent implements OnInit, AfterViewInit {
   }
 
   EliminarSucursal(idSucursal: number) {
+    var sucursal = this.Sucursales.find(x => x.id == idSucursal);
+    var texto = ''
+    sucursal?.estado.substring(0, 1) == 'A' ? texto = 'eliminar' : texto = 'activar';
+
     Swal.fire({
       title: "¡Atención!",
-      text: "¿Esta seguro de de eliminar la sucursal?",
+      text: `¿Esta seguro de ${texto} la sucursal?`,
       icon: "warning",
       showCancelButton: true,
       cancelButtonColor: "var(--color-principal)",

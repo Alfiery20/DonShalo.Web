@@ -122,9 +122,13 @@ export class MesaComponent implements OnInit, AfterViewInit {
   }
 
   EliminarMesa(idMesa: number) {
+    var mesa = this.mesas.find(x => x.id == idMesa);
+    var texto = ''
+    mesa?.estado.substring(0, 1) == 'A' ? texto = 'eliminar' : texto = 'activar';
+
     Swal.fire({
       title: "¡Atención!",
-      text: "¿Esta seguro de eliminar el piso?",
+      text: `¿Esta seguro de ${texto} el piso?`,
       icon: "warning",
       showCancelButton: true,
       cancelButtonColor: "var(--color-principal)",

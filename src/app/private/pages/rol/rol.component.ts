@@ -93,10 +93,13 @@ export class RolComponent {
     });
   }
 
-  EliminarRol(idPersonal: number) {
+  EliminarRol(idrol: number) {
+    var rol = this.roles.find(x => x.id == idrol);
+    var texto = ''
+    rol?.estado.substring(0, 1) == 'A' ? texto = 'eliminar' : texto = 'activar';
     Swal.fire({
       title: "¡Atención!",
-      text: "¿Esta seguro de de eliminar el rol?",
+      text: `¿Esta seguro de ${texto} el rol?`,
       icon: "warning",
       showCancelButton: true,
       cancelButtonColor: "var(--color-principal)",
@@ -104,7 +107,7 @@ export class RolComponent {
       cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
-        this.rolServi.EliminarRol(idPersonal).subscribe(
+        this.rolServi.EliminarRol(idrol).subscribe(
           (response) => {
             if (response != null && response.codigo == 'OK') {
               this.obtenerRoles();

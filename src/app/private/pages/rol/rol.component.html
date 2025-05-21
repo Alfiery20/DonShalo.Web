@@ -64,7 +64,10 @@
                         </button>
                         <button class="btn" (click)="EliminarRol(element.id)" title="Eliminar"
                             style="background-color: var(--color-principal); color: var(--color-terciario);">
-                            <i class="bi bi-trash"></i>
+                            <i class="bi bi-trash" *ngIf="element.estado.substring(0, 1) == 'A'; else icono_else"></i>
+                            <ng-template #icono_else>
+                                <i class="bi bi-check-circle"></i>
+                            </ng-template>
                         </button>
                     </td>
                 </ng-container>

@@ -103,9 +103,13 @@ export class PisoComponent implements OnInit, AfterViewInit {
   }
 
   EliminarPiso(idPiso: number) {
+    var piso = this.pisos.find(x => x.id == idPiso);
+    var texto = ''
+    piso?.estado.substring(0, 1) == 'A' ? texto = 'eliminar' : texto = 'activar';
+
     Swal.fire({
       title: "¡Atención!",
-      text: "¿Esta seguro de eliminar el piso?",
+      text: `¿Esta seguro de ${texto} el piso?`,
       icon: "warning",
       showCancelButton: true,
       cancelButtonColor: "var(--color-principal)",

@@ -158,9 +158,13 @@ export class PersonalComponent implements OnInit, AfterViewInit {
   }
 
   EliminarPersonal(idPersonal: number) {
+    var personal = this.Personales.find(x => x.id == idPersonal);
+    var texto = ''
+    personal?.estado.substring(0, 1) == 'A' ? texto = 'eliminar' : texto = 'activar';
+
     Swal.fire({
       title: "¡Atención!",
-      text: "¿Esta seguro de de eliminar el personal?",
+      text: `¿Esta seguro de ${texto} el personal?`,	
       icon: "warning",
       showCancelButton: true,
       cancelButtonColor: "var(--color-principal)",
