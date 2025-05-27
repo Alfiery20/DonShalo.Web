@@ -11,6 +11,7 @@ import { VerMesaResponse } from '../models/Mesa/VerMesa/VerMesaResponse';
 import { constants } from '../models/utils/contants';
 import { LocalStorageService } from './local-storage.service';
 import { EliminarMesaResponse } from '../models/Mesa/EliminarMesa/EliminarMesaResponse';
+import { ObtenerEstadoMesaResponse } from '../models/Mesa/ObtenerEstadoMesa/ObtenerEstadoMesaResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -68,5 +69,14 @@ export class MesaService {
       Authorization: `Bearer ${token}`
     };
     return this.http.delete<EliminarMesaResponse>(uri, { headers: headers });
+  }
+
+  ObtenerEstadoMesa(idPiso: number): Observable<Array<ObtenerEstadoMesaResponse>> {
+    var token = this.localService.getItem('token');
+    const uri = `${constants.apiUrl}/Mesa/obtenerEstadoMesas/${idPiso}`;
+    const headers = {
+      Authorization: `Bearer ${token}`
+    };
+    return this.http.get<Array<ObtenerEstadoMesaResponse>>(uri, { headers: headers });
   }
 }

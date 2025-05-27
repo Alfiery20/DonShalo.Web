@@ -1,0 +1,43 @@
+<div class="container-fluid">
+    <section>
+        <h1>Gestión de Mesa</h1>
+        <hr>
+    </section>
+    <form [formGroup]="formulario">
+        <div class="row g-2 d-flex justify-content-between">
+            <div class="form-floating col-xs-4 col-sm-6 col-md-3 col-xl-3">
+                <select class="form-select" formControlName="sucursal" id="rol" id="floatingSelect"
+                    aria-label="Floating label select example" (change)="ObtenerPiso($event)">
+                    <option value="0" selected>Seleccione</option>
+                    <option *ngFor="let sucursal of this.Sucursales" value="{{sucursal.id}}">
+                        {{sucursal.nombre}}
+                    </option>
+                </select>
+                <label for="floatingSelect">Sucursal...</label>
+            </div>
+            <div class="form-floating col-xs-4 col-sm-6 col-md-3 col-xl-3">
+                <select class="form-select" formControlName="piso" id="rol" id="floatingSelect"
+                    *ngIf="this.pisos.length > 0" aria-label="Floating label select example"
+                    (change)="ObtenerEstadoMesa($event)">
+                    <option value="0" selected>Seleccione</option>
+                    <option *ngFor="let piso of this.pisos" value="{{piso.id}}">
+                        {{piso.nombre}}
+                    </option>
+                </select>
+                <label *ngIf="this.pisos.length > 0" for="floatingSelect">Piso...</label>
+            </div>
+            <div class="col-xs-4 col-sm-2 col-md-6 col-xl-6 d-flex justify-content-end">
+                <button (click)="null" class="btn"
+                    style="height: 58px; width:  58px; background-color: var(--color-principal);">
+                    <i class="bi bi-search" style="color: var(--color-terciario); font-size: 20px;"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+    <section class="row g-2 mt-3">
+        <button class="btn mesa col-4" [ngStyle]="{'background-color' :retornarColor(mesa.estado)}"
+            style="background-image: url(img/Mesa.png);" *ngFor="let mesa of this.estadoMesas" (click)="VerPedido(mesa.id)">
+            {{mesa.numero}}
+        </button>
+    </section>
+</div>

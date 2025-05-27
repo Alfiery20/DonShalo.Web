@@ -29,7 +29,6 @@ import Swal from 'sweetalert2';
 })
 export class MesaComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator = {} as MatPaginator;
-  Piso: ObtenerPisoResponse[] = []
 
   formulario: FormGroup;
 

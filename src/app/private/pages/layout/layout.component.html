@@ -35,27 +35,28 @@
         class="justify-content-between d-flex">
         <div style="width: 100%; display: inline-flex; flex-direction: column;" role="group"
             aria-label="Vertical button group">
-            <button *ngFor="let item of menusObtenidos"
-                class="btn btn-toggle d-inline-flex align-items-center border-0 m-0"
-                [ngClass]="{ 'collapsed': item.menuHijo.length > 0 }"
-                [attr.data-bs-target]="item.menuHijo.length > 0 ? '#menu_' + item.id : null"
-                [attr.data-bs-toggle]="item.menuHijo.length > 0 ? 'collapse' : null" aria-expanded="true"
-                style="background-color: var(--color-terciario); height: 40px;">
-                {{ item.nombre }}
-            </button>
-            <div class="collapse" id="menu_{{item.id}}" *ngFor="let item of menusObtenidos">
-                <ul class="btn-toggle-nav fw-normal small" style="list-style: none;">
-                    <li *ngFor="let itemHijo of item.menuHijo" class="d-flex">
-                        <button type="button" id="btn_{{itemHijo.id}}" (click)="direccionar('btn_' + itemHijo.id)"
-                            class="btn_hijo btn d-inline-flex" role="button"
-                            style="width: 100%; margin: 0; padding: 0 10px;" [routerLink]="itemHijo.ruta">
-                            <p style="margin: 0; height: 40px; display: flex; align-items: center;">
-                                <i class="bi bi-caret-right-fill"></i>
-                                {{itemHijo.nombre}}
-                            </p>
-                        </button>
-                    </li>
-                </ul>
+            <div *ngFor="let item of menusObtenidos">
+                <button class="btn btn-toggle d-inline-flex align-items-center border-0 m-0"
+                    [ngClass]="{ 'collapsed': item.menuHijo.length > 0 }"
+                    [attr.data-bs-target]="item.menuHijo.length > 0 ? '#menu_' + item.id : null"
+                    [attr.data-bs-toggle]="item.menuHijo.length > 0 ? 'collapse' : null" aria-expanded="true"
+                    style="background-color: var(--color-terciario); height: 40px;">
+                    {{ item.nombre }}
+                </button>
+                <div class="collapse" id="menu_{{item.id}}">
+                    <ul class="btn-toggle-nav fw-normal small" style="list-style: none;">
+                        <li *ngFor="let itemHijo of item.menuHijo" class="d-flex">
+                            <button type="button" id="btn_{{itemHijo.id}}" (click)="direccionar('btn_' + itemHijo.id)"
+                                class="btn_hijo btn d-inline-flex" role="button"
+                                style="width: 100%; margin: 0; padding: 0 10px;" [routerLink]="itemHijo.ruta">
+                                <p style="margin: 0; height: 40px; display: flex; align-items: center;">
+                                    <i class="bi bi-caret-right-fill"></i>
+                                    {{itemHijo.nombre}}
+                                </p>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>

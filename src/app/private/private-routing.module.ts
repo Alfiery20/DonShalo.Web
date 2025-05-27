@@ -8,6 +8,9 @@ import { PersonalComponent } from "./pages/personal/personal.component";
 import { RolComponent } from "./pages/rol/rol.component";
 import { authorizeGuard } from "../core/guards/authorize.guard";
 import { MediopagoComponent } from "./pages/mediopago/mediopago.component";
+import { GestionMesaComponent } from "./pages/gestion-mesa/gestion-mesa.component";
+import { CategoriaComponent } from "./pages/categoria/categoria.component";
+import { PlatoComponent } from "./pages/plato/plato.component";
 
 const routes: Routes = [
     {
@@ -42,6 +45,21 @@ const routes: Routes = [
             {
                 path: "medioPago",
                 component: MediopagoComponent,
+                canActivate: [authorizeGuard]
+            },
+            {
+                path: "atencionMesa",
+                component: GestionMesaComponent,
+                canActivate: [authorizeGuard]
+            },
+            {
+                path: "categoria",
+                component: CategoriaComponent,
+                canActivate: [authorizeGuard]
+            },
+            {
+                path: "plato",
+                component: PlatoComponent,
                 canActivate: [authorizeGuard]
             }
         ]

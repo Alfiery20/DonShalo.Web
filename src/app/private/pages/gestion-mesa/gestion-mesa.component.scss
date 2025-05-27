@@ -1,0 +1,22 @@
+.mesa {
+    width: 200px;
+    height: 200px;
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    display: flex;
+    align-items: start;
+    justify-content: end;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.mesa:active {
+    color: var(--color-terciario);
+    transform: scale(0.95);
+    transition: transform 0.1s ease-in-out;
+}

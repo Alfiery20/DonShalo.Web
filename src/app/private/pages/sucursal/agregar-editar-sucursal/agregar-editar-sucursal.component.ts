@@ -10,7 +10,10 @@ import { EditarSucursalRequest } from '../../../../core/models/Sucursal/editarSu
 
 @Component({
   selector: 'app-agregar-editar-sucursal',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule
+  ],
   templateUrl: './agregar-editar-sucursal.component.html',
   styleUrl: './agregar-editar-sucursal.component.scss'
 })
