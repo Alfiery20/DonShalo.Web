@@ -1,1 +1,45 @@
-<p>agregar-editar-plato works!</p>
+<div class="modal fade show" id="exampleModalLive" tabindex="-1" style="display: block;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">{{this.titulo}} Plato</h2>
+                <button type="button" class="btn-close" (click)="CerrarModal()"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formulario">
+                    <div class="mb-3 row">
+                        <label for="nombre" class="col-sm-3 col-form-label">Nombre: </label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="nombre" formControlName="nombre" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="precio" class="col-sm-3 col-form-label">Precio: </label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="precio" formControlName="precio" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="cate" class="col-sm-3 col-form-label">Categoria: </label>
+                        <div class="col-sm-9">
+                            <select class="form-select" formControlName="cate" id="cate"
+                                aria-label="Default select example">
+                                <option value="0" disabled selected>Seleccione</option>
+                                <option value="{{categoria.id}}" *ngFor="let categoria of this.categoriasMenu">
+                                    {{categoria.nombre}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" style="background-color: var(--color-principal); color: white;"
+                    (click)="CerrarModal()">Cancelar</button>
+                <button type="button" class="btn" [ngClass]="{'disabled': null}"
+                    style="background-color: var(--color-terciario); color: var(--color-principal);"
+                    (click)="AccionGuardar()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
