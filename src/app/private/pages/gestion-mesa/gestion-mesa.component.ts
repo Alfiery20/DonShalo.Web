@@ -11,6 +11,7 @@ import { PisoService } from '../../../core/services/piso.service';
 import { SucursalService } from '../../../core/services/sucursal.service';
 import { ObtenerPisoRequest } from '../../../core/models/Piso/ObtenerPiso/obtenerPisoRequest';
 import { ObtenerEstadoMesaResponse } from '../../../core/models/Mesa/ObtenerEstadoMesa/ObtenerEstadoMesaResponse';
+import { AgregarEditarPedidoComponent } from './agregar-editar-pedido/agregar-editar-pedido.component';
 
 @Component({
   selector: 'app-gestion-mesa',
@@ -74,7 +75,13 @@ export class GestionMesaComponent implements OnInit {
   }
 
   VerPedido(idMesa: number) {
-
+    var modalAbierto = this.dialog.open(AgregarEditarPedidoComponent, {
+      width: '400px',
+      data: { id: 0 },
+    });
+    // modalAbierto.componentInstance.onClose.subscribe(() => {
+    //   this.ObtenerEstadoMesa();
+    // });
   }
 
   retornarColor(estado: number) {
