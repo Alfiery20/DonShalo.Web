@@ -8,7 +8,7 @@
             <div class="form-floating col-xs-4 col-sm-6 col-md-3 col-xl-3">
                 <select class="form-select" formControlName="sucursal" id="rol" id="floatingSelect"
                     aria-label="Floating label select example" (change)="ObtenerPiso($event)">
-                    <option value="0" selected>Seleccione</option>
+                    <option value="0" selected disabled>Seleccione</option>
                     <option *ngFor="let sucursal of this.Sucursales" value="{{sucursal.id}}">
                         {{sucursal.nombre}}
                     </option>
@@ -36,7 +36,8 @@
     </form>
     <section class="row g-2 mt-3">
         <button class="btn mesa col-4" [ngStyle]="{'background-color' :retornarColor(mesa.estado)}"
-            style="background-image: url(img/Mesa.png);" *ngFor="let mesa of this.estadoMesas" (click)="VerPedido(mesa.id)">
+            style="background-image: url(img/Mesa.png);" *ngFor="let mesa of this.estadoMesas"
+            (click)="VerPedido(mesa.id)">
             {{mesa.numero}}
         </button>
     </section>

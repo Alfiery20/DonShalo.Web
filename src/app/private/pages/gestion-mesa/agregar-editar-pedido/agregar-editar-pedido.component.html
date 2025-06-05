@@ -10,15 +10,133 @@
                     <div class="mb-3 row">
                         <label for="desc" class="col-sm-3 col-form-label">Nro. Serie: </label>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" id="desc" formControlName="nombre" required>
+                            <input type="text" class="form-control" id="desc" formControlName="nroSerie" [disabled]="true">
                         </div>
                         <label for="desc" class="col-sm-3 col-form-label">Nro. Correlativo: </label>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" id="desc" formControlName="nombre" required>
+                            <input type="text" class="form-control" id="desc" formControlName="nroCorre"  [disabled]="true">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="desc" class="col-sm-3 col-form-label">Nro. Documento: </label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="desc" formControlName="nroDoumento" (blur)="BuscarCliente()" required>
+                        </div>
+                        <label for="desc" class="col-sm-1 col-form-label">Cliente: </label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="desc" formControlName="nombre"  [disabled]="true">
+                        </div>
+                        <div class="col-sm-1">
+                            <button class="btn"
+                                style="background-color: var(--color-principal);"
+                                (click)="null">
+                                <i class="bi bi-plus-lg" style="color: var(--color-terciario);"></i>
+                            </button>
                         </div>
                     </div>
                     <hr>
+                    <div class="mb-3 row">
+                        <div class="form-floating col-xs-4 col-sm-8 col-md-4 col-xl-4">
+                            <select class="form-select" id="idCategoria" id="idCategoria" formControlName="categoria"
+                                aria-label="Floating label select example" (change)="ObtenerMenuPlato($event)">
+                                <option value="0" selected disabled>Seleccione</option>
+                                <option *ngFor="let categoria of this.categoriasMenu" value="{{categoria.id}}">
+                                    {{categoria.nombre}}
+                                </option>
+                            </select>
+                            <label for="idCategoria">Categoria...</label>
+                        </div>
+                        <div class="form-floating col-xs-4 col-sm-8 col-md-4 col-xl-4"
+                            *ngIf="this.formulario.get('categoria')?.value > 0">
+                            <select class="form-select" id="idCategoria" id="idCategoria" formControlName="plato"
+                                aria-label="Floating label select example">
+                                <option value="0" selected disabled>Seleccione</option>
+                                <option *ngFor="let plato of this.platosMenu" value="{{plato.id}}">
+                                    {{plato.nombre}}
+                                </option>
+                            </select>
+                            <label for="idCategoria">Plato...</label>
+                        </div>
+                        <div class="form-floating col-xs-4 col-sm-8 col-md-2 col-xl-2"
+                            *ngIf="this.formulario.get('plato')?.value > 0">
+                            <input type="number" class="form-control" id="desc" formControlName="cantidad">
+                            <label for="idCategoria">Cantidad...</label>
+                        </div>
+                        <div class="form-floating col-xs-4 col-sm-8 col-md-2 col-xl-2 d-flex justify-content-end align-items-end">
+                            <button class="btn"
+                                style="height: 58px; width:  58px; background-color: var(--color-principal);"
+                                (click)="null">
+                                <i class="bi bi-plus-lg" style="color: var(--color-terciario);"></i>
+                            </button>
+                        </div>
+                    </div>
                 </form>
+
+                <!-- <section>
+                    <div class="mat-elevation-z8" style="overflow-x: auto;">
+                        <table mat-table [dataSource]="dataSource">
+                            <ng-container matColumnDef="Nro">
+                                <th mat-header-cell *matHeaderCellDef> No. </th>
+                                <td mat-cell *matCellDef="let element"> {{pisos.indexOf(element) + 1}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Id">
+                                <th mat-header-cell *matHeaderCellDef> Id </th>
+                                <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Numero">
+                                <th mat-header-cell *matHeaderCellDef> Numero </th>
+                                <td mat-cell *matCellDef="let element"> {{element.numero}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Capacidad">
+                                <th mat-header-cell *matHeaderCellDef> Capacidad </th>
+                                <td mat-cell *matCellDef="let element"> {{element.capacidad}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Piso">
+                                <th mat-header-cell *matHeaderCellDef> Piso </th>
+                                <td mat-cell *matCellDef="let element"> {{element.piso}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Sucursal">
+                                <th mat-header-cell *matHeaderCellDef> Sucursal </th>
+                                <td mat-cell *matCellDef="let element"> {{element.sucursal}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Estado">
+                                <th mat-header-cell *matHeaderCellDef> Estado </th>
+                                <td mat-cell *matCellDef="let element"> {{element.estado}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Accion">
+                                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <button class="btn m-1" (click)="EditarMesa(element.id)" title="Editar"
+                                        style="background-color: var(--color-principal); color: var(--color-terciario);">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    <button class="btn" (click)="EliminarMesa(element.id)" title="Eliminar"
+                                        style="background-color: var(--color-principal); color: var(--color-terciario);">
+                                        <i class="bi bi-trash"
+                                            *ngIf="element.estado.substring(0, 1) == 'A'; else icono_else"></i>
+                                        <ng-template #icono_else>
+                                            <i class="bi bi-check-circle"></i>
+                                        </ng-template>
+                                    </button>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                            aria-label="Select page of periodic elements">
+                        </mat-paginator>
+                    </div>
+                </section> -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn" style="background-color: var(--color-principal); color: white;"

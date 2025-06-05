@@ -16,11 +16,11 @@
                 <select class="form-select" formControlName="idCategoria" id="idCategoria" id="idCategoria"
                     aria-label="Floating label select example">
                     <option value="0" selected>Seleccione</option>
-                    <option *ngFor="let rol of this.categoriasMenu" value="{{rol.id}}">
-                        {{rol.nombre}}
+                    <option *ngFor="let categoria of this.categoriasMenu" value="{{categoria.id}}">
+                        {{categoria.nombre}}
                     </option>
                 </select>
-                <label for="idCategoria">Rol...</label>
+                <label for="idCategoria">Categoria...</label>
             </div>
             <div class="col-xs-4 col-sm-2 col-md-4 col-xl-4 d-flex justify-content-end">
                 <button (click)="ObtenerPlato()" class="btn"

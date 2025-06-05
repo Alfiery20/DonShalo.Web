@@ -11,6 +11,7 @@ import { constants } from '../models/utils/contants';
 import { LocalStorageService } from './local-storage.service';
 import { EditarPlatoResponse } from '../models/Plato/EditarPlato/EditarPlatoResponse';
 import { ObtenerPlatoRequest } from '../models/Plato/ObtenerPlato/ObtenerPlatoRequest';
+import { ObtenerMenuPlatoResponse } from '../models/Plato/ObtenerMenuPlato/ObtenerMenuPlatoResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -70,4 +71,13 @@ export class PlatoService {
     return this.http.delete<EliminarPlatoResponse>(uri, { headers: headers });
   }
 
+  ObtenerMenuPlato(request: number): Observable<Array<ObtenerMenuPlatoResponse>> {
+    var token = this.localService.getItem('token');
+    const uri = `${constants.apiUrl}/Plato/obtenerMenuPlato/${request}`;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+    return this.http.get<Array<ObtenerMenuPlatoResponse>>(uri, { headers: headers });
+  }
 }
