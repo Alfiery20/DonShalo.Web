@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Inject, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { VerCategoriaResponse } from '../../../../core/models/Categoria/VerCategoria/VerCategoriaResponse';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { CategoriaService } from '../../../../core/services/categoria.service';
 import { AgregarEditarCategoriaComponent } from '../../categoria/agregar-editar-categoria/agregar-editar-categoria.component';
 import { CommonModule } from '@angular/common';
@@ -11,12 +11,18 @@ import { PlatoService } from '../../../../core/services/plato.service';
 import { ClienteService } from '../../../../core/services/cliente.service';
 import { ObtenerClienteDocResponse } from '../../../../core/models/Cliente/ObtenerClienteDoc/ObtenerClienteDocResponse';
 import Swal from 'sweetalert2';
+import { AgregarClienteComponent } from '../agregar-cliente/agregar-cliente.component';
+import { AgregarDetallePedidoRequest } from '../../../../core/models/DetallePedido/AgregarDetallePedido/AgregarDetallePedidoRequest';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
 @Component({
   selector: 'app-agregar-editar-pedido',
   imports: [
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule
   ],
   templateUrl: './agregar-editar-pedido.component.html',
   styleUrl: './agregar-editar-pedido.component.scss'
@@ -30,10 +36,25 @@ export class AgregarEditarPedidoComponent {
   categoriasMenu: ObtenerMenuCategoriaResponse[] = [];
   platosMenu: ObtenerMenuPlatoResponse[] = [];
 
-  clienteAsignado: ObtenerClienteDocResponse = {} as ObtenerClienteDocResponse;
+
+  clienteAsignado: ObtenerClienteDocResponse = {
+    id: 0,
+    nombre: ''
+  } as ObtenerClienteDocResponse;
 
   esEditar: boolean = false;
   titulo = 'Agregar';
+
+  displayedColumns: string[] =
+    [
+      'Nro',
+      'Plato',
+      'Cantidad',
+      'Accion'
+    ];
+  detallesDePedido: AgregarDetallePedidoRequest[] = [];
+
+  dataSource = new MatTableDataSource<AgregarDetallePedidoRequest>(this.detallesDePedido);
 
   constructor(
     private fb: FormBuilder,
@@ -41,7 +62,8 @@ export class AgregarEditarPedidoComponent {
     @Inject(MAT_DIALOG_DATA) private data: { id: number },
     private catServ: CategoriaService,
     private platoServ: PlatoService,
-    private clieServ: ClienteService
+    private clieServ: ClienteService,
+    private dialog: MatDialog,
   ) {
     this.formulario = this.fb.group({
       nroSerie: [{ value: '', disabled: true }, Validators.required],
@@ -100,6 +122,35 @@ export class AgregarEditarPedidoComponent {
     this.platoServ.ObtenerMenuPlato(id).subscribe((response) => {
       this.platosMenu = response;
     })
+  }
+
+  RegistrarCliente() {
+    var modalAbierto = this.dialog.open(AgregarClienteComponent, {
+      width: '400px',
+      data: { id: this.clienteAsignado.id },
+    });
+  }
+
+  AgregarDetallePedido() {
+    var platoNombre = this.platosMenu.filter(plato => plato.id == this.formulario.value.plato)[0].nombre;
+    console.log(platoNombre);
+
+    var detallePedido: AgregarDetallePedidoRequest = {
+      idPlato: this.formulario.value.plato,
+      nombrePlato: platoNombre,
+      cantidad: this.formulario.value.cantidad,
+    };
+    this.detallesDePedido.push(detallePedido);
+    this.dataSource.data = this.detallesDePedido;
+    this.formulario.get('categoria')?.setValue(0);
+    this.formulario.get('plato')?.setValue(0);
+    this.formulario.get('cantidad')?.setValue(1);
+
+  }
+
+  EliminarDetallePedido(element: AgregarDetallePedidoRequest) {
+    this.detallesDePedido.splice(this.detallesDePedido.indexOf(element), 1);
+    this.dataSource.data = this.detallesDePedido;
   }
 
   AccionGuardar() { }
