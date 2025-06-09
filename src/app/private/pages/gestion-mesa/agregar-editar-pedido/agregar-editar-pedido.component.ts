@@ -15,6 +15,13 @@ import { AgregarClienteComponent } from '../agregar-cliente/agregar-cliente.comp
 import { AgregarDetallePedidoRequest } from '../../../../core/models/DetallePedido/AgregarDetallePedido/AgregarDetallePedidoRequest';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { AgregarPedidoRequest } from '../../../../core/models/Pedido/AgregarPedido/AgregarPedidoRequest';
+import { AgregarPedidoDetalle } from '../../../../core/models/Pedido/AgregarPedido/AgregarPedidoDetalle';
+import { PedidoService } from '../../../../core/services/pedido.service';
+import { ObtenerPedidoResponse } from '../../../../core/models/Pedido/ObtenerPedido/ObtenerPedidoResponse';
+import { ObtenerDetallePedidoResponse } from '../../../../core/models/Pedido/ObtenerDetallePedido/ObtenerDetallePedidoResponse';
+import { EditarPedidoDetalle } from '../../../../core/models/Pedido/EditarPedido/EditarPedidoDetalle';
+import { EditarPedidoRequest } from '../../../../core/models/Pedido/EditarPedido/EditarPedidoRequest';
 
 @Component({
   selector: 'app-agregar-editar-pedido',
@@ -56,13 +63,17 @@ export class AgregarEditarPedidoComponent {
 
   dataSource = new MatTableDataSource<AgregarDetallePedidoRequest>(this.detallesDePedido);
 
+  datosPedido: ObtenerPedidoResponse = {} as ObtenerPedidoResponse;
+
+
   constructor(
     private fb: FormBuilder,
     private modalAgregarCategoria: MatDialogRef<AgregarEditarCategoriaComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: { id: number },
+    @Inject(MAT_DIALOG_DATA) private data: { id: number, estado: number },
     private catServ: CategoriaService,
     private platoServ: PlatoService,
     private clieServ: ClienteService,
+    private pediServ: PedidoService,
     private dialog: MatDialog,
   ) {
     this.formulario = this.fb.group({
@@ -77,13 +88,47 @@ export class AgregarEditarPedidoComponent {
   }
 
   ngOnInit(): void {
-    this.esEditar = this.data.id != 0;
+    this.esEditar = this.data.estado != 0;
+
     this.titulo = 'Agregar';
     this.ObtenerMenuCategoria();
     if (this.esEditar) {
       this.titulo = 'Modificar';
-      // this.ObtenerCategoria(this.data.id);
+      this.ObtenerPedido(this.data.id);
     }
+  }
+
+  ObtenerPedido(id: number) {
+    this.pediServ.ObtenerPedido(id).subscribe(
+      (response) => {
+        this.datosPedido = response
+        this.formulario.get('nroSerie')?.setValue(this.datosPedido.serie);
+        this.formulario.get('nroCorre')?.setValue(this.datosPedido.correlativo);
+        this.formulario.get('nroDoumento')?.setValue(this.datosPedido.numeroDocumento);
+        this.formulario.get('nombre')?.setValue(this.datosPedido.nombre);
+        this.BuscarCliente()
+        this.ObtenerDetallePedido(this.datosPedido.idPedido)
+      }
+    )
+  }
+
+  ObtenerDetallePedido(id: number) {
+    var detallesPedidoResponse: ObtenerDetallePedidoResponse[] = [];
+    this.pediServ.ObtenerDetallePedido(id).subscribe(
+      (response) => {
+        detallesPedidoResponse = response;
+        response.forEach(detalle => {
+          this.detallesDePedido.push(
+            {
+              idPlato: detalle.idPlato,
+              nombrePlato: detalle.plato,
+              cantidad: detalle.cantidad
+            }
+          )
+        });
+        this.dataSource.data = this.detallesDePedido;
+      }
+    )
   }
 
   BuscarCliente() {
@@ -133,7 +178,6 @@ export class AgregarEditarPedidoComponent {
 
   AgregarDetallePedido() {
     var platoNombre = this.platosMenu.filter(plato => plato.id == this.formulario.value.plato)[0].nombre;
-    console.log(platoNombre);
 
     var detallePedido: AgregarDetallePedidoRequest = {
       idPlato: this.formulario.value.plato,
@@ -153,5 +197,135 @@ export class AgregarEditarPedidoComponent {
     this.dataSource.data = this.detallesDePedido;
   }
 
-  AccionGuardar() { }
+  AgregarPedido() {
+    var detallesPedidoRequest: AgregarPedidoDetalle[] = [];
+    this.detallesDePedido.forEach(detalle => {
+      detallesPedidoRequest.push({
+        cantidad: detalle.cantidad,
+        idPlato: detalle.idPlato
+      })
+    });
+
+    var request: AgregarPedidoRequest = {
+      idCliente: this.clienteAsignado.id,
+      idMesa: this.data.id,
+      idPersonal: 0,
+      detallePedido: detallesPedidoRequest
+    }
+    this.pediServ.AgregarPedido(request).subscribe(
+      (response) => {
+        if (response != null && response.codigo == 'OK') {
+          this.CerrarModal();
+          Swal.fire({
+            title: response.mensaje,
+            icon: "success",
+            confirmButtonColor: "var(--color-principal)",
+          });
+        } else {
+          Swal.fire({
+            title: response.mensaje,
+            icon: "error",
+            confirmButtonColor: "var(--color-principal)",
+          });
+        }
+      },
+      (error) => {
+        Swal.fire({
+          title: "Ocurrio un error, comunicarse con servicio tecnico",
+          icon: "error",
+          confirmButtonColor: "var(--color-principal)",
+        });
+      }
+    )
+  }
+
+  EditarPedido() {
+    var detallesPedidoRequest: EditarPedidoDetalle[] = [];
+    this.detallesDePedido.forEach(detalle => {
+      detallesPedidoRequest.push({
+        cantidad: detalle.cantidad,
+        idPlato: detalle.idPlato
+      })
+    });
+
+    var request: EditarPedidoRequest = {
+      idPedido: this.datosPedido.idPedido,
+      idCliente: this.clienteAsignado.id,
+      detallePedido: detallesPedidoRequest
+    }
+    this.pediServ.EditarPedido(request).subscribe(
+      (response) => {
+        if (response != null && response.codigo == 'OK') {
+          this.CerrarModal();
+          Swal.fire({
+            title: response.mensaje,
+            icon: "success",
+            confirmButtonColor: "var(--color-principal)",
+          });
+        } else {
+          Swal.fire({
+            title: response.mensaje,
+            icon: "error",
+            confirmButtonColor: "var(--color-principal)",
+          });
+        }
+      },
+      (error) => {
+        Swal.fire({
+          title: "Ocurrio un error, comunicarse con servicio tecnico",
+          icon: "error",
+          confirmButtonColor: "var(--color-principal)",
+        });
+      }
+    )
+  }
+
+  EliminarPedido() {
+    Swal.fire({
+      title: "¡Atención!",
+      text: `¿Esta seguro de eliminar el pedido?`,
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonColor: "var(--color-principal)",
+      confirmButtonText: "Si",
+      cancelButtonText: "No",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.pediServ.EliminarPedido(this.datosPedido.idPedido).subscribe(
+          (response) => {
+            if (response != null && response.codigo == 'OK') {
+              Swal.fire({
+                title: response.mensaje,
+                icon: "success",
+                confirmButtonColor: "var(--color-principal)",
+              });
+            } else {
+              Swal.fire({
+                title: response.mensaje,
+                icon: "error",
+                confirmButtonColor: "var(--color-principal)",
+              });
+            }
+            this.CerrarModal();
+          },
+          (error) => {
+            Swal.fire({
+              title: "Ocurrio un error, comunicarse con servicio tecnico",
+              icon: "error",
+              confirmButtonColor: "var(--color-principal)",
+            });
+            this.CerrarModal();
+          }
+        )
+      }
+    });
+  }
+
+  AccionGuardar() {
+    if (this.esEditar) {
+      this.EditarPedido();
+    } else {
+      this.AgregarPedido();
+    }
+  }
 }

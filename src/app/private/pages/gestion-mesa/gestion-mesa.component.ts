@@ -63,6 +63,7 @@ export class GestionMesaComponent implements OnInit {
     };
     this.pisoServ.ObtenerPiso(obtenerPiso).subscribe((pisos) => {
       this.pisos = pisos;
+      this.estadoMesas = [];
     });
   }
 
@@ -74,14 +75,17 @@ export class GestionMesaComponent implements OnInit {
     });
   }
 
-  VerPedido(idMesa: number) {
+  VerPedido(idMesa: number, estado: number) {
     var modalAbierto = this.dialog.open(AgregarEditarPedidoComponent, {
       width: '400px',
-      data: { id: 0 },
+      data: { id: idMesa, estado: estado },
     });
-    // modalAbierto.componentInstance.onClose.subscribe(() => {
-    //   this.ObtenerEstadoMesa();
-    // });
+    modalAbierto.componentInstance.onClose.subscribe(() => {
+      this.formulario.get('sucursal')?.setValue(0);
+      this.formulario.get('piso')?.setValue(0);
+      this.pisos = []
+      this.estadoMesas = []
+    });
   }
 
   retornarColor(estado: number) {

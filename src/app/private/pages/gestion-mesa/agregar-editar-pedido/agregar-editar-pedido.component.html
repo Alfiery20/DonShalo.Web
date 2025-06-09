@@ -132,6 +132,11 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn" style="background-color: var(--color-principal); color: white;"
+                    (click)="EliminarPedido()">Anular</button>
+                <button type="button" class="btn" style="background-color: var(--color-secundario); color: white;"
+                    (click)="null">Pagar</button>
+                <div class="vr"></div>
+                <button type="button" class="btn" style="background-color: var(--color-principal); color: white;"
                     (click)="CerrarModal()">Cancelar</button>
                 <button type="button" class="btn" [ngClass]="{'disabled': null}"
                     style="background-color: var(--color-terciario); color: var(--color-principal);"

@@ -37,7 +37,7 @@
     <section class="row g-2 mt-3">
         <button class="btn mesa col-4" [ngStyle]="{'background-color' :retornarColor(mesa.estado)}"
             style="background-image: url(img/Mesa.png);" *ngFor="let mesa of this.estadoMesas"
-            (click)="VerPedido(mesa.id)">
+            (click)="VerPedido(mesa.id, mesa.estado)">
             {{mesa.numero}}
         </button>
     </section>
