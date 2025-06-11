@@ -9,4 +9,5 @@ export interface ObtenerPedidoResponse {
     apellidoMaterno: string;
     ruc: string;
     razonSocial: string;
+    estado: string;
 }
