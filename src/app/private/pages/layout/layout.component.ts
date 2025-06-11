@@ -6,23 +6,9 @@ import { Router, RouterModule } from '@angular/router';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
 import { ObtenerInformacionUsuario } from '../../../core/models/Autorizacion/obtenerInformacionUsuario/ObtenerInformacionLocal';
 
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatGridListModule } from '@angular/material/grid-list';
-
 @Component({
   selector: 'app-layout',
-  imports: [
-    CommonModule,
-    RouterModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatGridListModule
-  ],
+  imports: [CommonModule, RouterModule],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
 })
@@ -42,7 +28,6 @@ export class LayoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.autorService.ObtenerMenus().subscribe((response) => {
-      console.log("MENUS OBTENIDO",response)
       this.menusObtenidos = response;
     });
   }

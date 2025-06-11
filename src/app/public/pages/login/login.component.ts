@@ -16,7 +16,6 @@ import { LoaderService } from '../../../core/services/loader.service';
 })
 export class LoginComponent {
   formulario: FormGroup;
-  showPassword: boolean = false;
 
   constructor(
     private fb: FormBuilder,

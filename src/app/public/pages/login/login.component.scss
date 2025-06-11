@@ -1,35 +1,11 @@
-// .flotante {
-//     position: absolute;
-//     top: 50%;
-//     left: 50%;
-//     transform: translate(-50%, -50%);
-//     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-//     border-radius: 8px;
-// }
-
-section.main
-{
-    height: 100dvh;
-    width: 100%;
-    background-image: url('/img/Fondo.jpeg');
-    background-position: center;
-}
-
-div.logo-img
-{
-    background-color: red;
+.flotante {
+    width: 100vh;
+    height: 50vh;
     position: absolute;
+    top: 50%;
     left: 50%;
-    top: -15px;
-}
-
-div.flotante
-{
-    width: calc(100% - 60px);
-}
-
-div.flotante form
-{
-    padding-top: 60px;
-    width: 100%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 0px 0px 0px 0px;
 }
