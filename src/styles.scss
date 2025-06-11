@@ -4,7 +4,7 @@
 
 html {
   @include mat.theme((color: (theme-type: light,
-        primary: mat.$azure-palette,
+        primary: mat.$red-palette,
         tertiary: mat.$blue-palette,
       ),
       typography: Roboto,
@@ -21,7 +21,7 @@ html {
 
 html,
 body {
-  height: 100%;
+  height: 100dvh;
 }
 
 body {

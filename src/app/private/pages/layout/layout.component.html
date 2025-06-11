@@ -1,5 +1,28 @@
-<section id="var" style="width: 100%; height: 60px; background-color: var(--color-principal);"
-    class="justify-content-between d-flex">
+<mat-grid-list cols="1" rowHeight="50vh">
+    <mat-grid-tile>
+        <mat-toolbar class="row justify-content-between bg-primary">
+            <button class="btn text-white" mat-icon-button (click)="drawer.toggle()">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <button class="btn text-white" mat-icon-button>
+                <mat-icon>person</mat-icon>
+            </button>
+        </mat-toolbar>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <mat-drawer-container>
+            <mat-drawer #drawer mode="over">
+                @for(item of menusObtenidos; track item)
+                {
+                    <button></button>
+                }
+            </mat-drawer>
+            <router-outlet></router-outlet>
+        </mat-drawer-container>
+    </mat-grid-tile>
+</mat-grid-list>
+<!-- <section id="var" style="width: 100%; height: 60px; background-color: var(--color-principal);"
+    class="justify-content-between d-flex px-4">
     <section id="btn_desplegar" class="d-flex align-items-center">
         <button id="btn_menu" class="btn" (click)="toggleMenu()">
             <i class="bi bi-list" style="color: var(--color-terciario);"></i>
@@ -65,4 +88,4 @@
             <router-outlet></router-outlet>
         </section>
     </section>
-</section>
+</section> -->
