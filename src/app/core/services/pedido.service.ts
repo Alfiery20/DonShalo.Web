@@ -10,6 +10,7 @@ import { ObtenerDetallePedidoResponse } from '../models/Pedido/ObtenerDetallePed
 import { EditarPedidoRequest } from '../models/Pedido/EditarPedido/EditarPedidoRequest';
 import { EditarPedidoResponse } from '../models/Pedido/EditarPedido/EditarPedidoResponse';
 import { EliminarPedidoResponse } from '../models/Pedido/EliminarPedido/EliminarPedidoResponse';
+import { VerDetallePedidoPagarResponse } from '../models/Pedido/VerDetallePedidoPagar/VerDetallePedidoPagarResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -69,6 +70,16 @@ export class PedidoService {
       'Content-Type': 'application/json'
     };
     return this.http.delete<EliminarPedidoResponse>(uri, { headers: headers });
+  }
+
+  VerDetallePedidoPagar(id: number): Observable<VerDetallePedidoPagarResponse> {
+    var token = this.localService.getItem('token');
+    const uri = `${constants.apiUrl}/Pedido/verDetallePedidoPagar/${id}`;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+    return this.http.get<VerDetallePedidoPagarResponse>(uri, { headers: headers });
   }
 }
 

@@ -22,6 +22,7 @@ import { ObtenerPedidoResponse } from '../../../../core/models/Pedido/ObtenerPed
 import { ObtenerDetallePedidoResponse } from '../../../../core/models/Pedido/ObtenerDetallePedido/ObtenerDetallePedidoResponse';
 import { EditarPedidoDetalle } from '../../../../core/models/Pedido/EditarPedido/EditarPedidoDetalle';
 import { EditarPedidoRequest } from '../../../../core/models/Pedido/EditarPedido/EditarPedidoRequest';
+import { PagarPedidoComponent } from '../pagar-pedido/pagar-pedido.component';
 
 @Component({
   selector: 'app-agregar-editar-pedido',
@@ -237,6 +238,15 @@ export class AgregarEditarPedidoComponent {
         });
       }
     )
+  }
+
+  PagarPedido() {
+    var modalAbierto = this.dialog.open(PagarPedidoComponent, {
+      width: '400px',
+      data: { id: this.datosPedido.idPedido },
+    });
+    modalAbierto.componentInstance.onClose.subscribe(() => {
+    });
   }
 
   EditarPedido() {

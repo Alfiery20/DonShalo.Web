@@ -134,7 +134,7 @@
                 <button type="button" class="btn" style="background-color: var(--color-principal); color: white;"
                     (click)="EliminarPedido()" *ngIf="this.datosPedido.estado == '1'">Anular</button>
                 <button type="button" class="btn" style="background-color: var(--color-secundario); color: white;"
-                    (click)="null" *ngIf="this.datosPedido.estado == '1'">Pagar</button>
+                    (click)="PagarPedido()" *ngIf="this.datosPedido.estado == '1'">Pagar</button>
                 <div class="vr" *ngIf="this.datosPedido.estado == '1'"></div>
                 <button type="button" class="btn" style="background-color: var(--color-principal); color: white;"
                     (click)="CerrarModal()">Cancelar</button>
