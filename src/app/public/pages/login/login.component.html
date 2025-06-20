@@ -7,28 +7,31 @@
                 </picture>
                 <!-- <img class="w-100" src="img/Logo.png" alt="Logo"> -->
             </div>
-            <form [formGroup]="formulario" class="position-relative">
-                <h2 class="text-center">Bienvenid&#64;</h2>
-                <p>Ingrese sus credenciales para acceder a su cuenta</p>
-                <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="correo" placeholder="name@example.com" formControlName="correo">
-                    <label for="correo">Correo electrónico</label>
-                </div>
-                <div class="input-group mb-3">
-                    <div class="form-floating">
-                        <input [type]="showPassword ? 'text' : 'password'" class="form-control" id="clave" placeholder="Clave" formControlName="clave">
-                        <label for="clave">Contraseña</label>
+            <div class="container d-flex flex-column justify-content-center align-items-center"
+                style="flex: 1; background-color: var(--color-terciario);">
+                <form [formGroup]="formulario">
+                    <div class="form-floating mb-3">
+                        <h2>Iniciar Sesion</h2>
                     </div>
-                    <button class="btn btn-outline-secondary" (click)="showPassword = !showPassword">
-                        <i [classList]="['bi',showPassword ? 'bi-eye' : 'bi-eye-slash'].join(' ')"></i>
-                    </button>
-                </div>
-                <p class="text-secondary opacity-50">Restablecer contraseña</p>
-                <button class="btn btn-dark w-100 d-flex gap-2 justify-content-center" (click)="ValidarInicioSesion()" [disabled]="formulario.invalid">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    <span>Iniciar sesión</span>
-                </button>
-            </form>
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="correo" placeholder="name@example.com"
+                            style="width: 45vh;" formControlName="correo">
+                        <label for="correo">Correo Electronico</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" id="clave" placeholder="Clave" style="width: 45vh;"
+                            formControlName="clave">
+                        <label for="clave">Clave</label>
+                    </div>
+                    <div class="form-floating">
+                        <button type="button" class="btn-lg btn btn-primary"
+                            style="background-color: var(--color-principal); border-color: var(--color-terciario);"
+                            (click)="ValidarInicioSesion()" [disabled]="formulario.invalid">
+                            Iniciar Sesion
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </section>

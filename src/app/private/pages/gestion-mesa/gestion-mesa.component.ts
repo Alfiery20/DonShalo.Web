@@ -12,6 +12,7 @@ import { SucursalService } from '../../../core/services/sucursal.service';
 import { ObtenerPisoRequest } from '../../../core/models/Piso/ObtenerPiso/obtenerPisoRequest';
 import { ObtenerEstadoMesaResponse } from '../../../core/models/Mesa/ObtenerEstadoMesa/ObtenerEstadoMesaResponse';
 import { AgregarEditarPedidoComponent } from './agregar-editar-pedido/agregar-editar-pedido.component';
+import { PagarPedidoComponent } from './pagar-pedido/pagar-pedido.component';
 
 @Component({
   selector: 'app-gestion-mesa',
