@@ -2,7 +2,10 @@
     <div class="flotante position-absolute top-50 start-50 translate-middle">
         <div class="container bg-white position-relative p-4 rounded-4">
             <div class="logo-img rounded-circle translate-middle">
-                <img class="w-100" src="img/Logo.png" alt="Logo">
+                <picture>
+                    <source media="(max-width: 650px)" srcset="logo_bg_mobile.webp">
+                </picture>
+                <!-- <img class="w-100" src="img/Logo.png" alt="Logo"> -->
             </div>
             <form [formGroup]="formulario" class="position-relative">
                 <h2 class="text-center">Bienvenid&#64;</h2>
