@@ -16,6 +16,7 @@ import { LoaderService } from '../../../core/services/loader.service';
 })
 export class LoginComponent {
   formulario: FormGroup;
+  showPassword: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -39,12 +40,34 @@ export class LoginComponent {
     }
   }
 
+  showErrorModal(text:string)
+  {
+    Swal.fire({
+      title: text,
+      icon: "error",
+    });
+  }
+
   ValidarFormulario() {
-    var correo = this.formulario.value.correo;
-    var clave = this.formulario.value.clave;
-    var formularioValidado =
-      correo == '' || correo == null || clave == '' || clave == null;
-    return formularioValidado;
+    switch(true)
+    {
+      case this.formulario.controls['correo'].hasError('required'):
+        this.showErrorModal('No se ha proporcionado un correo');
+        return false;
+      case this.formulario.controls['correo'].hasError('email'):
+        this.showErrorModal('El correo proporcionado es inválido');
+        return false;
+      case this.formulario.controls['clave'].hasError('required'):
+        this.showErrorModal('No se ha proporcionado una contraseña');
+        return false;
+    }
+    return true;
+  }
+
+  onSubmit()
+  {
+    if(this.formulario.invalid) return;
+    this.IniciarSesion();
   }
 
   IniciarSesion() {
@@ -62,21 +85,23 @@ export class LoginComponent {
           Swal.fire({
             title: "Bienvenido!",
             icon: "success",
-            confirmButtonColor: "var(--color-principal)",
+            showConfirmButton: false,
+            timer: 1000
           });
           this.router.navigate(['/intranet']);
         } else {
           this.loaderServi.OcultarLoader();
           Swal.fire({
-            title: "Datos incorrectos",
+            title: "Correo o Contraseña incorrectas",
             icon: "error",
           });
         }
       },
       (error) => {
+        console.log('erro',error)
         this.loaderServi.OcultarLoader();
         Swal.fire({
-          title: "Datos incorrectos",
+          title: "Hubo un error en el servidor",
           icon: "error",
         });
       }
