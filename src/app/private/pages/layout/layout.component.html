@@ -1,4 +1,43 @@
-<section id="var" style="width: 100%; height: 60px; background-color: var(--color-principal);"
+<div class="body-container">
+    <mat-toolbar class="layout-toolbar">
+        <button mat-icon-button (click)="drawer.toggle()">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <span class="spacer"></span>
+        <img src="img/Logo.png" alt="Logo">
+        <span class="spacer"></span>
+        <button mat-icon-button>
+            <mat-icon>person</mat-icon>
+        </button>
+    </mat-toolbar>
+    <mat-drawer-container class="drawer-container">
+        <mat-drawer class="sidenav-container" #drawer [opened]="!mobileQuery.matches" [mode]="mobileQuery.matches ? 'push' : 'side'">
+            <div class="px-3 py-2 bg-white rounded-4">
+                <mat-accordion>
+                    @for (item of menusObtenidos; track $index) {
+                        <mat-expansion-panel [hideToggle]="!item.menuHijo" class="shadow-none m-0">
+                            <mat-expansion-panel-header class="ps-0 pe-1">
+                                <mat-panel-title>
+                                    <mat-icon class="me-3 material-icons-outlined">{{ item.icon }}</mat-icon>
+                                    <span>{{ item.nombre }}</span>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="d-flex flex-column align-items-start">
+                                @for (subitem of item.menuHijo; track $index) {
+                                    <button class="router-link rounded-3 w-100 justify-content-start" mat-button routerLinkActive="route-active" [routerLink]="subitem.ruta">{{ subitem.nombre }}</button>
+                                }
+                            </div>
+                        </mat-expansion-panel>
+                    }
+                </mat-accordion>
+            </div>
+        </mat-drawer>
+        <div class="bg-white p-3 rounded-4">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-drawer-container>
+</div>
+<!-- <section id="var" style="width: 100%; height: 60px; background-color: var(--color-principal);"
     class="justify-content-between d-flex">
     <section id="btn_desplegar" class="d-flex align-items-center">
         <button id="btn_menu" class="btn" (click)="toggleMenu()">
@@ -65,4 +104,4 @@
             <router-outlet></router-outlet>
         </section>
     </section>
-</section>
+</section> -->

@@ -1,4 +1,4 @@
 export class constants {
-    static readonly apiUrl: string = 'http://localhost:5221/api/v1';
+    static readonly apiUrl: string = 'https://donshalo.azurewebsites.net/api/v1';
   }
   
