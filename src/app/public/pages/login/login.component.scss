@@ -39,3 +39,9 @@ button[type="submit"]
     color: white;
     border: none;
 }
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear
+{
+    display: none;
+}
