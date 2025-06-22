@@ -88,6 +88,7 @@ export class PersonalComponent implements OnInit, AfterViewInit {
       idRol: this.formulario.get('rol')?.value,
     }
     this.persServi.ObtenerPersonal(obtenerPersonal).subscribe((personal) => {
+      console.log("personal",personal)
       this.Personales = personal;
       this.dataSource.data = this.Personales;
     });

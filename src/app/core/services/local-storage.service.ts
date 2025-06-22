@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { environment } from 'environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalStorageService {
+
+  private _localStorageKeys = environment.localStorageKeys;
 
   constructor() { }
   setItem(key: string, value: string): void {
@@ -19,6 +22,7 @@ export class LocalStorageService {
   }
 
   clear(): void {
-    localStorage.clear();
+    for(let key in this._localStorageKeys)
+      this.removeItem(key);
   }
 }

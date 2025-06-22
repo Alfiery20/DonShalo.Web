@@ -12,6 +12,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { environment } from 'environments/environment';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { UserInformacionComponent } from '../../components/modals/user-informacion/user-informacion.component';
 
 @Component({
   selector: 'app-layout',
@@ -22,36 +25,36 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatDialogModule
   ],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
 })
 export class LayoutComponent implements OnInit, OnDestroy {
 
-  mobileQuery: MediaQueryList;
-  private _mobileQueryListener: () => void;
+  private autorService = inject(AutorizacionService);
+  private changeDetectorRef = inject(ChangeDetectorRef);
+  private media = inject(MediaMatcher);
+  private localService = inject(LocalStorageService);
+  private route = inject(Router);
+  private _dialog = inject(MatDialog);
+  public mobileQuery: MediaQueryList = this.media.matchMedia('(max-width: 750px)');
+  private _mobileQueryListener = ():void => {};
 
-  menusObtenidos: ObtenerMenuRequest[] = [];
-  mostrarMenu: boolean = false;
-  mostrarUsuario: boolean = false;
-  infoUsuario: ObtenerInformacionUsuario = {} as ObtenerInformacionUsuario;
+  private _localStorageKeys = environment.localStorageKeys;
 
+  public menusObtenidos: ObtenerMenuRequest[] = [];
+  public mostrarMenu: boolean = false;
+  public mostrarUsuario: boolean = false;
 
-  constructor(
-    private autorService: AutorizacionService,
-    private localService: LocalStorageService,
-    private route: Router
-  ) {
-    const changeDetectorRef = inject(ChangeDetectorRef);
-    const media = inject(MediaMatcher);
-
-    this.mobileQuery = media.matchMedia('(max-width: 600px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addEventListener("change", this._mobileQueryListener);
-  }
-
+  public infoUsuario: ObtenerInformacionUsuario = {} as ObtenerInformacionUsuario;
+  private _userModal!: MatDialogRef<UserInformacionComponent> | null;
+  
   ngOnInit(): void {
+    this._mobileQueryListener = () => this.changeDetectorRef.detectChanges();
+    this.mobileQuery.addEventListener("change", this._mobileQueryListener);
+
     this.autorService.ObtenerMenus()
       .subscribe((response) => {
         for (let item of response) {
@@ -67,7 +70,6 @@ export class LayoutComponent implements OnInit, OnDestroy {
               break;
           }
         }
-        console.log("menus???", response)
         this.menusObtenidos = response;
       });
   }
@@ -76,21 +78,31 @@ export class LayoutComponent implements OnInit, OnDestroy {
     this.mobileQuery.removeEventListener("change", this._mobileQueryListener);
   }
 
-  ToggleUsuario() {
-    this.mostrarUsuario = !this.mostrarUsuario;
-    if (this.mostrarUsuario) {
-      this.InformacionUsuarioLocal();
+  showUserInfo()
+  {
+    if(!this._userModal){
+      this._userModal = this._dialog.open(UserInformacionComponent,{
+        position: {
+          top: '70px',
+          right: '20px'
+        },
+        closeOnNavigation: true,
+        hasBackdrop: false
+      });
+    }
+    else
+    {
+      this._userModal.close();
+      this._userModal = null;
     }
   }
 
   InformacionUsuarioLocal() {
-    this.infoUsuario = JSON.parse(this.localService.getItem('usuario') as string);
+    this.infoUsuario = JSON.parse(this.localService.getItem(this._localStorageKeys.USER) as string);
   }
 
   CerrarSesion() {
-    this.localService.removeItem('token');
-    this.localService.removeItem('usuario');
-    this.localService.removeItem('menu');
+    this.localService.clear();
     this.route.navigate(['/']);
   }
 
