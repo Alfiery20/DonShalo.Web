@@ -37,12 +37,6 @@
                 </select>
                 <label for="floatingSelect">Rol...</label>
             </div>
-
-            <div class="col-xs-4 col-sm-12 col-md-1 col-xl-1 d-flex justify-content-end">
-                <button (click)="obtenerPersonal()" class="btn btn-buscar">
-                    <i class="bi bi-search" style="color: var(--color-terciario); font-size: 20px;"></i>
-                </button>
-            </div>
         </div>
     </form>
     <section class="row g-2 mt-3">
@@ -54,8 +48,8 @@
             </button>
         </div>
     </section>
-    <section>
-        <div class="mat-elevation-z8" style="overflow-x: auto;">
+    <section class="d-none d-lg-block">
+        <div class="mat-elevation-z8 mt-3" style="overflow-x: auto;">
             <table mat-table [dataSource]="dataSource">
                 <ng-container matColumnDef="Nro">
                     <th mat-header-cell *matHeaderCellDef> No. </th>
@@ -136,5 +130,48 @@
                 aria-label="Select page of periodic elements">
             </mat-paginator>
         </div>
+    </section>
+    <section class="row d-lg-none">
+        <div class="col-lg-6 col-12 card shadow-sm p-3 mb-4">
+            <div class="card-body">
+                <h5 class="card-title fw-bold">Jesus Martin Lucero Cuzque</h5>
+                <p class="text-muted mb-2">Id: 1</p>
+                <div class="row mb-2">
+                    <div class="col-8"><strong>Tipo de documento:</strong></div>
+                    <div class="col-4 text-end">DNI</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-7"><strong>N° de documento</strong></div>
+                    <div class="col-5 text-end">70556212</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6"><strong>Telefono:</strong></div>
+                    <div class="col-6 text-end">997442247</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-4"><strong>Correo:</strong></div>
+                    <div class="col-8 text-end">jeshulucero14&#64;hotmail.com</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6"><strong>Estado:</strong></div>
+                    <div class="col-6 text-end">Activo</div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-3"><strong>Rol:</strong></div>
+                    <div class="col-9 text-end">Super-Administrador</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-5"><strong>Sucursal:</strong></div>
+                    <div class="col-7 text-end">Puente Piedra</div>
+                </div>
+                <div class="row g-1">
+                    <button class="btn col-12">Asignar Responsable</button>
+                    <button class="btn col-12">Editar</button>
+                    <button class="btn col-12">Eliminar</button>
+                </div>
+            </div>
+        </div>
+
     </section>
 </div>
