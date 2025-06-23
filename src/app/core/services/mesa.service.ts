@@ -12,6 +12,7 @@ import { constants } from '../models/utils/contants';
 import { LocalStorageService } from './local-storage.service';
 import { EliminarMesaResponse } from '../models/Mesa/EliminarMesa/EliminarMesaResponse';
 import { ObtenerEstadoMesaResponse } from '../models/Mesa/ObtenerEstadoMesa/ObtenerEstadoMesaResponse';
+import { LimpiarMesaResponse } from '../models/Mesa/LimpiarMesa/LimpiarMesaResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -78,5 +79,14 @@ export class MesaService {
       Authorization: `Bearer ${token}`
     };
     return this.http.get<Array<ObtenerEstadoMesaResponse>>(uri, { headers: headers });
+  }
+
+  LimpiarMesa(idPedido: number): Observable<LimpiarMesaResponse> {
+    var token = this.localService.getItem('token');
+    const uri = `${constants.apiUrl}/Mesa/limpiarMesa/${idPedido}`;
+    const headers = {
+      Authorization: `Bearer ${token}`
+    };
+    return this.http.get<LimpiarMesaResponse>(uri, { headers: headers });
   }
 }

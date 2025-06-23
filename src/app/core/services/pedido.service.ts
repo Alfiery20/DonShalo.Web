@@ -11,6 +11,10 @@ import { EditarPedidoRequest } from '../models/Pedido/EditarPedido/EditarPedidoR
 import { EditarPedidoResponse } from '../models/Pedido/EditarPedido/EditarPedidoResponse';
 import { EliminarPedidoResponse } from '../models/Pedido/EliminarPedido/EliminarPedidoResponse';
 import { VerDetallePedidoPagarResponse } from '../models/Pedido/VerDetallePedidoPagar/VerDetallePedidoPagarResponse';
+import { PagarPedidoDivididoRequest } from '../models/Pedido/PagarPedidoDividido/PagarPedidoDivididoRequest';
+import { PagarPedidoDivididoResponse } from '../models/Pedido/PagarPedidoDividido/PagarPedidoDivididoResponse';
+import { PagarPedidoResponse } from '../models/Pedido/PagarPedido/PagarPedidoResponse';
+import { PagarPedidoRequest } from '../models/Pedido/PagarPedido/PagarPedidoRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -80,6 +84,30 @@ export class PedidoService {
       'Content-Type': 'application/json'
     };
     return this.http.get<VerDetallePedidoPagarResponse>(uri, { headers: headers });
+  }
+
+  RegistrarPedidoDividido(request: PagarPedidoDivididoRequest): Observable<PagarPedidoDivididoResponse> {
+    var token = this.localService.getItem('token');
+    const uri = `${constants.apiUrl}/Pedido/pagarPedidoDividido`;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+    return this.http.post<PagarPedidoDivididoResponse>(uri, request, { headers: headers });
+  }
+
+  PagarPedido(idPedido: number): Observable<PagarPedidoResponse> {
+    var token = this.localService.getItem('token');
+    var request: PagarPedidoRequest =
+    {
+      idPedido: idPedido
+    };
+    const uri = `${constants.apiUrl}/Pedido/pagarPedido`;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+    return this.http.post<PagarPedidoResponse>(uri, request, { headers: headers });
   }
 }
 

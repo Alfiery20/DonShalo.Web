@@ -23,6 +23,7 @@ import { ObtenerDetallePedidoResponse } from '../../../../core/models/Pedido/Obt
 import { EditarPedidoDetalle } from '../../../../core/models/Pedido/EditarPedido/EditarPedidoDetalle';
 import { EditarPedidoRequest } from '../../../../core/models/Pedido/EditarPedido/EditarPedidoRequest';
 import { PagarPedidoComponent } from '../pagar-pedido/pagar-pedido.component';
+import { MesaService } from '../../../../core/services/mesa.service';
 
 @Component({
   selector: 'app-agregar-editar-pedido',
@@ -75,6 +76,7 @@ export class AgregarEditarPedidoComponent {
     private platoServ: PlatoService,
     private clieServ: ClienteService,
     private pediServ: PedidoService,
+    private mesaServ: MesaService,
     private dialog: MatDialog,
   ) {
     this.formulario = this.fb.group({
@@ -302,6 +304,47 @@ export class AgregarEditarPedidoComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         this.pediServ.EliminarPedido(this.datosPedido.idPedido).subscribe(
+          (response) => {
+            if (response != null && response.codigo == 'OK') {
+              Swal.fire({
+                title: response.mensaje,
+                icon: "success",
+                confirmButtonColor: "var(--color-principal)",
+              });
+            } else {
+              Swal.fire({
+                title: response.mensaje,
+                icon: "error",
+                confirmButtonColor: "var(--color-principal)",
+              });
+            }
+            this.CerrarModal();
+          },
+          (error) => {
+            Swal.fire({
+              title: "Ocurrio un error, comunicarse con servicio tecnico",
+              icon: "error",
+              confirmButtonColor: "var(--color-principal)",
+            });
+            this.CerrarModal();
+          }
+        )
+      }
+    });
+  }
+
+  LimpiarMesa() {
+    Swal.fire({
+      title: "¡Atención!",
+      text: `¿Esta seguro de limpiar mesa?`,
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonColor: "var(--color-principal)",
+      confirmButtonText: "Si",
+      cancelButtonText: "No",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.mesaServ.LimpiarMesa(this.data.id).subscribe(
           (response) => {
             if (response != null && response.codigo == 'OK') {
               Swal.fire({
