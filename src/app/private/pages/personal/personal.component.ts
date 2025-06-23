@@ -12,6 +12,15 @@ import { RolService } from '../../../core/services/rol.service';
 import { ObtenerRolResponse } from '../../../core/models/Rol/ObtenerRol/ObtenerRolResponse';
 import { AgregarEditarPersonalComponent } from './agregar-editar-personal/agregar-editar-personal.component';
 import Swal from 'sweetalert2';
+
+// pruebita-
+import { FormControl } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
+//-
+
 import { AsignarEncargadoSucursalComponent } from './asignar-encargado-sucursal/asignar-encargado-sucursal.component';
 import { ObtenerMenuRolResponse } from '../../../core/models/Rol/obtenerMenuRol/obtenerMenuRolResponse';
 
@@ -21,7 +30,10 @@ import { ObtenerMenuRolResponse } from '../../../core/models/Rol/obtenerMenuRol/
     ReactiveFormsModule,
     CommonModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatFormFieldModule,   // PRUEBITA
+    MatInputModule  // PRUEBITA
+
   ],
   templateUrl: './personal.component.html',
   styleUrl: './personal.component.scss'
@@ -50,6 +62,11 @@ export class PersonalComponent implements OnInit, AfterViewInit {
 
   Roles: ObtenerMenuRolResponse[] = []
 
+  //pruebita-
+  busquedaControl = new FormControl('');
+  PersonalesFiltrados: ObtenerPersonalResponse[] = [];
+  //-
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -65,21 +82,61 @@ export class PersonalComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /*
   ngOnInit(): void {
     this.obtenerPersonal();
     this.ObtenerRoles();
   }
 
+  */
+
+  //pruebita
+
+  ngOnInit(): void {
+  this.obtenerPersonal();
+  this.ObtenerRoles();
+
+  this.busquedaControl.valueChanges.pipe(debounceTime(200)).subscribe(valor => {
+    const filtro = valor?.toLowerCase().trim() || '';
+
+    // Filtro para la tabla
+    this.dataSource.filter = filtro;
+
+    // Filtro para tarjetas móviles
+    this.PersonalesFiltrados = this.Personales.filter(p =>
+      Object.values(p).some(val =>
+        String(val).toLowerCase().includes(filtro)
+      )
+    );
+  });
+}
+//-
+
+/*
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
+*/
+
+  //pruebita-
+  ngAfterViewInit(): void {
+  this.dataSource.paginator = this.paginator;
+
+  this.dataSource.filterPredicate = (data, filtro) => {
+    return Object.values(data).some(val =>
+      String(val).toLowerCase().includes(filtro)
+    );
+  };
+}
+//-
 
   ObtenerRoles() {
     this.rolServi.ObtenerMenuRol('').subscribe((roles) => {
       this.Roles = roles;
     });
   }
-
+  
+  /*
   obtenerPersonal() {
     var obtenerPersonal: ObtenerPersonalRequest = {
       codigoPersonal: this.formulario.get('codPersonal')?.value,
@@ -88,11 +145,30 @@ export class PersonalComponent implements OnInit, AfterViewInit {
       idRol: this.formulario.get('rol')?.value,
     }
     this.persServi.ObtenerPersonal(obtenerPersonal).subscribe((personal) => {
-      console.log("personal",personal)
+      console.log("personal", personal)
       this.Personales = personal;
       this.dataSource.data = this.Personales;
     });
   }
+  */
+
+  //pruebita
+  obtenerPersonal() {
+  const obtenerPersonal: ObtenerPersonalRequest = {
+    codigoPersonal: this.formulario.get('codPersonal')?.value,
+    numeroDocumento: this.formulario.get('nroDoru')?.value,
+    nombre: this.formulario.get('nombre')?.value,
+    idRol: this.formulario.get('rol')?.value,
+  };
+
+  this.persServi.ObtenerPersonal(obtenerPersonal).subscribe((personal) => {
+    console.log("personal", personal);
+    this.Personales = personal;
+    this.dataSource.data = this.Personales;
+    this.PersonalesFiltrados = [...this.Personales]; // Para tarjetas móviles
+  });
+}
+//-
 
   AgregarPersonal() {
     var modalAbierto = this.dialog.open(AgregarEditarPersonalComponent, {
@@ -165,7 +241,7 @@ export class PersonalComponent implements OnInit, AfterViewInit {
 
     Swal.fire({
       title: "¡Atención!",
-      text: `¿Esta seguro de ${texto} el personal?`,	
+      text: `¿Esta seguro de ${texto} el personal?`,
       icon: "warning",
       showCancelButton: true,
       cancelButtonColor: "var(--color-principal)",
