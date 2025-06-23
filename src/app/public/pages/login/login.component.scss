@@ -1,11 +1,41 @@
-.flotante {
-    width: 100vh;
-    height: 50vh;
+section.main
+{
+    height: 100dvh;
+    width: 100%;
+    position: relative;
+}
+
+div.logo-img
+{
+    background-color: red;
     position: absolute;
-    top: 50%;
+    top: 0%;
     left: 50%;
     transform: translate(-50%, -50%);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     padding: 0px 0px 0px 0px;
+}
+
+img.bg-image
+{
+    width: 100dvw;
+    height: 100dvh;
+}
+
+div.form-container
+{
+    margin-top: 5rem;
+}
+
+div.floating-modal
+{
+    max-width: 420px;
+}
+
+button[type="submit"]
+{
+    background-color: var(--color-principal);
+    color: white;
+    border: none;
 }
