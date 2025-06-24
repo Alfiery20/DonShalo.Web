@@ -23,6 +23,7 @@ import { MatInputModule } from '@angular/material/input';
 
 import { AsignarEncargadoSucursalComponent } from './asignar-encargado-sucursal/asignar-encargado-sucursal.component';
 import { ObtenerMenuRolResponse } from '../../../core/models/Rol/obtenerMenuRol/obtenerMenuRolResponse';
+import { MinicardPersonalComponent } from '../../components/minicard/personal/personal.component';
 
 @Component({
   selector: 'app-personal',
@@ -32,8 +33,8 @@ import { ObtenerMenuRolResponse } from '../../../core/models/Rol/obtenerMenuRol/
     MatTableModule,
     MatPaginatorModule,
     MatFormFieldModule,   // PRUEBITA
-    MatInputModule  // PRUEBITA
-
+    MatInputModule,  // PRUEBITA
+    MinicardPersonalComponent
   ],
   templateUrl: './personal.component.html',
   styleUrl: './personal.component.scss'
