@@ -3,33 +3,23 @@
         <h1>Rol</h1>
         <hr>
     </section>
-    <form [formGroup]="formulario">
-        <div class="row g-2 d-flex justify-content-between">
-            <div class="col-xs-4 col-sm-6 col-md-6 col-xl-6">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="codigo" placeholder="Codigo de personal..."
-                        formControlName="nombre">
-                    <label for="codigo">Nombre...</label>
-                </div>
-            </div>
-            <div class="col-xs-4 col-sm-1 col-md-1 col-xl-1 d-flex justify-content-end">
-                <button (click)="obtenerRoles()" class="btn btn-buscar">
-                    <i class="bi bi-search" style="color: var(--color-terciario); font-size: 20px;"></i>
-                </button>
-            </div>
+
+    <section class="row">
+        <div class="">
+            <input class="form-control col-12 col-lg-8 mb-3" [formControl]="busquedaControl"
+                placeholder="Buscar por nombre de rol o estado...">
         </div>
-    </form>
-    <section class="row g-2 mt-3">
-        <div class="d-flex justify-content-end">
-            <button class="btn" (click)="AgregarRol()"
+        <div class="">
+            <button class="btn col-12 col-lg-4 col-xxl-2 mb-3" (click)="AgregarRol()"
                 style="background-color: var(--color-principal); color: var(--color-terciario);">
                 <i class="bi bi-plus"></i>
-                Agregar
+                Agregar Rol
             </button>
         </div>
     </section>
+
     <section>
-        <div class="mat-elevation-z8" style="overflow-x: auto;">
+        <div class="mat-elevation-z8 d-none d-lg-block" style="overflow-x: auto;">
             <table mat-table [dataSource]="dataSource">
                 <ng-container matColumnDef="Nro">
                     <th mat-header-cell *matHeaderCellDef> No. </th>
@@ -81,4 +71,7 @@
             </mat-paginator>
         </div>
     </section>
+
+    <app-rol-minicard-component [RolFiltrados]="RolFiltrados"></app-rol-minicard-component>
+
 </div>

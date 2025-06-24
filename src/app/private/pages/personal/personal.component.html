@@ -4,47 +4,6 @@
         <hr>
     </section>
 
-    <!--
-    <form [formGroup]="formulario">
-        <div class="row g-2 d-flex justify-content-between">
-            <div class="col-xs-4 col-sm-6 col-md-6 col-xl-2">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="codigo" placeholder="Codigo de personal..."
-                        formControlName="codPersonal">
-                    <label for="codigo">Codigo personal...</label>
-                </div>
-            </div>
-            <div class="col-xs-4 col-sm-6 col-md-6 col-xl-3">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="nroDocu" placeholder="Numero de documento..."
-                        formControlName="nroDoru">
-                    <label for="nroDocu">Numero de documento...</label>
-                </div>
-            </div>
-            <div class="col-xs-4 col-sm-6 col-md-6 col-xl-3">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="nombre" placeholder="Nombre..."
-                        formControlName="nombre">
-                    <label for="nroDocu">Nombre...</label>
-                </div>
-            </div>
-
-            <div class="form-floating col-xs-4 col-sm-6 col-md-5 col-xl-3">
-                <select class="form-select" formControlName="rol" id="rol" id="floatingSelect"
-                    aria-label="Floating label select example">
-                    <option value="0" selected>Seleccione</option>
-                    <option *ngFor="let rol of this.Roles" value="{{rol.id}}">
-                        {{rol.nombre}}
-                    </option>
-                </select>
-                <label for="floatingSelect">Rol...</label>
-            </div>
-        </div>
-    </form>
-    -->
-
-
-
     <section class="row">
         <div class="">
             <input class="form-control col-12 col-lg-8 mb-3" [formControl]="busquedaControl"
