@@ -1,7 +1,6 @@
 <section class="w-100 m-0 row d-lg-none gy-3">
 
     @for(rol of RolFiltrados; track $index) {
-
     <div [classList]="[$index == 0 ? 'mt-0' : '', 'col-lg-6 col-12 card shadow-sm p-3'].join(' ')">
         <div class="card-body">
             <h5 class="card-title fw-bold">{{ rol.nombre }}</h5>
@@ -10,9 +9,6 @@
                 <div class="col-6"><strong>Estado:</strong></div>
                 <div class="col-6 text-end">{{ rol.estado }}</div>
             </div>
-
-
-
             <div class="row g-1">
                 <button class="btn btn-outline-danger col-12">Modificar permisos</button>
                 <button class="btn btn-outline-danger col-12">Editar nombre</button>
@@ -21,4 +17,5 @@
         </div>
     </div>
     }
+
 </section>
