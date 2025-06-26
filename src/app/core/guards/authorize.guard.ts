@@ -12,7 +12,7 @@ export const authorizeGuard: CanActivateChildFn = (childRoute, state) => {
   const _localstoragekeys = environment.localStorageKeys;
 
   var token = localServi.getItem(_localstoragekeys.TOKEN);
-  var url = (state.url).split('/')[2];
+  var url = (state.url).split('/')[2] ?? '/intranet';
 
   if (token) {
     const decoded = jwtDecode<TokenDesencriptado>(token);
