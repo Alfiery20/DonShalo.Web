@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormControl, FormsModule } from '@angular/forms';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,28 +12,26 @@ import { RolService } from '../../../core/services/rol.service';
 import { ObtenerRolResponse } from '../../../core/models/Rol/ObtenerRol/ObtenerRolResponse';
 import { AgregarEditarPersonalComponent } from './agregar-editar-personal/agregar-editar-personal.component';
 import Swal from 'sweetalert2';
-
-// pruebita-
-import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-
-//-
-
 import { AsignarEncargadoSucursalComponent } from './asignar-encargado-sucursal/asignar-encargado-sucursal.component';
 import { ObtenerMenuRolResponse } from '../../../core/models/Rol/obtenerMenuRol/obtenerMenuRolResponse';
 import { MinicardPersonalComponent } from '../../components/minicard/personal/personal.component';
+import { SucursalService } from '../../../core/services/sucursal.service';
+import { ObtenerMenuSucursalResponse } from '../../../core/models/Sucursal/obtenerMenuSucursal/obtenerMenuSucursalResponse';
 
 @Component({
   selector: 'app-personal',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
+    FormsModule,
     CommonModule,
     MatTableModule,
     MatPaginatorModule,
-    MatFormFieldModule,   // PRUEBITA
-    MatInputModule,  // PRUEBITA
+    MatFormFieldModule,
+    MatInputModule,
     MinicardPersonalComponent
   ],
   templateUrl: './personal.component.html',
@@ -44,29 +42,35 @@ export class PersonalComponent implements OnInit, AfterViewInit {
 
   formulario: FormGroup;
 
-  displayedColumns: string[] =
-    [
-      'Nro',
-      'Id',
-      'TipoDoc',
-      'NumDoc',
-      'Nombre',
-      'Telef',
-      'Correo',
-      'Estado',
-      'Rol',
-      'Sucursal',
-      'Accion',
-    ];
-  Personales: ObtenerPersonalResponse[] = []
+  displayedColumns: string[] = [
+    'Nro',
+    'Id',
+    'TipoDoc',
+    'NumDoc',
+    'Nombre',
+    'Telef',
+    'Correo',
+    'Estado',
+    'Rol',
+    'Sucursal',
+    'Accion',
+  ];
+
+  Personales: ObtenerPersonalResponse[] = [];
+  PersonalesFiltrados: ObtenerPersonalResponse[] = [];
   dataSource = new MatTableDataSource<ObtenerPersonalResponse>(this.Personales);
 
-  Roles: ObtenerMenuRolResponse[] = []
+  Roles: ObtenerMenuRolResponse[] = [];
+  Sucursales: ObtenerMenuSucursalResponse[] = [];
 
-  //pruebita-
   busquedaControl = new FormControl('');
-  PersonalesFiltrados: ObtenerPersonalResponse[] = [];
-  //-
+
+  criterioSeleccionado: string = '';
+  opcionesFiltro: string[] = [];
+  valorSeleccionado: string = '';
+
+  tipoDocumentoOpciones: string[] = ['DNI', 'Carnet de Extranjeria', 'Pasaporte'];
+  estadoOpciones: string[] = ['Activo', 'Inactivo'];
 
   constructor(
     private fb: FormBuilder,
@@ -74,6 +78,7 @@ export class PersonalComponent implements OnInit, AfterViewInit {
     private dialog: MatDialog,
     private persServi: PersonalService,
     private rolServi: RolService,
+    private sucursalServi: SucursalService
   ) {
     this.formulario = this.fb.group({
       codPersonal: ['', Validators.required],
@@ -83,113 +88,119 @@ export class PersonalComponent implements OnInit, AfterViewInit {
     });
   }
 
-  /*
   ngOnInit(): void {
     this.obtenerPersonal();
     this.ObtenerRoles();
+    this.ObtenerSucursales();
+
+    this.busquedaControl.valueChanges.pipe(debounceTime(200)).subscribe(valor => {
+      const filtro = valor?.toLowerCase().trim() || '';
+      this.dataSource.filter = filtro;
+
+      this.PersonalesFiltrados = this.Personales.filter(p =>
+        Object.values(p).some(val =>
+          String(val).toLowerCase().includes(filtro)
+        )
+      );
+    });
   }
 
-  */
-
-  //pruebita
-
-  ngOnInit(): void {
-  this.obtenerPersonal();
-  this.ObtenerRoles();
-
-  this.busquedaControl.valueChanges.pipe(debounceTime(200)).subscribe(valor => {
-    const filtro = valor?.toLowerCase().trim() || '';
-
-    // Filtro para la tabla
-    this.dataSource.filter = filtro;
-
-    // Filtro para tarjetas móviles
-    this.PersonalesFiltrados = this.Personales.filter(p =>
-      Object.values(p).some(val =>
-        String(val).toLowerCase().includes(filtro)
-      )
-    );
-  });
-}
-//-
-
-/*
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+
+    this.dataSource.filterPredicate = (data, filtro) => {
+      return Object.values(data).some(val =>
+        String(val).toLowerCase().includes(filtro)
+      );
+    };
   }
-*/
-
-  //pruebita-
-  ngAfterViewInit(): void {
-  this.dataSource.paginator = this.paginator;
-
-  this.dataSource.filterPredicate = (data, filtro) => {
-    return Object.values(data).some(val =>
-      String(val).toLowerCase().includes(filtro)
-    );
-  };
-}
-//-
 
   ObtenerRoles() {
     this.rolServi.ObtenerMenuRol('').subscribe((roles) => {
       this.Roles = roles;
     });
   }
-  
-  /*
+
+  ObtenerSucursales() {
+    this.sucursalServi.ObtenerMenuSucursal('').subscribe((sucs) => {
+      this.Sucursales = sucs;
+    });
+  }
+
   obtenerPersonal() {
-    var obtenerPersonal: ObtenerPersonalRequest = {
+    const obtenerPersonal: ObtenerPersonalRequest = {
       codigoPersonal: this.formulario.get('codPersonal')?.value,
       numeroDocumento: this.formulario.get('nroDoru')?.value,
       nombre: this.formulario.get('nombre')?.value,
       idRol: this.formulario.get('rol')?.value,
-    }
+    };
+
     this.persServi.ObtenerPersonal(obtenerPersonal).subscribe((personal) => {
-      console.log("personal", personal)
       this.Personales = personal;
-      this.dataSource.data = this.Personales;
+      this.dataSource.data = [...this.Personales];
+      this.PersonalesFiltrados = [...this.Personales];
     });
   }
-  */
 
-  //pruebita
-  obtenerPersonal() {
-  const obtenerPersonal: ObtenerPersonalRequest = {
-    codigoPersonal: this.formulario.get('codPersonal')?.value,
-    numeroDocumento: this.formulario.get('nroDoru')?.value,
-    nombre: this.formulario.get('nombre')?.value,
-    idRol: this.formulario.get('rol')?.value,
-  };
+  actualizarOpcionesFiltro() {
+    switch (this.criterioSeleccionado) {
+      case 'tipoDocumento':
+        this.opcionesFiltro = this.tipoDocumentoOpciones;
+        break;
+      case 'estado':
+        this.opcionesFiltro = this.estadoOpciones;
+        break;
+      case 'rol':
+        this.opcionesFiltro = this.Roles.map(r => r.nombre);
+        break;
+      case 'sucursal':
+        this.opcionesFiltro = this.Sucursales.map(s => s.nombre);
+        break;
+      default:
+        this.opcionesFiltro = [];
+    }
 
-  this.persServi.ObtenerPersonal(obtenerPersonal).subscribe((personal) => {
-    console.log("personal", personal);
-    this.Personales = personal;
-    this.dataSource.data = this.Personales;
-    this.PersonalesFiltrados = [...this.Personales]; // Para tarjetas móviles
-  });
-}
-//-
+    this.valorSeleccionado = '';
+  }
+
+  filtrarPorCriterio() {
+    const criterio = this.criterioSeleccionado;
+    const valor = this.valorSeleccionado;
+
+    if (!criterio || !valor) {
+      this.PersonalesFiltrados = [...this.Personales];
+      this.dataSource.data = this.PersonalesFiltrados;
+      return;
+    }
+
+    this.PersonalesFiltrados = this.Personales.filter(p => {
+      if (criterio === 'tipoDocumento') return p.tipoDocumento === valor;
+      if (criterio === 'estado') return p.estado === valor;
+      if (criterio === 'rol') return p.rol === valor;
+      if (criterio === 'sucursal') return p.sucursal === valor;
+      return false;
+    });
+
+    this.dataSource.data = this.PersonalesFiltrados;
+  }
 
   AgregarPersonal() {
-    var modalAbierto = this.dialog.open(AgregarEditarPersonalComponent, {
+    const modalAbierto = this.dialog.open(AgregarEditarPersonalComponent, {
       maxWidth: '750px',
       data: { id: 0 },
     });
     modalAbierto.componentInstance.onClose.subscribe(() => {
-      // this.formulario.reset();
       this.ObtenerRoles();
       this.obtenerPersonal();
     });
   }
 
   EditarPersonal(idPersonal: number) {
-    var modalAbierto = this.dialog.open(AgregarEditarPersonalComponent, {
+    const modalAbierto = this.dialog.open(AgregarEditarPersonalComponent, {
       maxWidth: '750px',
       data: { id: idPersonal },
     });
     modalAbierto.componentInstance.onClose.subscribe(() => {
-      // this.formulario.reset();
       this.ObtenerRoles();
       this.obtenerPersonal();
     });
@@ -223,26 +234,25 @@ export class PersonalComponent implements OnInit, AfterViewInit {
               });
             }
           },
-          (error) => {
+          () => {
             Swal.fire({
-              title: "Ocurrio un error, comunicarse con servicio tecnico",
+              title: "Ocurrió un error, comuníquese con soporte técnico",
               icon: "error",
               confirmButtonColor: "var(--color-principal)",
             });
           }
-        )
+        );
       }
     });
   }
 
   EliminarPersonal(idPersonal: number) {
-    var personal = this.Personales.find(x => x.id == idPersonal);
-    var texto = ''
-    personal?.estado.substring(0, 1) == 'A' ? texto = 'eliminar' : texto = 'activar';
+    const personal = this.Personales.find(x => x.id == idPersonal);
+    const texto = personal?.estado.substring(0, 1) == 'A' ? 'eliminar' : 'activar';
 
     Swal.fire({
       title: "¡Atención!",
-      text: `¿Esta seguro de ${texto} el personal?`,
+      text: `¿Está seguro de ${texto} el personal?`,
       icon: "warning",
       showCancelButton: true,
       cancelButtonColor: "var(--color-principal)",
@@ -267,14 +277,14 @@ export class PersonalComponent implements OnInit, AfterViewInit {
               });
             }
           },
-          (error) => {
+          () => {
             Swal.fire({
-              title: "Ocurrio un error, comunicarse con servicio tecnico",
+              title: "Ocurrió un error, comuníquese con soporte técnico",
               icon: "error",
               confirmButtonColor: "var(--color-principal)",
             });
           }
-        )
+        );
       }
     });
   }

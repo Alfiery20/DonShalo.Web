@@ -1,0 +1,33 @@
+<section class="w-100 m-0 row d-lg-none gy-3">
+
+    @for(piso of PisoFiltrados; track $index) {
+    <div [classList]="[$index == 0 ? 'mt-0' : '', 'col-lg-6 col-12 card shadow-sm p-3'].join(' ')">
+        <div class="card-body">
+            <h5 class="card-title fw-bold">{{ piso.nombre }}</h5>
+            <p class="text-muted mb-2">Id: {{ piso.id }}</p>
+            <div class="row mb-2">
+                <div class="col-8"><strong>Capacidad Clientes:</strong></div>
+                <div class="col-4 text-end">{{ piso.capacidadCliente }}</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-7"><strong>Capacidad Personal:</strong></div>
+                <div class="col-5 text-end">{{ piso.capacidadPersonal }}</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-6"><strong>Estado:</strong></div>
+                <div class="col-6 text-end">{{ piso.estado }}</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-5"><strong>Sucursal:</strong></div>
+                <div class="col-7 text-end">{{ piso.sucursal }}</div>
+            </div>
+
+            <div class="row g-1">
+                <button class="btn btn-outline-danger col-12">Editar Piso</button>
+                <button class="btn btn-danger col-12">Desahabilitar Piso</button>
+            </div>
+        </div>
+    </div>
+    }
+
+</section>

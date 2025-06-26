@@ -1,48 +1,47 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormControl } from '@angular/forms';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ObtenerRolResponse } from '../../../core/models/Rol/ObtenerRol/ObtenerRolResponse';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { PersonalService } from '../../../core/services/personal.service';
 import { RolService } from '../../../core/services/rol.service';
 import { AgregarEditarRolComponent } from './agregar-editar-rol/agregar-editar-rol.component';
 import Swal from 'sweetalert2';
 import { AgregarMenuRolComponent } from './agregar-menu-rol/agregar-menu-rol.component';
-import { ActualizarPermisoRequest } from '../../../core/models/Rol/actualizarPermiso/actualizarPermisoRequest';
+import { MinicardRolComponent } from '../../components/minicard/rol/rol.component';
 
 @Component({
   selector: 'app-rol',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     CommonModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MinicardRolComponent
   ],
   templateUrl: './rol.component.html',
   styleUrl: './rol.component.scss'
 })
-export class RolComponent {
-
+export class RolComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator = {} as MatPaginator;
 
   formulario: FormGroup;
+  busquedaControl: FormControl = new FormControl('');
 
-  displayedColumns: string[] =
-    [
-      'Nro',
-      'Id',
-      'Nombre',
-      'Estado',
-      'Accion'
-    ];
-  roles: ObtenerRolResponse[] = []
+  displayedColumns: string[] = [
+    'Nro',
+    'Id',
+    'Nombre',
+    'Estado',
+    'Accion'
+  ];
+
+  roles: ObtenerRolResponse[] = [];
   dataSource = new MatTableDataSource<ObtenerRolResponse>(this.roles);
-
-  rolSeleccionado: ObtenerRolResponse = {} as ObtenerRolResponse;
-  Roles: ObtenerRolResponse[] = []
+  RolFiltrados: ObtenerRolResponse[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -57,92 +56,99 @@ export class RolComponent {
 
   ngOnInit(): void {
     this.obtenerRoles();
+
+    this.busquedaControl.valueChanges.subscribe(valor => {
+      const filtro = (valor || '').toLowerCase();
+      this.RolFiltrados = this.roles.filter(rol =>
+        rol.nombre.toLowerCase().includes(filtro) ||
+        rol.estado.toLowerCase().includes(filtro)
+      );
+      this.dataSource.data = this.RolFiltrados;
+    });
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
 
-  obtenerRoles() {
-    var termino = this.formulario.get('nombre')?.value
+  obtenerRoles(): void {
+    const termino = this.formulario.get('nombre')?.value;
     this.rolServi.ObtenerRol(termino).subscribe((rol) => {
       this.roles = rol;
       this.dataSource.data = this.roles;
+      this.RolFiltrados = this.roles;
     });
   }
 
-  AgregarRol() {
-    var modalAbierto = this.dialog.open(AgregarEditarRolComponent, {
+  AgregarRol(): void {
+    const modalAbierto = this.dialog.open(AgregarEditarRolComponent, {
       maxWidth: '750px',
       data: { id: 0 },
     });
     modalAbierto.componentInstance.onClose.subscribe(() => {
-      // this.formulario.reset();
       this.obtenerRoles();
     });
   }
 
-  EditarRol(idPersonal: number) {
-    var modalAbierto = this.dialog.open(AgregarEditarRolComponent, {
+  EditarRol(idRol: number): void {
+    const modalAbierto = this.dialog.open(AgregarEditarRolComponent, {
       maxWidth: '750px',
-      data: { id: idPersonal },
+      data: { id: idRol },
     });
     modalAbierto.componentInstance.onClose.subscribe(() => {
-      // this.formulario.reset();
       this.obtenerRoles();
     });
   }
 
-  EliminarRol(idrol: number) {
-    var rol = this.roles.find(x => x.id == idrol);
-    var texto = ''
-    rol?.estado.substring(0, 1) == 'A' ? texto = 'eliminar' : texto = 'activar';
+  EliminarRol(idRol: number): void {
+    const rol = this.roles.find(x => x.id === idRol);
+    const texto = rol?.estado.startsWith('A') ? 'eliminar' : 'activar';
+
     Swal.fire({
-      title: "¡Atención!",
-      text: `¿Esta seguro de ${texto} el rol?`,
-      icon: "warning",
+      title: '¡Atención!',
+      text: `¿Está seguro de ${texto} el rol?`,
+      icon: 'warning',
       showCancelButton: true,
-      cancelButtonColor: "var(--color-principal)",
-      confirmButtonText: "Si",
-      cancelButtonText: "No",
+      cancelButtonColor: 'var(--color-principal)',
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.rolServi.EliminarRol(idrol).subscribe(
+        this.rolServi.EliminarRol(idRol).subscribe(
           (response) => {
-            if (response != null && response.codigo == 'OK') {
+            if (response && response.codigo === 'OK') {
               this.obtenerRoles();
               Swal.fire({
                 title: response.mensaje,
-                icon: "success",
-                confirmButtonColor: "var(--color-principal)",
+                icon: 'success',
+                confirmButtonColor: 'var(--color-principal)',
               });
             } else {
               Swal.fire({
-                title: response.mensaje,
-                icon: "error",
-                confirmButtonColor: "var(--color-principal)",
+                title: response?.mensaje || 'Error inesperado',
+                icon: 'error',
+                confirmButtonColor: 'var(--color-principal)',
               });
             }
           },
-          (error) => {
+          () => {
             Swal.fire({
-              title: "Ocurrio un error, comunicarse con servicio tecnico",
-              icon: "error",
-              confirmButtonColor: "var(--color-principal)",
+              title: 'Ocurrió un error, comuníquese con soporte técnico',
+              icon: 'error',
+              confirmButtonColor: 'var(--color-principal)',
             });
           }
-        )
+        );
       }
     });
   }
 
-  AgregarPermisoRol(idPersonal: number) {
-    var modalAbierto = this.dialog.open(AgregarMenuRolComponent, {
+  AgregarPermisoRol(idRol: number): void {
+    const modalAbierto = this.dialog.open(AgregarMenuRolComponent, {
       maxWidth: '750px',
-      data: { id: idPersonal },
+      data: { id: idRol },
     });
     modalAbierto.componentInstance.onClose.subscribe(() => {
-      // this.formulario.reset();
       this.obtenerRoles();
     });
   }
