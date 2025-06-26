@@ -4,19 +4,42 @@
         <hr>
     </section>
 
-    <section class="row">
-        <div class="">
-            <input class="form-control col-12 col-lg-8 mb-3" [formControl]="busquedaControl"
-                placeholder="Buscar por nombre, documento, sucursal...">
-        </div>
-        <div class="">
-            <button class="btn col-12 col-lg-4 col-xxl-2 mb-3" (click)="AgregarPersonal()"
-                style="background-color: var(--color-principal); color: var(--color-terciario);">
-                <i class="bi bi-plus"></i>
-                Agregar Personal
-            </button>
+    <section class="mb-3">
+
+        <div class="row g-2 mb-2 align-items-end">
+            <div class="col-12 col-md-6 col-lg-4">
+                <label class="mb-1">Filtrar todo:</label>
+                <input class="form-control" [formControl]="busquedaControl"
+                    placeholder="Buscar por nombre, documento, sucursal...">
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <label class="mb-1">Filtrar por:</label>
+                <select class="form-select" [(ngModel)]="criterioSeleccionado" (change)="actualizarOpcionesFiltro()">
+                    <option value="" disabled selected>Seleccione criterio</option>
+                    <option value="tipoDocumento">Tipo de Documento</option>
+                    <option value="estado">Estado</option>
+                    <option value="rol">Rol</option>
+                    <option value="sucursal">Sucursal</option>
+                </select>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3" *ngIf="opcionesFiltro.length > 0">
+                <label class="mb-1">Opciones:</label>
+                <select class="form-select" [(ngModel)]="valorSeleccionado" (change)="filtrarPorCriterio()">
+                    <option *ngFor="let opcion of opcionesFiltro" [value]="opcion">{{ opcion }}</option>
+                </select>
+            </div>
+
+            <div class="col-12 col-lg-2">
+                <button class="btn w-100" (click)="AgregarPersonal()"
+                    style="background-color: var(--color-principal); color: var(--color-terciario);">
+                    <i class="bi bi-plus"></i> Agregar Personal
+                </button>
+            </div>
         </div>
     </section>
+
     <section class="d-none d-lg-block">
         <div class="mat-elevation-z8 mt-3" style="overflow-x: auto;">
             <table mat-table [dataSource]="dataSource">

@@ -4,17 +4,22 @@
         <hr>
     </section>
 
-    <section class="row">
-        <div class="">
-            <input class="form-control col-12 col-lg-8 mb-3" [formControl]="busquedaControl"
-                placeholder="Buscar por nombre de rol o estado...">
+    <section class="mb-3">
+        <div class="row g-2 mb-2">
+            <div class="col-12 col-lg-6">
+                <label class="mb-1">Filtrar todo:</label>
+                <input class="form-control" [formControl]="busquedaControl"
+                    placeholder="Buscar por nombre de rol o estado...">
+            </div>
         </div>
-        <div class="">
-            <button class="btn col-12 col-lg-4 col-xxl-2 mb-3" (click)="AgregarRol()"
-                style="background-color: var(--color-principal); color: var(--color-terciario);">
-                <i class="bi bi-plus"></i>
-                Agregar Rol
-            </button>
+        <div class="row">
+            <div>
+                <button class="btn col-12 col-lg-4 col-xxl-2" (click)="AgregarRol()"
+                    style="background-color: var(--color-principal); color: var(--color-terciario);">
+                    <i class="bi bi-plus"></i>
+                    Agregar Rol
+                </button>
+            </div>
         </div>
     </section>
 

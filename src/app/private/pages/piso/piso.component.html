@@ -4,8 +4,8 @@
         <hr>
     </section>
     <section class="mb-3">
-        <div class="row g-2 mb-3">
-            <div class="col-12 col-lg-5">
+        <div class="row g-2 mb-2">
+            <div class="col-12 col-lg-6">
                 <label class="mb-1">Filtrar todo:</label>
                 <input class="form-control" [formControl]="busquedaControl"
                     placeholder="Buscar por nombre de rol o estado...">
@@ -23,8 +23,8 @@
         </div>
 
         <div class="row">
-            <div class="col-12 col-lg-2">
-                <button class="btn w-100" (click)="AgregarPiso()"
+            <div class="">
+                <button class="btn col-12 col-lg-4 col-xxl-2" (click)="AgregarPiso()"
                     style="background-color: var(--color-principal); color: var(--color-terciario);">
                     <i class="bi bi-plus"></i>
                     Agregar Piso
@@ -92,9 +92,13 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
 
+
+            @if(true){
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
                 aria-label="Select page of periodic elements">
             </mat-paginator>
+            }
+
         </div>
     </section>
 
