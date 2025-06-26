@@ -18,11 +18,11 @@ const routes: Routes = [
         path: "",
         component: LayoutComponent,
         children: [
-            {
-                path: "",
-                component: DefaultComponent,
-                canActivate: [authorizeGuard]
-            },
+            // {
+            //     path: "",
+            //     component: DefaultComponent,
+            //     canActivate: [authorizeGuard]
+            // },
             {
                 path: "personal",
                 component: PersonalComponent,
