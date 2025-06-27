@@ -8,13 +8,13 @@
 
         <div class="row g-2 mb-2 align-items-end">
 
-            <div class="col-12 col-lg-5">
+            <div class="col-12 col-lg-4 col-xxl-3">
                 <label class="mb-1">Filtrar todo:</label>
                 <input class="form-control col-12 col-lg-8" [formControl]="busquedaControl"
                     placeholder="Buscar por nombre, documento, sucursal...">
             </div>
 
-            <div class="col-12 col-md-4 col-lg-3">
+            <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
                 <label class="mb-1">Filtrar por:</label>
                 <select class="form-select" [(ngModel)]="criterioSeleccionado" (change)="actualizarCampoFiltro()">
                     <option value="" disabled selected>Seleccione</option>
@@ -26,7 +26,7 @@
             </div>
 
             @if (mostrarInput) {
-            <div class="col-12 col-md-4 col-lg-3">
+            <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
                 <label class="mb-1">Buscar:</label>
                 <input class="form-control" [(ngModel)]="valorInput" (input)="filtrarPorTexto()"
                     placeholder="Busca aquí" />
@@ -34,7 +34,7 @@
             }
 
             @if (mostrarSelect) {
-            <div class="col-12 col-md-4 col-lg-3">
+            <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
                 <label class="mb-1">Seleccione Rol:</label>
                 <select class="form-select" [(ngModel)]="valorSeleccionado" (change)="filtrarPorRol()">
                     <option value="" disabled selected>Seleccione</option>
@@ -43,22 +43,24 @@
             </div>
             }
 
-            <div class="col-12 col-md-4 col-lg-1">
-                <button class="btn btn-outline-danger" (click)="limpiarFiltros()">
+            <div class="col-12 col-lg-4 col-xxl-3" [ngClass]="(mostrarSelect || mostrarInput) ? 'col-xxl-1' : 'col-xxl-3'">
+                <button class="btn btn-outline-danger w-100" (click)="limpiarFiltros()">
                     <i class=""></i> Limpiar filtros
                 </button>
             </div>
         </div>
 
-        <div class="row">
-            <div>
-                <button class="btn col-12 col-lg-4 col-xxl-2" (click)="AgregarPersonal()"
+        <div class="row g-2 mb-2">
+            <div class="col-12 col-lg-4 col-xxl-2">
+                <button class="btn w-100" (click)="AgregarPersonal()"
                     style="background-color: var(--color-principal); color: var(--color-terciario);">
                     <i class="bi bi-plus"></i>
                     Agregar Personal
                 </button>
             </div>
         </div>
+
+
     </section>
 
     <section class="d-none d-lg-block">
