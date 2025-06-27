@@ -12,11 +12,14 @@ import Swal from 'sweetalert2';
 import { AgregarMenuRolComponent } from './agregar-menu-rol/agregar-menu-rol.component';
 import { MinicardRolComponent } from '../../components/minicard/rol/rol.component';
 
+import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-rol',
   standalone: true,
   imports: [
     ReactiveFormsModule,
+    FormsModule,
     CommonModule,
     MatTableModule,
     MatPaginatorModule,
@@ -31,17 +34,13 @@ export class RolComponent implements OnInit, AfterViewInit {
   formulario: FormGroup;
   busquedaControl: FormControl = new FormControl('');
 
-  displayedColumns: string[] = [
-    'Nro',
-    'Id',
-    'Nombre',
-    'Estado',
-    'Accion'
-  ];
+  displayedColumns: string[] = ['Nro', 'Id', 'Nombre', 'Estado', 'Accion'];
 
   roles: ObtenerRolResponse[] = [];
   dataSource = new MatTableDataSource<ObtenerRolResponse>(this.roles);
   RolFiltrados: ObtenerRolResponse[] = [];
+
+  estadoSeleccionado: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -152,4 +151,26 @@ export class RolComponent implements OnInit, AfterViewInit {
       this.obtenerRoles();
     });
   }
+
+  filtrarPorEstado(): void {
+    const estado = this.estadoSeleccionado.toLowerCase();
+    this.RolFiltrados = this.roles.filter(rol =>
+      rol.estado.toLowerCase() === estado
+    );
+    this.dataSource.data = this.RolFiltrados;
+  }
+
+  limpiarFiltroEstado(): void {
+    this.estadoSeleccionado = '';
+    this.RolFiltrados = [...this.roles];
+    this.dataSource.data = this.RolFiltrados;
+  }
+
+  limpiarFiltros() {
+    this.estadoSeleccionado = '';
+    this.busquedaControl.setValue('');
+    this.RolFiltrados = [...this.roles];
+    this.dataSource.data = this.RolFiltrados;
+  }
+
 }

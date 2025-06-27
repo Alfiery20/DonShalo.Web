@@ -43,9 +43,10 @@
             </div>
             }
 
-            <div class="col-12 col-lg-4 col-xxl-3" [ngClass]="(mostrarSelect || mostrarInput) ? 'col-xxl-1' : 'col-xxl-3'">
+            <div class="col-12 col-lg-4 col-xxl-2"
+                [ngClass]="(mostrarSelect || mostrarInput) ? 'col-md-12' : 'col-md-6'">
                 <button class="btn btn-outline-danger w-100" (click)="limpiarFiltros()">
-                    <i class=""></i> Limpiar filtros
+                    <i class="bi bi-trash"></i> Limpiar filtros
                 </button>
             </div>
         </div>

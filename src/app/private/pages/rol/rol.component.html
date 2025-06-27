@@ -4,24 +4,37 @@
         <hr>
     </section>
 
-    <section class="mb-3">
-        <div class="row g-2 mb-2">
-            <div class="col-12 col-lg-6">
-                <label class="mb-1">Filtrar todo:</label>
-                <input class="form-control" [formControl]="busquedaControl"
-                    placeholder="Buscar por nombre de rol o estado...">
+    <section class="mb-2">
+        <div class="row g-2 mb-2 align-items-end">
+
+            <div class="col-12 col-md-6 col-lg-6 col-xxl-4">
+                <label class="mb-1">Filtrar por estado:</label>
+                <select class="form-select" [(ngModel)]="estadoSeleccionado" (ngModelChange)="filtrarPorEstado()">
+                    <option value="" disabled selected>Seleccione</option>
+                    <option value="Activo">Activo</option>
+                    <option value="Inactivo">Inactivo</option>
+                </select>
             </div>
-        </div>
-        <div class="row">
-            <div>
-                <button class="btn col-12 col-lg-4 col-xxl-2" (click)="AgregarRol()"
-                    style="background-color: var(--color-principal); color: var(--color-terciario);">
-                    <i class="bi bi-plus"></i>
-                    Agregar Rol
+
+            <div class="col-12 col-md-6 col-lg-3 col-xxl-2">
+                <button class="btn btn-outline-danger w-100" (click)="limpiarFiltros()">
+                    <i class="bi bi-trash"></i> Limpiar Filtros
                 </button>
             </div>
+
+            <div class="col-4 d-none d-xxl-block"></div>
+
+            <div class="col-12 col-lg-3 col-xxl-2">
+                <button class="btn w-100" (click)="AgregarRol()"
+                    style="background-color: var(--color-principal); color: var(--color-terciario);">
+                    <i class="bi bi-plus"></i> Agregar Rol
+                </button>
+            </div>
+
         </div>
     </section>
+
+
 
     <section>
         <div class="mat-elevation-z8 d-none d-lg-block" style="overflow-x: auto;">

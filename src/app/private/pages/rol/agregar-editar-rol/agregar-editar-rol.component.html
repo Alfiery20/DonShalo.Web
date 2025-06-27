@@ -1,8 +1,8 @@
 <div class="modal fade show" id="exampleModalLive" tabindex="-1" style="display: block;">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">{{this.titulo}} Sucursal</h2>
+                <h2 class="modal-title">{{this.titulo}} Rol</h2>
                 <button type="button" class="btn-close" (click)="CerrarModal()"></button>
             </div>
             <div class="modal-body">
@@ -16,10 +16,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn" style="background-color: var(--color-principal); color: white;"
-                    (click)="CerrarModal()">Cancelar</button>
-                <button type="button" class="btn" [ngClass]="{'disabled': null}"
-                    style="background-color: var(--color-terciario); color: var(--color-principal);"
+                <button type="button" id="botonCancelar" class="btn" (click)="CerrarModal()">Cancelar</button>
+                <button type="button" id="botonAceptar" class="btn" [ngClass]="{'disabled': null}"
                     (click)="AccionGuardar()">Guardar</button>
             </div>
         </div>
