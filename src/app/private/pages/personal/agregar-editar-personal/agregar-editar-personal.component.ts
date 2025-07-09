@@ -177,7 +177,7 @@ export class AgregarEditarPersonalComponent implements OnInit {
 
   ObtenerSucursal() {
     var terminoSucursal = this.formulario.get('sucursal')?.value ?? '';
-    this.sucServi.ObtenerMenuSucursal(terminoSucursal).subscribe((response) => {
+    this.sucServi.ObtenerMenuSucursal('').subscribe((response) => {
       this.Sucursales = response
     })
   }

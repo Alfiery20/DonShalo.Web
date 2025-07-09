@@ -1,61 +1,47 @@
-<div class="container-fluid">
+<div class="container-fluid bg-white p-3 rounded-4">
     <section>
         <h1>Personal</h1>
         <hr>
     </section>
-    <form [formGroup]="formulario">
-        <div class="row g-2 d-flex justify-content-between">
-            <div class="col-xs-4 col-sm-6 col-md-6 col-xl-2">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="codigo" placeholder="Codigo de personal..."
-                        formControlName="codPersonal">
-                    <label for="codigo">Codigo personal...</label>
-                </div>
-            </div>
-            <div class="col-xs-4 col-sm-6 col-md-6 col-xl-3">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="nroDocu" placeholder="Numero de documento..."
-                        formControlName="nroDoru">
-                    <label for="nroDocu">Numero de documento...</label>
-                </div>
-            </div>
-            <div class="col-xs-4 col-sm-6 col-md-6 col-xl-3">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="nombre" placeholder="Nombre..."
-                        formControlName="nombre">
-                    <label for="nroDocu">Nombre...</label>
-                </div>
+
+    <section class="mb-3">
+
+        <div class="row g-2 mb-2 align-items-end">
+            <div class="col-12 col-md-6 col-lg-4">
+                <label class="mb-1">Filtrar todo:</label>
+                <input class="form-control" [formControl]="busquedaControl"
+                    placeholder="Buscar por nombre, documento, sucursal...">
             </div>
 
-            <div class="form-floating col-xs-4 col-sm-6 col-md-5 col-xl-3">
-                <select class="form-select" formControlName="rol" id="rol" id="floatingSelect"
-                    aria-label="Floating label select example">
-                    <option value="0" selected>Seleccione</option>
-                    <option *ngFor="let rol of this.Roles" value="{{rol.id}}">
-                        {{rol.nombre}}
-                    </option>
+            <div class="col-12 col-md-6 col-lg-3">
+                <label class="mb-1">Filtrar por:</label>
+                <select class="form-select" [(ngModel)]="criterioSeleccionado" (change)="actualizarOpcionesFiltro()">
+                    <option value="" disabled selected>Seleccione criterio</option>
+                    <option value="tipoDocumento">Tipo de Documento</option>
+                    <option value="estado">Estado</option>
+                    <option value="rol">Rol</option>
+                    <option value="sucursal">Sucursal</option>
                 </select>
-                <label for="floatingSelect">Rol...</label>
             </div>
 
-            <div class="col-xs-4 col-sm-12 col-md-1 col-xl-1 d-flex justify-content-end">
-                <button (click)="obtenerPersonal()" class="btn btn-buscar">
-                    <i class="bi bi-search" style="color: var(--color-terciario); font-size: 20px;"></i>
+            <div class="col-12 col-md-6 col-lg-3" *ngIf="opcionesFiltro.length > 0">
+                <label class="mb-1">Opciones:</label>
+                <select class="form-select" [(ngModel)]="valorSeleccionado" (change)="filtrarPorCriterio()">
+                    <option *ngFor="let opcion of opcionesFiltro" [value]="opcion">{{ opcion }}</option>
+                </select>
+            </div>
+
+            <div class="col-12 col-lg-2">
+                <button class="btn w-100" (click)="AgregarPersonal()"
+                    style="background-color: var(--color-principal); color: var(--color-terciario);">
+                    <i class="bi bi-plus"></i> Agregar Personal
                 </button>
             </div>
         </div>
-    </form>
-    <section class="row g-2 mt-3">
-        <div class="d-flex justify-content-end">
-            <button class="btn" (click)="AgregarPersonal()"
-                style="background-color: var(--color-principal); color: var(--color-terciario);">
-                <i class="bi bi-plus"></i>
-                Agregar
-            </button>
-        </div>
     </section>
-    <section>
-        <div class="mat-elevation-z8" style="overflow-x: auto;">
+
+    <section class="d-none d-lg-block">
+        <div class="mat-elevation-z8 mt-3" style="overflow-x: auto;">
             <table mat-table [dataSource]="dataSource">
                 <ng-container matColumnDef="Nro">
                     <th mat-header-cell *matHeaderCellDef> No. </th>
@@ -137,4 +123,6 @@
             </mat-paginator>
         </div>
     </section>
+
+    <app-personal-minicard-component [PersonalesFiltrados]="PersonalesFiltrados"></app-personal-minicard-component>
 </div>

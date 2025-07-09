@@ -1,49 +1,55 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormControl } from '@angular/forms';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { ObtenerPisoRequest } from '../../../core/models/Piso/ObtenerPiso/obtenerPisoRequest';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { SucursalService } from '../../../core/services/sucursal.service';
-import { PisoService } from '../../../core/services/piso.service';
-import { ObtenerPisoResponse } from '../../../core/models/Piso/ObtenerPiso/obtenerPisoResponse';
 import { CommonModule } from '@angular/common';
-import { AgregarEditarPisoComponent } from './agregar-editar-piso/agregar-editar-piso.component';
-import { ObtenerMenuSucursalResponse } from '../../../core/models/Sucursal/obtenerMenuSucursal/obtenerMenuSucursalResponse';
 import Swal from 'sweetalert2';
+
+import { ObtenerPisoRequest } from '../../../core/models/Piso/ObtenerPiso/obtenerPisoRequest';
+import { ObtenerPisoResponse } from '../../../core/models/Piso/ObtenerPiso/obtenerPisoResponse';
+import { ObtenerMenuSucursalResponse } from '../../../core/models/Sucursal/obtenerMenuSucursal/obtenerMenuSucursalResponse';
+
+import { PisoService } from '../../../core/services/piso.service';
+import { SucursalService } from '../../../core/services/sucursal.service';
+
+import { AgregarEditarPisoComponent } from './agregar-editar-piso/agregar-editar-piso.component';
+import { MinicardPisoComponent } from '../../components/minicard/piso/piso.component';
 
 @Component({
   selector: 'app-piso',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     CommonModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MinicardPisoComponent
   ],
   templateUrl: './piso.component.html',
   styleUrl: './piso.component.scss'
 })
 export class PisoComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator = {} as MatPaginator;
-  Piso: ObtenerPisoResponse[] = []
+
+  pisos: ObtenerPisoResponse[] = [];
+  PisoFiltrados: ObtenerPisoResponse[] = [];
+  Sucursales: ObtenerMenuSucursalResponse[] = [];
 
   formulario: FormGroup;
+  busquedaControl: FormControl = new FormControl('');
 
-  displayedColumns: string[] =
-    [
-      'Nro',
-      'Id',
-      'Nombre',
-      'CapaciCliente',
-      'CapaciPerson',
-      'Sucursal',
-      'Estado',
-      'Accion'
-    ];
-
-  pisos: ObtenerPisoResponse[] = []
-  Sucursales: ObtenerMenuSucursalResponse[] = []
+  displayedColumns: string[] = [
+    'Nro',
+    'Id',
+    'Nombre',
+    'CapaciCliente',
+    'CapaciPerson',
+    'Sucursal',
+    'Estado',
+    'Accion'
+  ];
 
   dataSource = new MatTableDataSource<ObtenerPisoResponse>(this.pisos);
 
@@ -56,34 +62,48 @@ export class PisoComponent implements OnInit, AfterViewInit {
   ) {
     this.formulario = this.fb.group({
       nombre: ['', Validators.required],
-      sucursal: [0, Validators.required],
+      sucursal: ['0', Validators.required]  // usamos nombre, no id
     });
   }
 
   ngOnInit(): void {
-    this.ObtenerSucursal()
+    this.ObtenerSucursal();
     this.ObtenerPiso();
-  }
 
-  ObtenerPiso() {
-    var obtenerPiso: ObtenerPisoRequest = {
-      termino: this.formulario.get('nombre')?.value,
-      idSucursal: this.formulario.get('sucursal')?.value,
-    }
-    this.pisoServ.ObtenerPiso(obtenerPiso).subscribe((pisos) => {
-      this.pisos = pisos;
-      this.dataSource.data = this.pisos;
+    this.busquedaControl.valueChanges.subscribe(() => {
+      this.filtrarResultados();
+    });
+
+    this.formulario.get('sucursal')?.valueChanges.subscribe(() => {
+      this.filtrarResultados();
     });
   }
 
-  ObtenerSucursal() {
-    this.sucService.ObtenerMenuSucursal('').subscribe((response) => {
-      this.Sucursales = response
-    })
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
   }
 
-  AgregarPiso() {
-    var modalAbierto = this.dialog.open(AgregarEditarPisoComponent, {
+  ObtenerPiso(): void {
+    const obtenerPiso: ObtenerPisoRequest = {
+      termino: this.formulario.get('nombre')?.value,
+      idSucursal: 0 // ya no usamos idSucursal, pero lo enviamos por compatibilidad
+    };
+
+    this.pisoServ.ObtenerPiso(obtenerPiso).subscribe(pisos => {
+      this.pisos = pisos;
+      this.PisoFiltrados = [...pisos];
+      this.dataSource.data = [...pisos];
+    });
+  }
+
+  ObtenerSucursal(): void {
+    this.sucService.ObtenerMenuSucursal('').subscribe(response => {
+      this.Sucursales = response;
+    });
+  }
+
+  AgregarPiso(): void {
+    const modalAbierto = this.dialog.open(AgregarEditarPisoComponent, {
       width: '400px',
       data: { id: 0 },
     });
@@ -92,62 +112,72 @@ export class PisoComponent implements OnInit, AfterViewInit {
     });
   }
 
-  EditarPiso(idCategoria: number) {
-    var modalAbierto = this.dialog.open(AgregarEditarPisoComponent, {
+  EditarPiso(id: number): void {
+    const modalAbierto = this.dialog.open(AgregarEditarPisoComponent, {
       width: '400px',
-      data: { id: idCategoria },
+      data: { id },
     });
     modalAbierto.componentInstance.onClose.subscribe(() => {
       this.ObtenerPiso();
     });
   }
 
-  EliminarPiso(idPiso: number) {
-    var piso = this.pisos.find(x => x.id == idPiso);
-    var texto = ''
-    piso?.estado.substring(0, 1) == 'A' ? texto = 'eliminar' : texto = 'activar';
+  EliminarPiso(id: number): void {
+    const piso = this.pisos.find(x => x.id === id);
+    const texto = piso?.estado.startsWith('A') ? 'eliminar' : 'activar';
 
     Swal.fire({
-      title: "¡Atención!",
-      text: `¿Esta seguro de ${texto} el piso?`,
-      icon: "warning",
+      title: '¡Atención!',
+      text: `¿Está seguro de ${texto} el piso?`,
+      icon: 'warning',
       showCancelButton: true,
-      cancelButtonColor: "var(--color-principal)",
-      confirmButtonText: "Si",
-      cancelButtonText: "No",
-    }).then((result) => {
+      cancelButtonColor: 'var(--color-principal)',
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No',
+    }).then(result => {
       if (result.isConfirmed) {
-        this.pisoServ.EliminarPiso(idPiso).subscribe(
-          (response) => {
-            if (response != null && response.codigo == 'OK') {
-              this.ObtenerPiso();
-              Swal.fire({
-                title: response.mensaje,
-                icon: "success",
-                confirmButtonColor: "var(--color-principal)",
-              });
-            } else {
-              Swal.fire({
-                title: response.mensaje,
-                icon: "error",
-                confirmButtonColor: "var(--color-principal)",
-              });
-            }
-          },
-          (error) => {
+        this.pisoServ.EliminarPiso(id).subscribe(response => {
+          if (response?.codigo === 'OK') {
+            this.ObtenerPiso();
             Swal.fire({
-              title: "Ocurrio un error, comunicarse con servicio tecnico",
-              icon: "error",
-              confirmButtonColor: "var(--color-principal)",
+              title: response.mensaje,
+              icon: 'success',
+              confirmButtonColor: 'var(--color-principal)',
+            });
+          } else {
+            Swal.fire({
+              title: response.mensaje,
+              icon: 'error',
+              confirmButtonColor: 'var(--color-principal)',
             });
           }
-        )
+        }, () => {
+          Swal.fire({
+            title: 'Ocurrió un error, comuníquese con soporte técnico',
+            icon: 'error',
+            confirmButtonColor: 'var(--color-principal)',
+          });
+        });
       }
     });
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
+  private filtrarResultados(): void {
+    const filtroTexto = this.busquedaControl.value?.toLowerCase().trim() || '';
+    const sucursalSeleccionada = this.formulario.get('sucursal')?.value;
 
+    this.PisoFiltrados = this.pisos.filter(p => {
+      const coincideTexto =
+        p.nombre.toLowerCase().includes(filtroTexto) ||
+        p.estado.toLowerCase().includes(filtroTexto) ||
+        p.sucursal.toLowerCase().includes(filtroTexto);
+
+      const coincideSucursal =
+        sucursalSeleccionada === '0' || p.sucursal === sucursalSeleccionada;
+
+      return coincideTexto && coincideSucursal;
+    });
+
+    this.dataSource.data = this.PisoFiltrados;
+  }
 }

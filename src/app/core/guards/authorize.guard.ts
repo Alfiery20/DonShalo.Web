@@ -4,13 +4,15 @@ import { LocalStorageService } from '../services/local-storage.service';
 import { jwtDecode } from 'jwt-decode';
 import { Permisos } from '../models/Autorizacion/permiso/permisos';
 import { TokenDesencriptado } from '../models/Autorizacion/permiso/tokenDesencriptado';
+import { environment } from 'environments/environment';
 
 export const authorizeGuard: CanActivateChildFn = (childRoute, state) => {
   const localServi = inject(LocalStorageService);
   const router = inject(Router);
+  const _localstoragekeys = environment.localStorageKeys;
 
-  var token = localServi.getItem('token');
-  var url = (state.url).split('/')[2];
+  var token = localServi.getItem(_localstoragekeys.TOKEN);
+  var url = (state.url).split('/')[2] ?? '/intranet';
 
   if (token) {
     const decoded = jwtDecode<TokenDesencriptado>(token);

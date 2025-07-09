@@ -11,12 +11,18 @@ import { MediopagoComponent } from "./pages/mediopago/mediopago.component";
 import { GestionMesaComponent } from "./pages/gestion-mesa/gestion-mesa.component";
 import { CategoriaComponent } from "./pages/categoria/categoria.component";
 import { PlatoComponent } from "./pages/plato/plato.component";
+import { DefaultComponent } from "./pages/default/default.component";
 
 const routes: Routes = [
     {
         path: "",
         component: LayoutComponent,
         children: [
+            // {
+            //     path: "",
+            //     component: DefaultComponent,
+            //     canActivate: [authorizeGuard]
+            // },
             {
                 path: "personal",
                 component: PersonalComponent,

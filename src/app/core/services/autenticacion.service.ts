@@ -1,19 +1,15 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IniciarSesionRequest } from '../models/Autenticacion/iniciarSesion/iniciarSesionRequest';
 import { IniciarSesionResponse } from '../models/Autenticacion/iniciarSesion/IniciarSesionResponse';
 import { Observable } from 'rxjs';
-import { constants } from '../models/utils/contants';
+import { Api } from '../classes/api';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AutenticacionService {
-
-  constructor(private http: HttpClient) { }
-
+export class AutenticacionService extends Api {
   IniciarSesion(usuarioLogin: IniciarSesionRequest): Observable<IniciarSesionResponse> {
-    const uri = `${constants.apiUrl}/Autenticacion/iniciarSesion`;
+    const uri = `${this.url}/Autenticacion/iniciarSesion`;
     return this.http.post<IniciarSesionResponse>(uri, usuarioLogin);
   }
 }

@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { environment } from 'environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalStorageService {
+
+  private _localStorageKeys = environment.localStorageKeys;
 
   constructor() { }
   setItem(key: string, value: string): void {
@@ -11,7 +14,20 @@ export class LocalStorageService {
   }
 
   getItem(key: string): string | null {
-    return localStorage.getItem(key);
+    const item: string | null = localStorage.getItem(key);
+    if(item == null) return null;
+
+    try{
+      const p = JSON.parse(item);
+      if(typeof p == 'object' && p !== null)
+        return p;
+
+      return item;
+    }
+    catch(e)
+    {
+      return item;
+    }
   }
 
   removeItem(key: string): void {
@@ -19,6 +35,7 @@ export class LocalStorageService {
   }
 
   clear(): void {
-    localStorage.clear();
+    for(let key in this._localStorageKeys)
+      this.removeItem(key);
   }
 }

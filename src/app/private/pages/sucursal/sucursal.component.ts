@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SucursalService } from '../../../core/services/sucursal.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -9,6 +9,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { AgregarEditarSucursalComponent } from './agregar-editar-sucursal/agregar-editar-sucursal.component';
 import Swal from 'sweetalert2';
 import { ObtenerSucursalResponse } from '../../../core/models/Sucursal/obtenerSucursal/ObtenerSucursalResponse';
+import { debounceTime } from 'rxjs';
+import { SucursalMinicardComponent } from '../../components/minicard/sucursal/sucursal.component';
 
 @Component({
   selector: 'app-sucursal',
@@ -16,15 +18,14 @@ import { ObtenerSucursalResponse } from '../../../core/models/Sucursal/obtenerSu
     ReactiveFormsModule,
     CommonModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    SucursalMinicardComponent
   ],
   templateUrl: './sucursal.component.html',
   styleUrl: './sucursal.component.scss'
 })
 export class SucursalComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator = {} as MatPaginator;
-
-  formulario: FormGroup;
 
   displayedColumns: string[] =
     [
@@ -41,37 +42,50 @@ export class SucursalComponent implements OnInit, AfterViewInit {
       'Accion'
     ];
   Sucursales: ObtenerSucursalResponse[] = []
+  SucursalesFiltradas: ObtenerSucursalResponse[] = [];
+
   dataSource = new MatTableDataSource<ObtenerSucursalResponse>(this.Sucursales);
+
+  filterControl: FormControl = new FormControl('');
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private dialog: MatDialog,
     private sucursaService: SucursalService,
-  ) {
-    this.formulario = this.fb.group({
-      sucursal: ['', Validators.required],
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.buscarSucursal('');
-  }
 
-  buscarSucursalPorNombre() {
-    const nombre = this.formulario.get('sucursal')?.value ?? '';
-    this.buscarSucursal(nombre);
+    this.filterControl.valueChanges.pipe(
+      debounceTime(200)
+    )
+    .subscribe( (v:string) => {
+      const f = v.toLowerCase().trim() || '';
+
+      this.dataSource.filter = f;
+
+      this.SucursalesFiltradas = this.Sucursales.filter( p => {
+        Object.values(p).some( v => v.toString().toLowerCase().includes(f) );
+      });
+    });
   }
 
   buscarSucursal(termino: string) {
     this.sucursaService.ObtenerSucursal(termino).subscribe((sucursales) => {
       this.Sucursales = sucursales;
       this.dataSource.data = this.Sucursales;
+      this.SucursalesFiltradas = this.Sucursales;
     });
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+
+    this.dataSource.filterPredicate = 
+      (d,f) => 
+        Object.values(d).some(v => v.toString().toLowerCase().includes(f))
   }
 
   AgregarSucursal() {

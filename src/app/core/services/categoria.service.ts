@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AgregarCategoriaRequest } from '../models/Categoria/AgregarCategoria/AgregarCategoriaRequest';
@@ -7,76 +6,48 @@ import { EditarCategoriaRequest } from '../models/Categoria/EditarCategoria/Edit
 import { EliminarCategoriaResponse } from '../models/Categoria/EliminarCategoria/EliminarCategoriaResponse';
 import { ObtenerCategoriaResponse } from '../models/Categoria/ObtenerCategoria/ObtenerCategoriaResponse';
 import { VerCategoriaResponse } from '../models/Categoria/VerCategoria/VerCategoriaResponse';
-import { constants } from '../models/utils/contants';
-import { LocalStorageService } from './local-storage.service';
 import { EditarCategoriaRespone } from '../models/Categoria/EditarCategoria/EditarCategoriaResponse';
 import { ObtenerMenuCategoriaResponse } from '../models/Categoria/ObtenerMenuCategoria/ObtenerMenuCategoriaResponse';
+import { Api } from '../classes/api';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CategoriaService {
-
-  constructor(
-    private http: HttpClient,
-    private localService: LocalStorageService
-  ) { }
+export class CategoriaService extends Api {
 
   ObtenerCategoria(termino: string): Observable<Array<ObtenerCategoriaResponse>> {
-    var token = this.localService.getItem('token');
-    const uri = `${constants.apiUrl}/Categoria/obtenerCategoria/${termino}`;
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    };
+    const uri = `${this.url}/Categoria/obtenerCategoria/${termino}`;
+    const headers = this._headers;
     return this.http.get<Array<ObtenerCategoriaResponse>>(uri, { headers: headers });
   }
 
   AgregarCategoria(Categoria: AgregarCategoriaRequest): Observable<AgregarCategoriaResponse> {
-    var token = this.localService.getItem('token');
-    const uri = `${constants.apiUrl}/Categoria/registrarCategoria`;
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    };
+    const uri = `${this.url}/Categoria/registrarCategoria`;
+    const headers = this._headers;
     return this.http.post<AgregarCategoriaResponse>(uri, Categoria, { headers: headers });
   }
 
   VerCategoria(id: number): Observable<VerCategoriaResponse> {
-    var token = this.localService.getItem('token');
-    const uri = `${constants.apiUrl}/Categoria/verCategoria/${id}`;
-    const headers = {
-      Authorization: `Bearer ${token}`
-    };
+    const uri = `${this.url}/Categoria/verCategoria/${id}`;
+    const headers = this._headers;
     return this.http.get<VerCategoriaResponse>(uri, { headers: headers });
   }
 
   EditarCategoria(Categoria: EditarCategoriaRequest): Observable<EditarCategoriaRespone> {
-    var token = this.localService.getItem('token');
-    const uri = `${constants.apiUrl}/Categoria/editarCategoria`;
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    };
+    const uri = `${this.url}/Categoria/editarCategoria`;
+    const headers = this._headers;
     return this.http.put<EditarCategoriaRespone>(uri, Categoria, { headers: headers });
   }
 
   EliminarCategoria(id: number): Observable<EliminarCategoriaResponse> {
-    var token = this.localService.getItem('token');
-    const uri = `${constants.apiUrl}/Categoria/eliminarCategoria/${id}`;
-    const headers = {
-      Authorization: `Bearer ${token}`
-    };
+    const uri = `${this.url}/Categoria/eliminarCategoria/${id}`;
+    const headers = this._headers;
     return this.http.delete<EliminarCategoriaResponse>(uri, { headers: headers });
   }
 
   ObtenerMenuCategoria(): Observable<Array<ObtenerMenuCategoriaResponse>> {
-    var token = this.localService.getItem('token');
-    const uri = `${constants.apiUrl}/Categoria/obtenerMenuCategoria`;
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    };
+    const uri = `${this.url}/Categoria/obtenerMenuCategoria`;
+    const headers = this._headers;
     return this.http.get<Array<ObtenerMenuCategoriaResponse>>(uri, { headers: headers });
   }
 }

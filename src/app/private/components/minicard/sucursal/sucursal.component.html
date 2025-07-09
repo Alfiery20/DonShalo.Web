@@ -1,0 +1,41 @@
+<section class="w-100 m-0 row d-lg-none gy-3">
+  @for (sucursal of FilteredSucursales; track $index) {
+    <div [classList]="[$index == 0 ? 'mt-0' : '', 'col-lg-6 col-12 card shadow-md p-3'].join(' ')">
+      <div class="card-body">
+        <h5 class="card-title fw-bold">{{ sucursal.nombre }}</h5>
+        <p class="text-muted mb-2">ID: {{ sucursal.id }}</p>
+        <p class="row justify-content-between">
+          <span class="col-12 col-md-8 fw-bold">Codigo:</span>
+          <span class="col-12 col-md-4 text-md-end">{{ sucursal.codigoSucursal }}</span>
+        </p>
+        <p class="row justify-content-between">
+          <span class="col-12 col-md-8 fw-bold">Dirección:</span>
+          <span class="col-12 col-md-4 text-md-end">{{ sucursal.direccion }}</span>
+        </p>
+        <p class="row justify-content-between">
+          <span class="col-12 col-md-8 fw-bold">Teléfono:</span>
+          <span class="col-12 col-md-4 text-md-end">{{ sucursal.telefono }}</span>
+        </p>
+        <p class="row justify-content-between">
+          <span class="col-12 col-md-8 fw-bold">Hora entrada:</span>
+          <span class="col-12 col-md-4 text-md-end">{{ sucursal.horaEntrada }}</span>
+        </p>
+        <p class="row justify-content-between">
+          <span class="col-12 col-md-8 fw-bold">Hora salida:</span>
+          <span class="col-12 col-md-4 text-md-end">{{ sucursal.horaSalida }}</span>
+        </p>
+        <p class="row justify-content-between">
+          <span class="col-12 col-md-8 fw-bold">Estado:</span>
+          <span class="col-12 col-md-4 text-md-end">{{ sucursal.estado }}</span>
+        </p>
+        <p class="row justify-content-between">
+          <span class="col-12 col-md-8 fw-bold">Responsable:</span>
+          <span class="col-12 col-md-4 text-md-end">{{ sucursal.responsable }}</span>
+        </p>
+        <div class="row g-1">
+          <button class="btn col-12"></button>
+        </div>
+      </div>
+    </div>
+  }
+</section>

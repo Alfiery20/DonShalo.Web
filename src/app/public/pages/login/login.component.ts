@@ -7,6 +7,7 @@ import { LocalStorageService } from '../../../core/services/local-storage.servic
 import { AutenticacionService } from '../../../core/services/autenticacion.service';
 import Swal from 'sweetalert2';
 import { LoaderService } from '../../../core/services/loader.service';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,8 @@ import { LoaderService } from '../../../core/services/loader.service';
 export class LoginComponent {
   formulario: FormGroup;
   showPassword: boolean = false;
+
+  private _localStorageKeys = environment.localStorageKeys;
 
   constructor(
     private fb: FormBuilder,
@@ -75,11 +78,14 @@ export class LoginComponent {
       correo: this.formulario.value.correo,
       clave: this.formulario.value.clave,
     };
-    this.autentitacionService.IniciarSesion(userLogin).subscribe(
-      (response) => {
+    this.loaderServi.MostrarLoader();
+    this.autentitacionService.IniciarSesion(userLogin)
+    .subscribe({
+      next: (response) => {
         if (response != null && response.token != null) {
-          this.localService.setItem('token', response.token);
-          this.localService.setItem('usuario', JSON.stringify(response));
+          this.localService.setItem(this._localStorageKeys.TOKEN, response.token);
+          this.localService.setItem(this._localStorageKeys.USER, JSON.stringify(response));
+          this.loaderServi.OcultarLoader();
           Swal.fire({
             title: "Bienvenido!",
             icon: "success",
@@ -94,7 +100,7 @@ export class LoginComponent {
           });
         }
       },
-      (error) => {
+      error: (error) => {
         console.log('erro',error)
         this.loaderServi.OcultarLoader();
         Swal.fire({
@@ -102,7 +108,7 @@ export class LoginComponent {
           icon: "error",
         });
       }
-    );
+  });
 
   }
 

@@ -1,68 +1,43 @@
-<section id="var" style="width: 100%; height: 60px; background-color: var(--color-principal);"
-    class="justify-content-between d-flex">
-    <section id="btn_desplegar" class="d-flex align-items-center">
-        <button id="btn_menu" class="btn" (click)="toggleMenu()">
-            <i class="bi bi-list" style="color: var(--color-terciario);"></i>
+<div class="body-container">
+    <mat-toolbar class="layout-toolbar">
+        <button mat-icon-button (click)="drawer.toggle()">
+            <mat-icon>menu</mat-icon>
         </button>
-    </section>
-    <section id="info_usuario" class="d-flex align-items-center position-relative">
-        <button id="btn_menu" class="btn" (click)="ToggleUsuario()">
-            <i class="bi bi-person" style="font-size: 24px; color: var(--color-terciario);"></i>
+        <span class="spacer"></span>
+        <a routerLink="/intranet"><img src="img/Logo.png" alt="Logo"></a>
+        <span class="spacer"></span>
+        <button mat-icon-button (click)="showUserInfo()">
+            <mat-icon>person</mat-icon>
         </button>
-        <section id="user_menu" *ngIf="mostrarUsuario" class="informacion-usuario bubble">
-            <section>
-                <i class="bi bi-person-square" style="font-size: 64px;"></i>
-                <hr>
-                <p>
-                    <strong>
-                        {{this.infoUsuario.nombre}} {{this.infoUsuario.apellidoPaterno}}
-                        {{this.infoUsuario.apellidoMaterno}}
-                    </strong>
-                    <br>
-                    {{this.infoUsuario.nombreRol}}
-                </p>
-                <button class="btn" style="background-color: var(--color-principal); color: var(--color-terciario);"
-                    (click)="CerrarSesion()">
-                    Cerrar Sesión
-                </button>
-            </section>
-        </section>
-    </section>
-</section>
-<section class="d-flex">
-    <section *ngIf="mostrarMenu" id="navBar"
-        style="width: 250px; height: calc(100vh - 60px); background-color: var(--color-terciario); z-index: 999;"
-        class="justify-content-between d-flex">
-        <div style="width: 100%; display: inline-flex; flex-direction: column;" role="group"
-            aria-label="Vertical button group">
-            <div *ngFor="let item of menusObtenidos">
-                <button class="btn btn-toggle d-inline-flex align-items-center border-0 m-0"
-                    [ngClass]="{ 'collapsed': item.menuHijo.length > 0 }"
-                    [attr.data-bs-target]="item.menuHijo.length > 0 ? '#menu_' + item.id : null"
-                    [attr.data-bs-toggle]="item.menuHijo.length > 0 ? 'collapse' : null" aria-expanded="true"
-                    style="background-color: var(--color-terciario); height: 40px;">
-                    {{ item.nombre }}
-                </button>
-                <div class="collapse" id="menu_{{item.id}}">
-                    <ul class="btn-toggle-nav fw-normal small" style="list-style: none;">
-                        <li *ngFor="let itemHijo of item.menuHijo" class="d-flex">
-                            <button type="button" id="btn_{{itemHijo.id}}" (click)="direccionar('btn_' + itemHijo.id)"
-                                class="btn_hijo btn d-inline-flex" role="button"
-                                style="width: 100%; margin: 0; padding: 0 10px;" [routerLink]="itemHijo.ruta">
-                                <p style="margin: 0; height: 40px; display: flex; align-items: center;">
-                                    <i class="bi bi-caret-right-fill"></i>
-                                    {{itemHijo.nombre}}
-                                </p>
-                            </button>
-                        </li>
-                    </ul>
-                </div>
+    </mat-toolbar>
+    <mat-drawer-container class="drawer-container">
+        <mat-drawer class="sidenav-container" #drawer [opened]="!mobileQuery.matches" [mode]="mobileQuery.matches ? 'push' : 'side'">
+            <div class="px-3 py-2 bg-white rounded-4">
+                <mat-accordion displayMode="flat">
+                    @for (item of menusObtenidos; track $index) {
+                        <mat-expansion-panel [hideToggle]="!item.menuHijo" class="shadow-none m-0">
+                            <mat-expansion-panel-header class="ps-0 pe-1">
+                                <mat-panel-title>
+                                    <mat-icon class="me-3 material-icons-outlined">{{ item.icon }}</mat-icon>
+                                    <span>{{ item.nombre }}</span>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="d-flex flex-column align-items-start">
+                                @for (subitem of item.menuHijo; track $index) {
+                                    <button
+                                        class="router-link rounded-3 w-100 justify-content-start"
+                                        mat-button
+                                        routerLinkActive="route-active"
+                                        [routerLink]="subitem.ruta"
+                                        (click)="mobileQuery.matches && drawer.close()"
+                                    >{{ subitem.nombre }}</button>
+                                }
+                            </div>
+                        </mat-expansion-panel>
+                    }
+                </mat-accordion>
             </div>
-        </div>
-    </section>
-    <section style="width: 100%; display: flex; justify-content: center;">
-        <section style="width: 80%;" class="pt-4">
-            <router-outlet></router-outlet>
-        </section>
-    </section>
-</section>
+        </mat-drawer>
+        <router-outlet></router-outlet>
+    </mat-drawer-container>
+</div>
