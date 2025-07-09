@@ -10,6 +10,7 @@ import { ObtenerMedioPagoResponse } from '../models/MedioPago/ObtenerMedioPago/O
 import { VerMedioPagoResponse } from '../models/MedioPago/VerMedioPago/VerMedioPagoResponse';
 import { constants } from '../models/utils/contants';
 import { LocalStorageService } from './local-storage.service';
+import { ObtenerMedioPagoMenuResponse } from '../models/MedioPago/ObtenerMedioPagoMenu/ObtenerMedioPagoMenuResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -67,5 +68,15 @@ export class MedioPagoService {
       Authorization: `Bearer ${token}`
     };
     return this.http.delete<EliminarMedioPagoResponse>(uri, { headers: headers });
+  }
+
+  ObtenerMedioPagoMenu(): Observable<Array<ObtenerMedioPagoMenuResponse>> {
+    var token = this.localService.getItem('token');
+    const uri = `${constants.apiUrl}/MedioPago/obtenerMedioPagoMenu`;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+    return this.http.get<Array<ObtenerMedioPagoMenuResponse>>(uri, { headers: headers });
   }
 }
