@@ -94,7 +94,6 @@ export class LoginComponent {
           });
           this.router.navigate(['/intranet']);
         } else {
-          this.loaderServi.OcultarLoader();
           Swal.fire({
             title: "Correo o Contraseña incorrectas",
             icon: "error",

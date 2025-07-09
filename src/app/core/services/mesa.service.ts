@@ -10,6 +10,7 @@ import { VerMesaResponse } from '../models/Mesa/VerMesa/VerMesaResponse';
 import { EliminarMesaResponse } from '../models/Mesa/EliminarMesa/EliminarMesaResponse';
 import { ObtenerEstadoMesaResponse } from '../models/Mesa/ObtenerEstadoMesa/ObtenerEstadoMesaResponse';
 import { Api } from '../classes/api';
+import { LimpiarMesaResponse } from '../models/Mesa/LimpiarMesa/LimpiarMesaResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -50,5 +51,11 @@ export class MesaService extends Api {
     const uri = `${this.url}/Mesa/obtenerEstadoMesas/${idPiso}`;
     const headers = this._headers;
     return this.http.get<Array<ObtenerEstadoMesaResponse>>(uri, { headers: headers });
+  }
+
+  LimpiarMesa(idPedido: number): Observable<LimpiarMesaResponse> {
+    const uri = `${this.url}/Mesa/limpiarMesa/${idPedido}`;
+    const headers = this._headers;
+    return this.http.get<LimpiarMesaResponse>(uri, { headers: headers });
   }
 }

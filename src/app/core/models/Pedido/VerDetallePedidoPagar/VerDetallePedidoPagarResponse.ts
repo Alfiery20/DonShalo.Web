@@ -6,7 +6,9 @@ export interface VerDetallePedidoPagarResponse {
     nroCorrelativo: string;
     clienteNatural: string;
     clienteJuridico: string;
+    idPersonal: number;
     personal: string;
+    idMesa: number;
     mesa: string;
     detalles: VerDetallePedidoParaPagarDetalle[]
 }

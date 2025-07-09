@@ -131,6 +131,8 @@
                 </section>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn" style="background-color: var(--color-secundario); color: white;"
+                    (click)="LimpiarMesa()" *ngIf="this.datosPedido.estado === null ">Limpiar</button>
                 <button type="button" class="btn" style="background-color: var(--color-principal); color: white;"
                     (click)="EliminarPedido()" *ngIf="this.datosPedido.estado == '1'">Anular</button>
                 <button type="button" class="btn" style="background-color: var(--color-secundario); color: white;"

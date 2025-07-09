@@ -9,6 +9,10 @@ import { EditarPedidoResponse } from '../models/Pedido/EditarPedido/EditarPedido
 import { EliminarPedidoResponse } from '../models/Pedido/EliminarPedido/EliminarPedidoResponse';
 import { VerDetallePedidoPagarResponse } from '../models/Pedido/VerDetallePedidoPagar/VerDetallePedidoPagarResponse';
 import { Api } from '../classes/api';
+import { PagarPedidoDivididoRequest } from '../models/Pedido/PagarPedidoDividido/PagarPedidoDivididoRequest';
+import { PagarPedidoDivididoResponse } from '../models/Pedido/PagarPedidoDividido/PagarPedidoDivididoResponse';
+import { PagarPedidoResponse } from '../models/Pedido/PagarPedido/PagarPedidoResponse';
+import { PagarPedidoRequest } from '../models/Pedido/PagarPedido/PagarPedidoRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +53,22 @@ export class PedidoService extends Api {
     const uri = `${this.url}/Pedido/verDetallePedidoPagar/${id}`;
     const headers = this._headers;
     return this.http.get<VerDetallePedidoPagarResponse>(uri, { headers: headers });
+  }
+
+  RegistrarPedidoDividido(request: PagarPedidoDivididoRequest): Observable<PagarPedidoDivididoResponse> {
+    const uri = `${this.url}/Pedido/pagarPedidoDividido`;
+    const headers = this._headers;
+    return this.http.post<PagarPedidoDivididoResponse>(uri, request, { headers: headers });
+  }
+
+  PagarPedido(idPedido: number): Observable<PagarPedidoResponse> {
+    var request: PagarPedidoRequest =
+    {
+      idPedido: idPedido
+    };
+    const uri = `${this.url}/Pedido/pagarPedido`;
+    const headers = this._headers;
+    return this.http.post<PagarPedidoResponse>(uri, request, { headers: headers });
   }
 }
 
