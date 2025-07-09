@@ -42,6 +42,20 @@
                             </strong>
                             {{this.detallePedido.mesa}}
                         </div>
+                        <div class="col-6">
+
+                            <div class="d-flex">
+                                <strong>
+                                    Medio de Pago:
+                                </strong>
+                                <select class="form-select" id="medioPago" aria-label="Floating label select example">
+                                    <option value="0" selected>Seleccione</option>
+                                    <option *ngFor="let medioPago of this.mediosPago" value="{{medioPago.id}}">
+                                        {{medioPago.nombre}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row">
@@ -61,11 +75,23 @@
                                     [(ngModel)]="this.numeroDocumento">
                             </div>
                         </div>
-                        <div class="col-6" *ngIf="this.cuentaDividas">
+                        <div class="col-4" *ngIf="this.cuentaDividas">
                             <strong>
                                 Usuario para cuenta dividida:
                             </strong>
                             {{this.clienteAsignado.nombre}}
+                        </div>
+                        <div class="col-4" *ngIf="this.cuentaDividas">
+                            <strong>
+                                Medio de Pago:
+                            </strong>
+                            <select class="form-select" id="medioPagoSubCuenta"
+                                aria-label="Floating label select example">
+                                <option value="0" selected>Seleccione</option>
+                                <option *ngFor="let medioPago of this.mediosPago" value="{{medioPago.id}}">
+                                    {{medioPago.nombre}}
+                                </option>
+                            </select>
                         </div>
 
                         <div [ngClass]="{'col-6': this.cuentaDividas, 'col-12' : !this.cuentaDividas}">
@@ -165,7 +191,6 @@
                                     <i class="bi bi-plus fs-5"></i> Separar Cuenta
 
                                 </button>
-
                             </section>
                         </div>
                         <div>

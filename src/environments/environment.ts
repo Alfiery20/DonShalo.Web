@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
   apps_url: {
-    api: "https://donshalo.azurewebsites.net/api/v1"
+    api: "https://localhost:7229/api/v1"
   },
   localStorageKeys: {
     USER: "DSH_USERDATA",

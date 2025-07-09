@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">{{this.titulo}} Pedido a Mesa</h2>
+                <h2 class="modal-title">{{titulo}} Pedido a Mesa</h2>
                 <button type="button" class="btn-close" (click)="CerrarModal()"></button>
             </div>
             <div class="modal-body">
@@ -34,9 +34,9 @@
                             <button class="btn" style="background-color: var(--color-principal);"
                                 (click)="RegistrarCliente()">
                                 <i class="bi bi-plus-lg" style="color: var(--color-terciario);"
-                                    *ngIf="this.clienteAsignado.id == 0"></i>
+                                    *ngIf="clienteAsignado.id == 0"></i>
                                 <i class="bi bi-eye-fill" style="color: var(--color-terciario);"
-                                    *ngIf="this.clienteAsignado.id != 0"></i>
+                                    *ngIf="clienteAsignado.id != 0"></i>
                             </button>
                         </div>
                     </div>
@@ -46,25 +46,25 @@
                             <select class="form-select" id="idCategoria" id="idCategoria" formControlName="categoria"
                                 aria-label="Floating label select example" (change)="ObtenerMenuPlato($event)">
                                 <option value="0" selected disabled>Seleccione</option>
-                                <option *ngFor="let categoria of this.categoriasMenu" value="{{categoria.id}}">
+                                <option *ngFor="let categoria of categoriasMenu" value="{{categoria.id}}">
                                     {{categoria.nombre}}
                                 </option>
                             </select>
                             <label for="idCategoria">Categoria...</label>
                         </div>
                         <div class="form-floating col-xs-4 col-sm-8 col-md-4 col-xl-4"
-                            *ngIf="this.formulario.get('categoria')?.value > 0">
+                            *ngIf="formulario.get('categoria')?.value > 0">
                             <select class="form-select" id="idCategoria" id="idCategoria" formControlName="plato"
                                 aria-label="Floating label select example">
                                 <option value="0" selected disabled>Seleccione</option>
-                                <option *ngFor="let plato of this.platosMenu" value="{{plato.id}}">
+                                <option *ngFor="let plato of platosMenu" value="{{plato.id}}">
                                     {{plato.nombre}}
                                 </option>
                             </select>
                             <label for="idCategoria">Plato...</label>
                         </div>
                         <div class="form-floating col-xs-4 col-sm-8 col-md-2 col-xl-2"
-                            *ngIf="this.formulario.get('plato')?.value > 0">
+                            *ngIf="formulario.get('plato')?.value > 0">
                             <input type="number" class="form-control" id="desc" formControlName="cantidad">
                             <label for="idCategoria">Cantidad...</label>
                         </div>
@@ -75,6 +75,14 @@
                                 (click)="AgregarDetallePedido()">
                                 <i class="bi bi-plus-lg" style="color: var(--color-terciario);"></i>
                             </button>
+                        </div>
+                        <div class="form-floating col-xs-12 col-sm-12 col-md-12 col-xl-12"
+                            *ngIf="formulario.get('plato')?.value > 0">
+                            <div class="form-floating">
+                                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
+                                    formControlName="comentario" style="height: 100px"></textarea>
+                                <label for="idCategoria">Comentario...</label>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -110,6 +118,11 @@
                                 </td>
                             </ng-container>
 
+                            <ng-container matColumnDef="Comentario">
+                                <th mat-header-cell *matHeaderCellDef> Comentario </th>
+                                <td mat-cell *matCellDef="let element"> {{element.comentario}} </td>
+                            </ng-container>
+
                             <ng-container matColumnDef="Accion">
                                 <th mat-header-cell *matHeaderCellDef> Acciones </th>
                                 <td mat-cell *matCellDef="let element">
@@ -132,12 +145,13 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn" style="background-color: var(--color-secundario); color: white;"
-                    (click)="LimpiarMesa()" *ngIf="this.datosPedido.estado === null ">Limpiar</button>
+                    (click)="LimpiarMesa()" *ngIf="datosPedido.estado === null ">Limpiar</button>
                 <button type="button" class="btn" style="background-color: var(--color-principal); color: white;"
-                    (click)="EliminarPedido()" *ngIf="this.datosPedido.estado == '1'">Anular</button>
+                    (click)="EliminarPedido()" *ngIf="datosPedido.estado == '1'">Anular</button>
                 <button type="button" class="btn" style="background-color: var(--color-secundario); color: white;"
-                    (click)="PagarPedido()" *ngIf="this.datosPedido.estado == '1'">Pagar</button>
-                <div class="vr" *ngIf="this.datosPedido.estado == '1'"></div>
+                    (click)="PagarPedido()" *ngIf="datosPedido.estado == '1'"
+                    [disabled]="clienteAsignado.id == null">Pagar</button>
+                <div class="vr" *ngIf="datosPedido.estado == '1'"></div>
                 <button type="button" class="btn" style="background-color: var(--color-principal); color: white;"
                     (click)="CerrarModal()">Cancelar</button>
                 <button type="button" class="btn" [ngClass]="{'disabled': null}"

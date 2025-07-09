@@ -18,6 +18,8 @@ import { PagarPedidoDivididoDetalle } from '../../../../core/models/Pedido/Pagar
 import { PagarPedidoDivididoRequestSubcuenta } from '../../../../core/models/Pedido/PagarPedidoDividido/PagarPedidoDivididoRequestSubcuenta';
 import { PagarPedidoDivididoPreview } from '../../../../core/models/Pedido/PagarPedidoDividido/PagarPedidoDividioPreview';
 import { PagarPedidoRequest } from '../../../../core/models/Pedido/PagarPedido/PagarPedidoRequest';
+import { MedioPagoService } from '../../../../core/services/medio-pago.service';
+import { ObtenerMedioPagoMenuResponse } from '../../../../core/models/MedioPago/ObtenerMedioPagoMenu/ObtenerMedioPagoMenuResponse';
 
 @Component({
   selector: 'app-pagar-pedido',
@@ -35,7 +37,7 @@ export class PagarPedidoComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator = {} as MatPaginator;
 
   @Output() onClose: EventEmitter<void> = new EventEmitter<void>();
-  formulario: FormGroup;
+  // formulario: FormGroup;
 
   detallePedido: VerDetallePedidoPagarResponse = {} as VerDetallePedidoPagarResponse;
 
@@ -81,6 +83,8 @@ export class PagarPedidoComponent implements OnInit {
 
   pedidosMuestras: PagarPedidoDivididoPreview[] = [];
 
+  mediosPago: ObtenerMedioPagoMenuResponse[] = [];
+
 
   constructor(
     private fb: FormBuilder,
@@ -88,16 +92,27 @@ export class PagarPedidoComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private data: { id: number },
     private pediServ: PedidoService,
     private clieServ: ClienteService,
+    private medioPagoServ: MedioPagoService
   ) {
-    this.formulario = this.fb.group({
-      nombre: ['', Validators.required]
-    });
-
-    console.log(this.clienteAsignado);
-
+    // this.formulario = this.fb.group({
+    //   nombre: ['', Validators.required]
+    // });
   }
 
   ngOnInit(): void {
+    this.obtenerDetallePedido();
+    this.obtenerMedioPagoMenu();
+  }
+
+  obtenerMedioPagoMenu() {
+    this.medioPagoServ.ObtenerMedioPagoMenu().subscribe(
+      (response) => {
+        this.mediosPago = response;
+      }
+    )
+  }
+
+  obtenerDetallePedido() {
     this.pediServ.VerDetallePedidoPagar(this.data.id).subscribe(
       (request) => {
         this.detallePedido = request;
@@ -139,11 +154,18 @@ export class PagarPedidoComponent implements OnInit {
     }
   }
 
+  ValidarCantidadPlatos() {
+    var isVacia = 0;
+    this.detallePedido.detalles.forEach(detalle => {
+      isVacia += detalle.cantidad;
+    });
+    return isVacia;
+  }
+
   DividirCuentas(detalle: VerDetallePedidoParaPagarDetalle) {
-    if (this.detallePedido.detalles.length == 1 && this.detallePedido.detalles[0].cantidad == 1) {
+    if (this.ValidarCantidadPlatos() == 1) {
       Swal.fire({
         title: "Advertencia!",
-        text: "La cuenta principal no puede estar vacia!",
         icon: "info"
       });
       return;
@@ -198,8 +220,12 @@ export class PagarPedidoComponent implements OnInit {
   }
 
   SepararPerdido() {
+    const medioPagoSelect = document.getElementById('medioPagoSubCuenta') as HTMLSelectElement;
+    const medioPagoValue = medioPagoSelect ? medioPagoSelect.value : null;
+
     var pedidoDividio: PagarPedidoDivididoRequestSubcuenta = {
       idCliente: this.clienteAsignado.id,
+      idMedioPago: parseInt(medioPagoValue!),
       detallePedidoSubcuenta: this.detallesSeparados
     }
     this.pedidosNuevos.push(pedidoDividio);
@@ -264,8 +290,11 @@ export class PagarPedidoComponent implements OnInit {
   }
 
   GuardarDividido() {
+    const medioPagoSelect = document.getElementById('medioPago') as HTMLSelectElement;
+    const medioPagoValue = medioPagoSelect ? medioPagoSelect.value : null;
     var request: PagarPedidoDivididoRequest = {
       idPedido: this.data.id,
+      idMedioPago: parseInt(medioPagoValue!),
       detallePedido: this.detallePedido.detalles.filter((item) => item.cantidad > 0),
       subcuentas: this.pedidosNuevos.filter((item) => item.detallePedidoSubcuenta.length > 0)
     }

@@ -3,6 +3,7 @@ import { PagarPedidoDivididoRequestSubcuenta } from "./PagarPedidoDivididoReques
 
 export interface PagarPedidoDivididoRequest {
     idPedido: number,
+    idMedioPago: number,
     detallePedido: PagarPedidoDivididoDetalle[],
     subcuentas: PagarPedidoDivididoRequestSubcuenta[]
 }

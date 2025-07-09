@@ -59,6 +59,7 @@ export class AgregarEditarPedidoComponent {
       'Nro',
       'Plato',
       'Cantidad',
+      'Comentario',
       'Accion'
     ];
   detallesDePedido: AgregarDetallePedidoRequest[] = [];
@@ -87,6 +88,7 @@ export class AgregarEditarPedidoComponent {
       categoria: [0, Validators.required],
       plato: [0, Validators.required],
       cantidad: [1, Validators.required],
+      comentario: ['']
     });
   }
 
@@ -125,7 +127,8 @@ export class AgregarEditarPedidoComponent {
             {
               idPlato: detalle.idPlato,
               nombrePlato: detalle.plato,
-              cantidad: detalle.cantidad
+              cantidad: detalle.cantidad,
+              comentario: detalle.comentario
             }
           )
         });
@@ -186,6 +189,7 @@ export class AgregarEditarPedidoComponent {
       idPlato: this.formulario.value.plato,
       nombrePlato: platoNombre,
       cantidad: this.formulario.value.cantidad,
+      comentario: this.formulario.value.comentario
     };
     this.detallesDePedido.push(detallePedido);
     this.dataSource.data = this.detallesDePedido;
@@ -205,7 +209,8 @@ export class AgregarEditarPedidoComponent {
     this.detallesDePedido.forEach(detalle => {
       detallesPedidoRequest.push({
         cantidad: detalle.cantidad,
-        idPlato: detalle.idPlato
+        idPlato: detalle.idPlato,
+        comentario: detalle.comentario
       })
     });
 
@@ -256,7 +261,8 @@ export class AgregarEditarPedidoComponent {
     this.detallesDePedido.forEach(detalle => {
       detallesPedidoRequest.push({
         cantidad: detalle.cantidad,
-        idPlato: detalle.idPlato
+        idPlato: detalle.idPlato,
+        comentario: detalle.comentario
       })
     });
 

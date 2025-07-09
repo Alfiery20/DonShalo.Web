@@ -43,4 +43,10 @@ export class MedioPagoService extends Api {
     const headers = this._headers;
     return this.http.delete<EliminarMedioPagoResponse>(uri, { headers: headers });
   }
+
+  ObtenerMedioPagoMenu(): Observable<Array<ObtenerMedioPagoResponse>> {
+    const uri = `${this.url}/MedioPago/obtenerMedioPagoMenu`;
+    const headers = this._headers;
+    return this.http.get<Array<ObtenerMedioPagoResponse>>(uri, { headers: headers });
+  }
 }
