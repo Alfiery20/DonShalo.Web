@@ -2,15 +2,19 @@ import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RolService } from '../../../../core/services/rol.service';
-import { AgregarEditarRolComponent } from '../agregar-editar-rol/agregar-editar-rol.component';
 import { CommonModule } from '@angular/common';
 import { ObtenerMenuXRolResponse } from '../../../../core/models/Rol/obtenerMenuXRol/obtenerMenuXRolResponse';
 import { ActualizarPermisoRequest } from '../../../../core/models/Rol/actualizarPermiso/actualizarPermisoRequest';
 import Swal from 'sweetalert2';
+import { PermisoItemComponentComponent } from './permiso-item-component/permiso-item-component.component';
 
 @Component({
   selector: 'app-agregar-menu-rol',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    PermisoItemComponentComponent,
+  ],
   templateUrl: './agregar-menu-rol.component.html',
   styleUrl: './agregar-menu-rol.component.scss'
 })

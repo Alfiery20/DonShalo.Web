@@ -12,6 +12,7 @@
 
 div.body-container
 {
+    min-height: 100dvh;
     height: 100%;
     background-color: var(--bs-gray-200);
 
@@ -48,6 +49,14 @@ div.body-container
         & .sidenav-container {
             min-width: 250px;
             width: unset;
+        }
+
+        & .mat-drawer-container,
+        & .toolbar-container
+        {
+            margin: auto;
+            width: 100%;
+            max-width: 1200px;
         }
     }
 }

@@ -7,7 +7,7 @@
     <section class="mb-2">
         <div class="row g-2 mb-2 align-items-end">
 
-            <div class="col-12 col-md-6 col-lg-6 col-xxl-4">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3" [ngClass]="_bFiltroActivo ? '' : ''">
                 <label class="mb-1">Filtrar por estado:</label>
                 <select class="form-select" [(ngModel)]="estadoSeleccionado" (ngModelChange)="filtrarPorEstado()">
                     <option value="" disabled selected>Seleccione</option>
@@ -16,15 +16,18 @@
                 </select>
             </div>
 
-            <div class="col-12 col-md-6 col-lg-3 col-xxl-2">
-                <button class="btn btn-outline-danger w-100" (click)="limpiarFiltros()">
-                    <i class="bi bi-trash"></i> Limpiar Filtros
-                </button>
-            </div>
-
-            <div class="col-4 d-none d-xxl-block"></div>
-
-            <div class="col-12 col-lg-3 col-xxl-2">
+            @if(_bFiltroActivo)
+            {
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <button class="btn btn-outline-danger w-100" (click)="limpiarFiltros()">
+                        <i class="bi bi-trash"></i>
+                        <span>Limpiar Filtros</span>
+                    </button>
+                </div>
+            }
+            
+            <div class="d-none d-lg-block" [ngClass]="_bFiltroActivo ? 'col-lg-3' : 'col-lg-6'"></div>
+            <div class="col-12 col-lg-3" [ngClass]="_bFiltroActivo ? 'col-sm-12' : 'col-sm-6'">
                 <button class="btn w-100" (click)="AgregarRol()"
                     style="background-color: var(--color-principal); color: var(--color-terciario);">
                     <i class="bi bi-plus"></i> Agregar Rol
@@ -37,8 +40,132 @@
 
 
     <section>
-        <div class="mat-elevation-z8 d-none d-lg-block" style="overflow-x: auto;">
-            <table mat-table [dataSource]="dataSource">
+        <div class="mat-elevation-z8">
+            <ngx-datatable
+                #table
+                class="material expandable shadow-none"
+                style="min-height: 300px;"
+                columnMode="force"
+                [headerHeight]="50"
+                [footerHeight]="50"
+                [rowHeight]="50"
+                [scrollbarVDynamic]="true"
+                [limit]="5"
+                [rows]="roles"
+            >
+                <ngx-datatable-row-detail [rowHeight]="180" #detailRow>
+                    <ng-template let-row="row" ngx-datatable-row-detail-template>
+                        <div class="p-3">
+                            <p class="mb-1 fw-bold">ID</p>
+                            <p>{{ row.id }}</p>
+                            <p class="mb-1 fw-bold">Estado</p>
+                            <p>{{ row.estado }}</p>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-row-detail>
+
+                @if(showExpandableButton)
+                {
+                    <ngx-datatable-column
+                        [width]="50"
+                        [resizeable]="false"
+                        [sortable]="false"
+                        [draggable]="false"
+                        [canAutoResize]="false"
+                    >
+                        <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                            <button id="expand-button" class="btn btn-outline-text border-0 px-1 d-grid place-items-center btn-center" type="button" (click)="toggleExpandRow(row)">
+                                @if(expanded)
+                                {
+                                    <i class="bi bi-chevron-down"></i>
+                                }
+                                @else
+                                {
+                                    <i class="bi bi-chevron-right"></i>
+                                }
+                            </button>
+                        </ng-template>
+                    </ngx-datatable-column>
+                }
+            
+                @if(bID)
+                {
+                    <ngx-datatable-column
+                        name="ID"
+                        prop="id"
+                        width="80"
+                        [resizeable]="false"
+                        [draggable]="false"
+                        [canAutoResize]="false"
+                    >
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p>{{ value }}</p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                }
+                
+                <ngx-datatable-column
+                    name="Nombre"
+                    prop="nombre"
+                    [resizeable]="false"
+                    [draggable]="false"
+                >
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <p>{{ value }}</p>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                @if(bState)
+                {
+                    <ngx-datatable-column
+                        name="Estado"
+                        prop="estado"
+                        [resizeable]="false"
+                        [draggable]="false"
+                    >
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            <p>{{ value }}</p>
+                        </ng-template>
+                    </ngx-datatable-column>
+                }
+
+                <ngx-datatable-column
+                    [width]="50"
+                    [resizeable]="false"
+                    [draggable]="false"
+                    [sortable]="false"
+                    [canAutoResize]="false"
+                    cellClass="position-relative"
+                >
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                        <button class="btn btn-outline-text border-0 px-1 d-grid place-items-center btn-center" [mat-menu-trigger-for]="menu">
+                            <i class="bi bi-three-dots"></i>
+                        </button>
+                        <mat-menu #menu class="bg-white rounded-3">
+                            <button mat-menu-item class="d-flex gap-3" (click)="AgregarPermisoRol(row.id)">
+                                <i class="bi bi-card-checklist me-2"></i>
+                                <span>Otorgar accesos</span>
+                            </button>
+                            <button mat-menu-item (click)="EditarRol(row.id)">
+                                <i class="bi bi-pencil me-2"></i>
+                                <span>Editar</span>
+                            </button>
+                            <button mat-menu-item (click)="EliminarRol(row.id)">
+                                @if(row.estado == 'ACTIVO')
+                                {
+                                    <i class="bi bi-x-circle me-2"></i>
+                                    <span>Desactivar</span>
+                                }
+                                @else{
+                                    <i class="bi bi-check-circle me-2"></i>
+                                    <span>Activar</span>
+                                }
+                            </button>
+                        </mat-menu>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+            <!-- <table mat-table [dataSource]="dataSource">
                 <ng-container matColumnDef="Nro">
                     <th mat-header-cell *matHeaderCellDef> No. </th>
                     <td mat-cell *matCellDef="let element"> {{roles.indexOf(element) + 1}} </td>
@@ -86,10 +213,10 @@
 
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
                 aria-label="Select page of periodic elements">
-            </mat-paginator>
+            </mat-paginator> -->
         </div>
     </section>
 
-    <app-rol-minicard-component [RolFiltrados]="RolFiltrados"></app-rol-minicard-component>
+    <!-- <app-rol-minicard-component [RolFiltrados]="RolFiltrados"></app-rol-minicard-component> -->
 
 </div>

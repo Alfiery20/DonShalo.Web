@@ -1,11 +1,8 @@
-import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { VerRolResponse } from '../../../../core/models/Rol/verRol/verRolResponse';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PersonalService } from '../../../../core/services/personal.service';
 import { RolService } from '../../../../core/services/rol.service';
-import { SucursalService } from '../../../../core/services/sucursal.service';
-import { AgregarEditarSucursalComponent } from '../../sucursal/agregar-editar-sucursal/agregar-editar-sucursal.component';
 import { CommonModule } from '@angular/common';
 import { EditarRolRequest } from '../../../../core/models/Rol/editarRol/editarRolRequest';
 import Swal from 'sweetalert2';
@@ -18,17 +15,15 @@ import { AgregarRolRequest } from '../../../../core/models/Rol/agregarRol/agrega
   styleUrl: './agregar-editar-rol.component.scss'
 })
 export class AgregarEditarRolComponent implements OnInit {
-  @Output() onClose: EventEmitter<void> = new EventEmitter<void>();
   formulario: FormGroup;
 
   personal: VerRolResponse = {} as VerRolResponse;
 
-  esEditar: boolean = false;
   titulo = 'Agregar';
   constructor(
     private fb: FormBuilder,
     private modalAgregarPersonal: MatDialogRef<AgregarEditarRolComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: { id: number },
+    @Inject(MAT_DIALOG_DATA) private data: { id: number|null, edit: boolean },
     private rolServi: RolService,
   ) {
     this.formulario = this.fb.group({
@@ -37,11 +32,10 @@ export class AgregarEditarRolComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.esEditar = this.data.id != 0;
     this.titulo = 'Agregar';
-    if (this.esEditar) {
+    if (this.data.edit) {
       this.titulo = 'Modificar';
-      this.ObtenerRol(this.data.id);
+      this.ObtenerRol(this.data.id!);
     }
   }
 
@@ -55,7 +49,8 @@ export class AgregarEditarRolComponent implements OnInit {
   }
 
   AccionGuardar() {
-    if (this.esEditar) {
+    if(this.formulario.invalid) return;
+    if (this.data.edit) {
       this.EditarRol();
     } else {
       this.AgregarRol();
@@ -66,8 +61,9 @@ export class AgregarEditarRolComponent implements OnInit {
     var agregarPersonal: AgregarRolRequest = {
       nombre: this.formulario.value.nombre
     }
-    this.rolServi.AgregarRol(agregarPersonal).subscribe(
-      (response) => {
+    this.rolServi.AgregarRol(agregarPersonal)
+    .subscribe({
+      next: (response) => {
         if (response != null && response.codigo == 'OK') {
           this.CerrarModal();
           Swal.fire({
@@ -83,19 +79,20 @@ export class AgregarEditarRolComponent implements OnInit {
           });
         }
       },
-      (error) => {
+      error: (error) => {
         Swal.fire({
           title: "Ocurrio un error, comunicarse con servicio tecnico",
           icon: "error",
           confirmButtonColor: "var(--color-principal)",
         });
       }
+    }
     );
   }
 
   EditarRol() {
     var editarRol: EditarRolRequest = {
-      idRol: this.data.id,
+      idRol: this.data.id!,
       nombre: this.formulario.value.nombre
     }
     this.rolServi.EditarRol(editarRol).subscribe(
@@ -127,7 +124,6 @@ export class AgregarEditarRolComponent implements OnInit {
 
   CerrarModal() {
     this.modalAgregarPersonal.close();
-    this.onClose.emit();
   }
 
 }

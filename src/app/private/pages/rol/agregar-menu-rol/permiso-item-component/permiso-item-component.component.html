@@ -1,0 +1,16 @@
+<div class="form-check" [ngStyle]="{'padding-left.px': (nivel * 20)}">
+  <input type="checkbox" [id]="'check-' + item.id" class="form-check-input" [checked]="item.permiso" (change)="onCheckboxChange()">
+  <label [for]="'check-' + item.id" class="form-check-label">{{ item.nombre }}</label>
+</div>
+
+<!-- Renderiza si tiene hijos -->
+@if(item.hijos && item.hijos.length > 0)
+{
+  @for (i of item.hijos; track $index) {
+    <app-permiso-item-component
+      [item]="i"
+      [nivel]="nivel + 1"
+      [actualizarPermiso]="actualizarPermiso"
+    ></app-permiso-item-component>
+  }
+}

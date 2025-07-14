@@ -1,25 +1,24 @@
-<div class="modal fade show" id="exampleModalLive" tabindex="-1" style="display: block;">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">{{this.titulo}} Rol</h2>
-                <button type="button" class="btn-close" (click)="CerrarModal()"></button>
-            </div>
-            <div class="modal-body">
-                <form [formGroup]="formulario">
-                    <div class="mb-3 row">
-                        <label for="nombre" class="col-sm-3 col-form-label">Nombre: </label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" id="nombre" formControlName="nombre" required>
-                        </div>
+<div class="p-3" tabindex="-1">
+    <div class="modal-content gap-4">
+        <div class="modal-header">
+            <h2 class="modal-title">{{this.titulo}} Rol</h2>
+        </div>
+        <hr class="m-0">
+        <div class="modal-body">
+            <form [formGroup]="formulario">
+                <div class="mb-3 row">
+                    <label for="nombre" class="col-sm-3 col-form-label">Nombre: </label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="nombre" formControlName="nombre" required>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="botonCancelar" class="btn" (click)="CerrarModal()">Cancelar</button>
-                <button type="button" id="botonAceptar" class="btn" [ngClass]="{'disabled': null}"
-                    (click)="AccionGuardar()">Guardar</button>
-            </div>
+                </div>
+            </form>
+        </div>
+        <hr class="m-0">
+        <div class="modal-footer gap-3">
+            <button type="button" id="botonCancelar" class="btn" (click)="CerrarModal()">Cancelar</button>
+            <button type="button" id="botonAceptar" class="btn"
+                (click)="AccionGuardar()">Guardar</button>
         </div>
     </div>
 </div>

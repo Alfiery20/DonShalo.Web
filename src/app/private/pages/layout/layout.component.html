@@ -1,15 +1,17 @@
 <div class="body-container">
-    <mat-toolbar class="layout-toolbar">
-        <button mat-icon-button (click)="drawer.toggle()">
-            <mat-icon>menu</mat-icon>
-        </button>
-        <span class="spacer"></span>
-        <a routerLink="/intranet"><img src="img/Logo.png" alt="Logo"></a>
-        <span class="spacer"></span>
-        <button mat-icon-button (click)="showUserInfo()">
-            <mat-icon>person</mat-icon>
-        </button>
-    </mat-toolbar>
+    <div class="layout-toolbar">
+        <mat-toolbar class="toolbar-container">
+            <button mat-icon-button (click)="drawer.toggle()">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <span class="spacer"></span>
+            <a routerLink="/intranet"><img src="img/Logo.png" alt="Logo"></a>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="showUserInfo()">
+                <mat-icon>person</mat-icon>
+            </button>
+        </mat-toolbar>
+    </div>
     <mat-drawer-container class="drawer-container">
         <mat-drawer class="sidenav-container" #drawer [opened]="!mobileQuery.matches" [mode]="mobileQuery.matches ? 'push' : 'side'">
             <div class="px-3 py-2 bg-white rounded-4">

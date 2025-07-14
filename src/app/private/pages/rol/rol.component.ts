@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormControl } from '@angular/forms';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -10,9 +10,11 @@ import { RolService } from '../../../core/services/rol.service';
 import { AgregarEditarRolComponent } from './agregar-editar-rol/agregar-editar-rol.component';
 import Swal from 'sweetalert2';
 import { AgregarMenuRolComponent } from './agregar-menu-rol/agregar-menu-rol.component';
-import { MinicardRolComponent } from '../../components/minicard/rol/rol.component';
+import { DatatableComponent, NgxDatatableModule } from '@siemens/ngx-datatable';
 
 import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-rol',
@@ -23,24 +25,38 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     MatTableModule,
     MatPaginatorModule,
-    MinicardRolComponent
+    NgxDatatableModule,
+    MatButtonModule,
+    MatMenuModule
   ],
   templateUrl: './rol.component.html',
   styleUrl: './rol.component.scss'
 })
-export class RolComponent implements OnInit, AfterViewInit {
+export class RolComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator = {} as MatPaginator;
 
   formulario: FormGroup;
   busquedaControl: FormControl = new FormControl('');
 
-  displayedColumns: string[] = ['Nro', 'Id', 'Nombre', 'Estado', 'Accion'];
-
   roles: ObtenerRolResponse[] = [];
-  dataSource = new MatTableDataSource<ObtenerRolResponse>(this.roles);
   RolFiltrados: ObtenerRolResponse[] = [];
 
   estadoSeleccionado: string = '';
+
+  private _columnsQueryListPoints:any = {
+    state: 992,
+    id: 992,
+  }
+
+  _mdQueryList: MediaQueryList | null = null;
+  private _mdQueryListener: (event: MediaQueryListEvent) => void = () => {};
+
+  public bState:boolean = true;
+  public bID:boolean = true;
+
+  @ViewChild('table') table!: DatatableComponent;
+
+  public _bFiltroActivo:boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -56,25 +72,84 @@ export class RolComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.obtenerRoles();
 
-    this.busquedaControl.valueChanges.subscribe(valor => {
-      const filtro = (valor || '').toLowerCase();
-      this.RolFiltrados = this.roles.filter(rol =>
-        rol.nombre.toLowerCase().includes(filtro) ||
-        rol.estado.toLowerCase().includes(filtro)
-      );
-      this.dataSource.data = this.RolFiltrados;
-    });
+    Object.keys(this._columnsQueryListPoints).forEach( (key) => {
+      const bp = this._columnsQueryListPoints[key];
+      const min_bp:string = `(min-width: ${bp}px)`,
+            max_bp:string = `(max-width: ${bp}px)`;
+
+      for(let bkp of [min_bp, max_bp])
+      {
+        const show = bkp.includes('min');
+        this._mdQueryList = window.matchMedia(bkp);
+        this._mdQueryListener = (event:MediaQueryListEvent) => {
+          if(event.matches)
+          {
+            switch(key)
+            {
+              case 'id':
+                this.bID = show;
+                break;
+              case 'state':
+                this.bState = show;
+                break;
+            }
+          }
+        }
+        this._mdQueryList.addEventListener('change', this._mdQueryListener);
+        switch(key)
+        {
+          case 'id':
+            this.bID = !this._mdQueryList.matches;
+            break;
+          case 'state':
+            this.bState = !this._mdQueryList.matches;
+            break;
+        }
+      }
+    } );
+
+    // this.busquedaControl.valueChanges.subscribe(valor => {
+    //   const filtro = (valor || '').toLowerCase();
+    //   this.RolFiltrados = this.roles.filter(rol =>
+    //     rol.nombre.toLowerCase().includes(filtro) ||
+    //     rol.estado.toLowerCase().includes(filtro)
+    //   );
+    //   this.dataSource.data = this.RolFiltrados;
+    // });
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+  ngOnDestroy(): void {
+    Object.keys(this._columnsQueryListPoints).forEach( (bp) => {
+      this._mdQueryList!.removeEventListener('change',this._mdQueryListener);
+    } );
+  }
+
+  toggleExpandRow(row: ObtenerRolResponse)
+  {
+    this.table!.rowDetail?.toggleExpandRow(row);
+  }
+
+  get showExpandableButton():boolean
+  {
+    try
+    {
+      const ret = window.matchMedia('(max-width: 992px)').matches;
+      if(!ret && this.roles.length > 0)
+      {
+        this.table!.rowDetail?.collapseAllRows();
+      }
+      return ret;
+    }
+    catch(e)
+    {
+      return false;
+    }
   }
 
   obtenerRoles(): void {
     const termino = this.formulario.get('nombre')?.value;
     this.rolServi.ObtenerRol(termino).subscribe((rol) => {
       this.roles = rol;
-      this.dataSource.data = this.roles;
       this.RolFiltrados = this.roles;
     });
   }
@@ -82,26 +157,30 @@ export class RolComponent implements OnInit, AfterViewInit {
   AgregarRol(): void {
     const modalAbierto = this.dialog.open(AgregarEditarRolComponent, {
       maxWidth: '750px',
-      data: { id: 0 },
+      panelClass: 'bootstrap-dialog',
+      data: { id:null, edit:false },
     });
-    modalAbierto.componentInstance.onClose.subscribe(() => {
+
+    modalAbierto.afterClosed().subscribe(() => {
       this.obtenerRoles();
-    });
+    })
   }
 
   EditarRol(idRol: number): void {
     const modalAbierto = this.dialog.open(AgregarEditarRolComponent, {
       maxWidth: '750px',
-      data: { id: idRol },
+      panelClass: 'bootstrap-dialog',
+      data: { id: idRol, edit: true },
     });
-    modalAbierto.componentInstance.onClose.subscribe(() => {
+    modalAbierto.afterClosed()
+    .subscribe(() => {
       this.obtenerRoles();
     });
   }
 
   EliminarRol(idRol: number): void {
     const rol = this.roles.find(x => x.id === idRol);
-    const texto = rol?.estado.startsWith('A') ? 'eliminar' : 'activar';
+    const texto = rol?.estado.startsWith('A') ? 'desactivar' : 'activar';
 
     Swal.fire({
       title: '¡Atención!',
@@ -153,24 +232,23 @@ export class RolComponent implements OnInit, AfterViewInit {
   }
 
   filtrarPorEstado(): void {
+    this._bFiltroActivo = true;
     const estado = this.estadoSeleccionado.toLowerCase();
     this.RolFiltrados = this.roles.filter(rol =>
       rol.estado.toLowerCase() === estado
     );
-    this.dataSource.data = this.RolFiltrados;
   }
 
   limpiarFiltroEstado(): void {
     this.estadoSeleccionado = '';
     this.RolFiltrados = [...this.roles];
-    this.dataSource.data = this.RolFiltrados;
   }
 
   limpiarFiltros() {
+    this._bFiltroActivo = false;
     this.estadoSeleccionado = '';
     this.busquedaControl.setValue('');
     this.RolFiltrados = [...this.roles];
-    this.dataSource.data = this.RolFiltrados;
   }
 
 }

@@ -5,11 +5,13 @@ import { jwtDecode } from 'jwt-decode';
 import { Permisos } from '../models/Autorizacion/permiso/permisos';
 import { TokenDesencriptado } from '../models/Autorizacion/permiso/tokenDesencriptado';
 import { environment } from 'environments/environment';
+import { MatDialog } from '@angular/material/dialog';
 
 export const authorizeGuard: CanActivateChildFn = (childRoute, state) => {
   const localServi = inject(LocalStorageService);
   const router = inject(Router);
   const _localstoragekeys = environment.localStorageKeys;
+  const dialog = inject(MatDialog);
 
   var token = localServi.getItem(_localstoragekeys.TOKEN);
   var url = (state.url).split('/')[2] ?? '/intranet';
@@ -25,6 +27,7 @@ export const authorizeGuard: CanActivateChildFn = (childRoute, state) => {
     }
     return true
   } else {
+    dialog.closeAll();
     router.navigate(['/']);
     return true;
   }
