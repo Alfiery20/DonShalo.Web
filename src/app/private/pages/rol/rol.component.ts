@@ -149,6 +149,7 @@ export class RolComponent implements OnInit, OnDestroy {
   obtenerRoles(): void {
     const termino = this.formulario.get('nombre')?.value;
     this.rolServi.ObtenerRol(termino).subscribe((rol) => {
+      console.log(rol[0])
       this.roles = rol;
       this.RolFiltrados = this.roles;
     });
