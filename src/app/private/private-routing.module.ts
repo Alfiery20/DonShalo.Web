@@ -17,56 +17,47 @@ const routes: Routes = [
     {
         path: "",
         component: LayoutComponent,
+        canActivateChild: [authorizeGuard],
         children: [
-            // {
-            //     path: "",
-            //     component: DefaultComponent,
-            //     canActivate: [authorizeGuard]
-            // },
+            {
+                path: "",
+                component: DefaultComponent,
+            },
             {
                 path: "personal",
-                component: PersonalComponent,
-                canActivate: [authorizeGuard]
+                component: PersonalComponent
             },
             {
                 path: "sucursal",
-                component: SucursalComponent,
-                canActivate: [authorizeGuard]
+                component: SucursalComponent
             },
             {
                 path: "piso",
-                component: PisoComponent,
-                canActivate: [authorizeGuard]
+                component: PisoComponent
             },
             {
                 path: "mesa",
-                component: MesaComponent,
-                canActivate: [authorizeGuard]
+                component: MesaComponent
             },
             {
                 path: "rol",
-                component: RolComponent,
-                canActivate: [authorizeGuard]
+                component: RolComponent
             },
             {
                 path: "medioPago",
-                component: MediopagoComponent,
-                canActivate: [authorizeGuard]
+                component: MediopagoComponent
             },
             {
                 path: "atencionMesa",
-                component: GestionMesaComponent,
-                canActivate: [authorizeGuard]
+                component: GestionMesaComponent
             },
             {
                 path: "categoria",
-                component: CategoriaComponent,
-                canActivate: [authorizeGuard]
+                component: CategoriaComponent
             },
             {
                 path: "plato",
-                component: PlatoComponent,
-                canActivate: [authorizeGuard]
+                component: PlatoComponent
             }
         ]
     }

@@ -5,12 +5,12 @@
     </section>
 
     <section class="row">
-        <div class="">
+        <div class="col-10">
             <input class="form-control col-12 col-lg-8 mb-3" [formControl]="filterControl"
                 placeholder="Buscar por nombre, documento, sucursal...">
         </div>
-        <div class="">
-            <button class="btn col-12 col-lg-2 col-xl-2 col-xxl-1 mb-3" (click)="AgregarSucursal()"
+        <div class="col-2">
+            <button class="btn" (click)="AgregarSucursal()"
                 style="background-color: var(--color-principal); color: var(--color-terciario);">
                 <i class="bi bi-plus"></i>
                 Agregar

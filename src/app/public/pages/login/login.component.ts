@@ -92,7 +92,7 @@ export class LoginComponent {
             showConfirmButton: false,
             timer: 1000
           });
-          this.router.navigate(['/intranet']);
+          this.router.navigate(['intranet']);
         } else {
           this.loaderServi.OcultarLoader();
           Swal.fire({

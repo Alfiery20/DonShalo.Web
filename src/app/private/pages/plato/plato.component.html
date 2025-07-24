@@ -6,11 +6,9 @@
     <form [formGroup]="formulario">
         <div class="row g-2 d-flex justify-content-between">
             <div class="col-xs-4 col-sm-8 col-md-4 col-xl-4">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="nombre" placeholder="Nombre..."
-                        formControlName="nombre">
-                    <label for="nombre">Nombre...</label>
-                </div>
+                <label for="nombre">Filtrar por:</label>
+                <input type="text" class="form-control" id="nombre" placeholder="Nombre..."
+                    formControlName="nombre">
             </div>
             <div class="form-floating col-xs-4 col-sm-8 col-md-4 col-xl-4">
                 <select class="form-select" formControlName="idCategoria" id="idCategoria" id="idCategoria"

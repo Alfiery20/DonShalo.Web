@@ -5,23 +5,21 @@
     </section>
     <form [formGroup]="formulario">
         <div class="row g-2 d-flex justify-content-between">
-            <div class="col-xs-4 col-sm-8 col-md-6 col-xl-6">
-                <div class="form-floating">
-                    <input type="email" class="form-control" id="termino" placeholder="Nombre..."
-                        formControlName="termino">
-                    <label for="termino">Nombre...</label>
-                </div>
+            <div class="col-xs-4 col-sm-8 col-md-6 col-xl-4">
+                <label for="termino">Filtrar por:</label>
+                <input type="email" class="form-control" id="termino" placeholder="Nombre..."
+                    formControlName="termino">
             </div>
-            <div class="col-xs-4 col-sm-2 col-md-6 col-xl-6 d-flex justify-content-end">
+            <!-- <div class="col-xs-4 col-sm-2 col-md-6 col-xl-6 d-flex justify-content-end">
                 <button (click)="buscarMedioPago()" class="btn"
                     style="height: 58px; width:  58px; background-color: var(--color-principal);">
                     <i class="bi bi-search" style="color: var(--color-terciario); font-size: 20px;"></i>
                 </button>
-            </div>
+            </div> -->
         </div>
     </form>
-    <section class="row g-2 mt-3">
-        <div class="d-flex justify-content-end">
+    <section class="row g-2 mt-1">
+        <div class="d-flex">
             <button class="btn" (click)="AgregarSucursal()"
                 style="background-color: var(--color-principal); color: var(--color-terciario);">
                 <i class="bi bi-plus"></i>

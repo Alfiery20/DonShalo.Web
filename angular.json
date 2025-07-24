@@ -32,11 +32,6 @@
               }
             ],
             "styles": [
-              "node_modules/bootstrap/scss/bootstrap.scss",
-              "node_modules/bootstrap-icons/font/bootstrap-icons.scss",
-              "node_modules/@siemens/ngx-datatable/index.css",
-              "node_modules/@siemens/ngx-datatable/themes/material.scss",
-              "node_modules/@siemens/ngx-datatable/assets/icons.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -102,8 +97,6 @@
               }
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/bootstrap-icons/font/bootstrap-icons.scss",
               "src/styles.scss"
             ],
             "scripts": [

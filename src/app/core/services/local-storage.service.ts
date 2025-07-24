@@ -13,8 +13,9 @@ export class LocalStorageService {
     localStorage.setItem(key, value);
   }
 
-  getItem(key: string): string | null {
-    const item: string | null = localStorage.getItem(key);
+  getItem(key: string): object | string | null {
+    const item: any = localStorage.getItem(key);
+    console.log("CHECK ITEM", item)
     if(item == null) return null;
 
     try{
@@ -35,7 +36,10 @@ export class LocalStorageService {
   }
 
   clear(): void {
-    for(let key in this._localStorageKeys)
-      this.removeItem(key);
+    Object.keys(this._localStorageKeys)
+    .forEach( k => {
+      const v = this._localStorageKeys[k as keyof typeof this._localStorageKeys]
+      this.removeItem(v);
+    } )
   }
 }
